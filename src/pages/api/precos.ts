@@ -1,16 +1,33 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import fs from "fs";
 import path from "path";
+import { fetchSFMCProducts } from "../../lib/sfmc";
 
 const getFilePath = () => {
   return path.join(process.cwd(), "data", "tabela_precos.json");
 };
 
-export default function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const filePath = getFilePath();
 
   if (req.method === "GET") {
     try {
+      // Tentar buscar do SFMC
+      const sfmcItems = await fetchSFMCProducts();
+
+      if (sfmcItems && sfmcItems.length > 0) {
+        const prices: Record<string, number> = {};
+        sfmcItems.forEach((item) => {
+          const codigo = item.keys.ProductCode;
+          const unitPrice = item.values.UnitPrice ? parseFloat(item.values.UnitPrice) : 0;
+          if (codigo && !isNaN(unitPrice)) {
+            prices[codigo] = unitPrice;
+          }
+        });
+        return res.status(200).json(prices);
+      }
+
+      // Fallback local
       if (!fs.existsSync(filePath)) {
         return res.status(200).json({});
       }
@@ -18,6 +35,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
       const data = JSON.parse(fileContent);
       return res.status(200).json(data);
     } catch (error) {
+      console.error("API precos GET Error:", error);
       return res.status(500).json({ error: "Erro ao ler tabela de preços." });
     }
   } else if (req.method === "POST") {
@@ -44,6 +62,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
       fs.writeFileSync(filePath, JSON.stringify(sanitized, null, 2), "utf-8");
       return res.status(200).json({ success: true, count: Object.keys(sanitized).length });
     } catch (error) {
+      console.error("API precos POST Error:", error);
       return res.status(500).json({ error: "Erro ao salvar tabela de preços." });
     }
   } else {
