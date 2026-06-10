@@ -72,51 +72,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   try {
-    // Tentar buscar do Salesforce Marketing Cloud
-    const sfmcItems = await fetchSFMCProducts();
-
-    if (sfmcItems && sfmcItems.length > 0) {
-      const dentscare: any[] = [];
-      const homeCare: any[] = [];
-      const whiteness: any[] = [];
-
-      sfmcItems.forEach((item) => {
-        const keys = (item.keys || {}) as any;
-        const values = (item.values || {}) as any;
-        const codigo = keys.ProductCode || values.ProductCode || keys.productcode || values.productcode || "";
-        const material = values.Description || values.description || "";
-        const promotionName = values.promotionname || values.promotionName || "";
-        const promotionIsActive = values.promotionisactive !== "false" && values.promotionIsActive !== "false";
-
-        const { categoria, businessUnit, cor } = classifyProduct(material);
-
-        const prod = {
-          codigo,
-          material,
-          categoria,
-          cor,
-          businessUnit,
-          promotionName,
-          promotionIsActive,
-        };
-
-        if (businessUnit === "Home_Care") {
-          homeCare.push(prod);
-        } else if (businessUnit === "Whiteness") {
-          whiteness.push(prod);
-        } else {
-          dentscare.push(prod);
-        }
-      });
-
-      return res.status(200).json({
-        Dentscare: dentscare,
-        Home_Care: homeCare,
-        Whiteness: whiteness,
-      });
-    }
-
-    // Fallback local caso SFMC não esteja configurado ou falhe
+    // Carregar arquivos JSON locais primeiro para definir a estrutura permitida e sequência
     const dataDir = path.join(process.cwd(), "data");
     
     const dentscarePath = path.join(dataDir, "Dentscare.json");
@@ -134,6 +90,60 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const whitenessRaw = fs.existsSync(whitenessPath) 
       ? JSON.parse(fs.readFileSync(whitenessPath, "utf-8")) 
       : [];
+
+    // Tentar buscar do Salesforce Marketing Cloud
+    const sfmcItems = await fetchSFMCProducts();
+
+    if (sfmcItems && sfmcItems.length > 0) {
+      const sfmcMap = new Map<string, any>();
+      
+      sfmcItems.forEach((item) => {
+        const keys = (item.keys || {}) as any;
+        const values = (item.values || {}) as any;
+        const codigo = String(keys.ProductCode || values.ProductCode || keys.productcode || values.productcode || "").trim();
+        const material = values.Description || values.description || "";
+        const promotionName = values.promotionname || values.promotionName || "";
+        const promotionIsActive = values.promotionisactive !== "false" && values.promotionIsActive !== "false" && values.promotionisactive !== false && values.promotionIsActive !== false;
+
+        if (codigo) {
+          sfmcMap.set(codigo, { material, promotionName, promotionIsActive });
+        }
+      });
+
+      const processList = (rawList: any[], targetBU: string) => {
+        return rawList.map((item: any) => {
+          const code = String(item.codigo).trim();
+          const sfmcData = sfmcMap.get(code);
+          if (sfmcData) {
+            return {
+              codigo: item.codigo,
+              material: sfmcData.material || item.material,
+              categoria: item.categoria || "Geral",
+              cor: item.cor || "dark_gray",
+              businessUnit: targetBU,
+              promotionName: sfmcData.promotionName,
+              promotionIsActive: sfmcData.promotionIsActive,
+            };
+          } else {
+            return {
+              codigo: item.codigo,
+              material: item.material,
+              categoria: item.categoria || "Geral",
+              cor: item.cor || "dark_gray",
+              businessUnit: targetBU,
+              promotionName: "",
+              promotionIsActive: false,
+            };
+          }
+        });
+      };
+
+      return res.status(200).json({
+        Dentscare: processList(dentscareRaw, "Dentscare"),
+        Home_Care: processList(homeCareRaw, "Home_Care"),
+        Whiteness: processList(whitenessRaw, "Whiteness"),
+      });
+    }
 
     // Adicionar mock de promoções no fallback local para fins de testes
     const addMockPromotions = (p: any) => {
