@@ -55,6 +55,10 @@ const colorMap: Record<string, string> = {
   dark_green: "#10b981", // Emerald médio
   brown: "#fbbf24",      // Amber claro
   dark_gray: "#9ca3af",  // Cinza claro
+  navy: "#c084fc",     // Navy
+  olive: "#34d399",  //Olive
+  orange: "#fbbf24",  //Orange
+  light_blue: "#34d399" //Light Blue
 };
 
 interface Product {
@@ -74,23 +78,23 @@ interface CartItem {
 export default function Home() {
   // Estado de Perfil (Vendedor ou Administrador)
   const [role, setRole] = useState<"vendedor" | "administrador">("vendedor");
-  
+
   // Abas do Vendedor ("Dentscare", "Home_Care", "Whiteness")
   const [vendedorTab, setVendedorTab] = useState<number>(0);
   const buKeys = ["Dentscare", "Home_Care", "Whiteness"];
-  
+
   // Dados brutos
   const [productsByBU, setProductsByBU] = useState<Record<string, Product[]>>({
     Dentscare: [],
     Home_Care: [],
     Whiteness: [],
   });
-  
+
   // Tabela de Preços (Código -> Preço)
   const [prices, setPrices] = useState<Record<string, number>>({});
   // Edições temporárias de preços no perfil administrador
   const [tempPrices, setTempPrices] = useState<Record<string, number>>({});
-  
+
   // Itens de Pedido (Aba -> Código -> Dados)
   const [cart, setCart] = useState<Record<string, Record<string, CartItem>>>({
     Dentscare: {},
@@ -100,14 +104,14 @@ export default function Home() {
 
   // Filtros
   const [searchQuery, setSearchQuery] = useState("");
-  
+
   // Estados de UI/Feedback
   const [snackbar, setSnackbar] = useState<{ open: boolean; message: string; severity: "success" | "error" | "warning" }>({
     open: false,
     message: "",
     severity: "success",
   });
-  
+
   // Diálogos de Inconsistência
   const [inconsistencyDialog, setInconsistencyDialog] = useState<{
     open: boolean;
@@ -128,7 +132,7 @@ export default function Home() {
     try {
       const prodRes = await fetch("/api/produtos");
       const prodData = await prodRes.json();
-      
+
       // Mapear businessUnit para os itens para fácil rastreabilidade
       const mappedBU: Record<string, Product[]> = {};
       Object.keys(prodData).forEach((bu) => {
@@ -183,7 +187,7 @@ export default function Home() {
     setCart((prev) => {
       const buCart = { ...prev[bu] };
       const currentItem = buCart[code] || { quantidade: 0, desconto: 0, bonificados: 0 };
-      
+
       const updated = {
         ...currentItem,
         [field]: val >= 0 ? val : 0,
@@ -217,7 +221,7 @@ export default function Home() {
   const handleCopyOrder = () => {
     const bu = buKeys[vendedorTab];
     const buCart = cart[bu] || {};
-    
+
     // Obter itens com quantidade > 0 pertencentes a esta aba
     const itemsToCopy = Object.entries(buCart)
       .filter(([_, data]) => data.quantidade > 0)
@@ -247,7 +251,8 @@ export default function Home() {
     // Gerar dados para exportar
     const rows = buProducts.map((p) => {
       const cItem = buCart[p.codigo] || { quantidade: 0, desconto: 0, bonificados: 0 };
-      const tablePrice = prices[p.codigo] || 0;
+      const isSobConsulta = bu === "Home_Care" || bu === "Whiteness";
+      const tablePrice = isSobConsulta ? "Sob consulta" : (prices[p.codigo] || 0);
       return {
         aba: bu,
         codigo: p.codigo,
@@ -558,15 +563,16 @@ export default function Home() {
   const cartSummary = useMemo(() => {
     const bu = buKeys[vendedorTab];
     const buCart = cart[bu] || {};
-    
+
     let totalItems = 0;
     let totalValue = 0;
     let totalBonificados = 0;
 
     Object.entries(buCart).forEach(([code, data]) => {
-      const price = prices[code] || 0;
+      const isSobConsulta = bu === "Home_Care" || bu === "Whiteness";
+      const price = isSobConsulta ? 0 : (prices[code] || 0);
       const subtotal = data.quantidade * price * (1 - data.desconto / 100);
-      
+
       totalItems += data.quantidade;
       totalValue += subtotal;
       totalBonificados += data.bonificados;
@@ -596,18 +602,19 @@ export default function Home() {
           gap: 2,
         }}
       >
-        <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
+        <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
           {/* Logo / Branding */}
           <Box
+            component="img"
+            src="/logo-fgm.png"
+            alt="FGM Logo"
             sx={{
-              width: 32,
-              height: 32,
-              borderRadius: "50%",
-              background: "linear-gradient(135deg, #6366f1 0%, #14b8a6 100%)",
+              height: 36,
+              objectFit: "contain",
             }}
           />
           <Typography variant="h5" sx={{ fontWeight: 700, letterSpacing: "-0.5px" }}>
-            FGM <Typography component="span" variant="h5" sx={{ color: "primary.main", fontWeight: 400 }}>SalesPortal</Typography>
+            Planilha de <Typography component="span" variant="h5" sx={{ color: "primary.main", fontWeight: 700 }}>Preços Web</Typography>
           </Typography>
         </Box>
 
@@ -718,7 +725,8 @@ export default function Home() {
                     filteredProducts.map((p) => {
                       const bu = buKeys[vendedorTab];
                       const cItem = cart[bu]?.[p.codigo] || { quantidade: 0, desconto: 0, bonificados: 0 };
-                      const price = prices[p.codigo] || 0;
+                      const isSobConsulta = bu === "Home_Care" || bu === "Whiteness";
+                      const price = isSobConsulta ? 0 : (prices[p.codigo] || 0);
                       const displayColor = p.cor && colorMap[p.cor] ? colorMap[p.cor] : "#f3f4f6";
 
                       return (
@@ -731,9 +739,9 @@ export default function Home() {
                           </TableCell>
                           <TableCell sx={{ color: "text.secondary" }}>{p.categoria}</TableCell>
                           <TableCell align="right" sx={{ fontWeight: 600 }}>
-                            {price > 0 ? `R$ ${price.toFixed(2).replace(".", ",")}` : "Sob consulta"}
+                            {isSobConsulta ? "Sob consulta" : (price > 0 ? `R$ ${price.toFixed(2).replace(".", ",")}` : "Sob consulta")}
                           </TableCell>
-                          
+
                           {/* Quantidade */}
                           <TableCell align="center">
                             <TextField
@@ -793,7 +801,7 @@ export default function Home() {
                     <Typography variant="h6" sx={{ mb: 2, display: "flex", alignItems: "center", gap: 1 }}>
                       <ShoppingCartIcon color="primary" /> Ações do Pedido ({buKeys[vendedorTab]})
                     </Typography>
-                    
+
                     <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap" }}>
                       <Box sx={{ flex: { xs: "1 1 100%", sm: "1 1 0%" } }}>
                         <Button
@@ -861,7 +869,7 @@ export default function Home() {
                     <Typography variant="h6" sx={{ mb: 2, color: "text.primary" }}>
                       Resumo da Aba {buKeys[vendedorTab]}
                     </Typography>
-                    
+
                     <Box sx={{ display: "flex", justifyContent: "space-between", mb: 1.5 }}>
                       <Typography variant="body2" color="text.secondary">Quantidade de Itens:</Typography>
                       <Typography variant="body1" sx={{ fontWeight: 600 }}>{cartSummary.totalItems} un</Typography>
