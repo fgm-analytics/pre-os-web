@@ -81,10 +81,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       const whiteness: any[] = [];
 
       sfmcItems.forEach((item) => {
-        const codigo = item.keys.ProductCode;
-        const material = item.values.Description || "";
-        const promotionName = item.values.promotionname || "";
-        const promotionIsActive = item.values.promotionisactive !== "false"; // default true unless explicitly "false"
+        const keys = (item.keys || {}) as any;
+        const values = (item.values || {}) as any;
+        const codigo = keys.ProductCode || values.ProductCode || keys.productcode || values.productcode || "";
+        const material = values.Description || values.description || "";
+        const promotionName = values.promotionname || values.promotionName || "";
+        const promotionIsActive = values.promotionisactive !== "false" && values.promotionIsActive !== "false";
 
         const { categoria, businessUnit, cor } = classifyProduct(material);
 

@@ -18,8 +18,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       if (sfmcItems && sfmcItems.length > 0) {
         const prices: Record<string, number> = {};
         sfmcItems.forEach((item) => {
-          const codigo = item.keys.ProductCode;
-          const unitPrice = item.values.UnitPrice ? parseFloat(item.values.UnitPrice) : 0;
+          const keys = (item.keys || {}) as any;
+          const values = (item.values || {}) as any;
+          const codigo = keys.ProductCode || values.ProductCode || keys.productcode || values.productcode || "";
+          const rawUnitPrice = values.UnitPrice || values.unitprice || values.unitPrice || "0";
+          const unitPrice = parseFloat(rawUnitPrice);
           if (codigo && !isNaN(unitPrice)) {
             prices[codigo] = unitPrice;
           }
