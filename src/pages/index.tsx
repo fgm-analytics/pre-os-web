@@ -67,6 +67,8 @@ interface Product {
   categoria: string;
   cor?: string;
   businessUnit?: string;
+  promotionName?: string;
+  promotionIsActive?: boolean;
 }
 
 interface CartItem {
@@ -252,15 +254,18 @@ export default function Home() {
     const rows = buProducts.map((p) => {
       const cItem = buCart[p.codigo] || { quantidade: 0, desconto: 0, bonificados: 0 };
       const isSobConsulta = bu === "Home_Care" || bu === "Whiteness";
-      const tablePrice = isSobConsulta ? "Sob consulta" : (prices[p.codigo] || 0);
+      const tablePrice = isSobConsulta ? 0 : (prices[p.codigo] || 0);
+      const totalPrice = isSobConsulta ? 0 : tablePrice * (1 - cItem.desconto / 100);
       return {
         aba: bu,
         codigo: p.codigo,
         produto: p.material,
+        promocao: p.promotionName || "-",
         categoria: p.categoria,
-        preco_tabela: tablePrice,
+        preco_tabela: isSobConsulta ? "Sob consulta" : tablePrice,
         quantidade: cItem.quantidade,
         desconto: cItem.desconto,
+        preco_total: isSobConsulta ? "Sob consulta" : totalPrice,
         bonificados: cItem.bonificados,
       };
     });
@@ -272,10 +277,12 @@ export default function Home() {
       { header: "aba", key: "aba", width: 15 },
       { header: "codigo", key: "codigo", width: 15 },
       { header: "produto", key: "produto", width: 40 },
+      { header: "promocao", key: "promocao", width: 25 },
       { header: "categoria", key: "categoria", width: 20 },
       { header: "preco_tabela", key: "preco_tabela", width: 15 },
       { header: "quantidade", key: "quantidade", width: 12 },
       { header: "desconto", key: "desconto", width: 12 },
+      { header: "preco_total", key: "preco_total", width: 15 },
       { header: "bonificados", key: "bonificados", width: 12 },
     ];
 
@@ -586,6 +593,7 @@ export default function Home() {
       <Head>
         <title>FGM Comercial - Portal de Pedidos & Preços</title>
         <meta name="description" content="Plataforma de apoio a força de vendas FGM. Gerencie preços e monte pedidos Salesforce." />
+        <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noodp, noydir" />
       </Head>
 
       {/* Header Premium */}
@@ -703,19 +711,21 @@ export default function Home() {
               <Table stickyHeader size="small">
                 <TableHead>
                   <TableRow>
-                    <TableCell width="12%">Código</TableCell>
-                    <TableCell width="40%">Produto</TableCell>
-                    <TableCell width="15%">Categoria</TableCell>
-                    <TableCell width="11%" align="right">Preço Tabela</TableCell>
-                    <TableCell width="10%" align="center">Quantidade</TableCell>
+                    <TableCell width="10%">Código</TableCell>
+                    <TableCell width="28%">Produto</TableCell>
+                    <TableCell width="12%">Promoção</TableCell>
+                    <TableCell width="12%">Categoria</TableCell>
+                    <TableCell width="10%" align="right">Preço Tabela</TableCell>
+                    <TableCell width="8%" align="center">Quantidade</TableCell>
                     <TableCell width="6%" align="center">Desconto (%)</TableCell>
+                    <TableCell width="8%" align="right">Preço Total</TableCell>
                     <TableCell width="6%" align="center">Bonificados</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
                   {filteredProducts.length === 0 ? (
                     <TableRow>
-                      <TableCell colSpan={7} align="center" sx={{ py: 6 }}>
+                      <TableCell colSpan={9} align="center" sx={{ py: 6 }}>
                         <Typography variant="body1" sx={{ color: "text.secondary" }}>
                           Nenhum produto encontrado.
                         </Typography>
@@ -728,15 +738,18 @@ export default function Home() {
                       const isSobConsulta = bu === "Home_Care" || bu === "Whiteness";
                       const price = isSobConsulta ? 0 : (prices[p.codigo] || 0);
                       const displayColor = p.cor && colorMap[p.cor] ? colorMap[p.cor] : "#f3f4f6";
+                      const isInactive = p.promotionIsActive === false;
+                      const totalPrice = isSobConsulta ? 0 : price * (1 - cItem.desconto / 100);
 
                       return (
-                        <TableRow key={p.codigo} hover>
+                        <TableRow key={p.codigo} hover sx={{ opacity: isInactive ? 0.4 : 1, transition: "opacity 0.2s" }}>
                           <TableCell sx={{ fontFamily: "monospace", fontWeight: 500 }}>
                             {p.codigo}
                           </TableCell>
                           <TableCell sx={{ color: displayColor, fontWeight: 600 }}>
                             {p.material}
                           </TableCell>
+                          <TableCell sx={{ color: "text.secondary" }}>{p.promotionName || "-"}</TableCell>
                           <TableCell sx={{ color: "text.secondary" }}>{p.categoria}</TableCell>
                           <TableCell align="right" sx={{ fontWeight: 600 }}>
                             {isSobConsulta ? "Sob consulta" : (price > 0 ? `R$ ${price.toFixed(2).replace(".", ",")}` : "Sob consulta")}
@@ -748,6 +761,7 @@ export default function Home() {
                               type="number"
                               size="small"
                               variant="outlined"
+                              disabled={isInactive}
                               slotProps={{ htmlInput: { min: 0, style: { textAlign: "center", padding: "6px" } } }}
                               value={cItem.quantidade || ""}
                               onChange={(e) =>
@@ -763,6 +777,7 @@ export default function Home() {
                               type="number"
                               size="small"
                               variant="outlined"
+                              disabled={isInactive}
                               slotProps={{ htmlInput: { min: 0, max: 100, style: { textAlign: "center", padding: "6px" } } }}
                               value={cItem.desconto || ""}
                               onChange={(e) =>
@@ -772,12 +787,18 @@ export default function Home() {
                             />
                           </TableCell>
 
+                          {/* Preço Total */}
+                          <TableCell align="right" sx={{ fontWeight: 600 }}>
+                            {isSobConsulta ? "Sob consulta" : `R$ ${totalPrice.toFixed(2).replace(".", ",")}`}
+                          </TableCell>
+
                           {/* Bonificados */}
                           <TableCell align="center">
                             <TextField
                               type="number"
                               size="small"
                               variant="outlined"
+                              disabled={isInactive}
                               slotProps={{ htmlInput: { min: 0, style: { textAlign: "center", padding: "6px" } } }}
                               value={cItem.bonificados || ""}
                               onChange={(e) =>
