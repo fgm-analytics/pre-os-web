@@ -29,7 +29,22 @@ interface SFMCRowsetResponse {
   items: SFMCProductRow[];
 }
 
+interface CacheEntry<T> {
+  data: T;
+  expiresAt: number;
+}
+
+let tokenCache: CacheEntry<SFMCTokenResponse> | null = null;
+let productsCache: CacheEntry<SFMCProductRow[]> | null = null;
+
+const CACHE_TTL = 30 * 60 * 1000; // 30 minutos em milissegundos
+
 export async function getSFMCToken(): Promise<SFMCTokenResponse | null> {
+  const now = Date.now();
+  if (tokenCache && tokenCache.expiresAt > now) {
+    return tokenCache.data;
+  }
+
   const clientId = process.env.SFMC_CLIENT_ID;
   const clientSecret = process.env.SFMC_CLIENT_SECRET;
   const authUrl = process.env.SFMC_AUTH_URI; // e.g. https://xxxx.auth.marketingcloudapis.com/
@@ -54,6 +69,10 @@ export async function getSFMCToken(): Promise<SFMCTokenResponse | null> {
     }
 
     const data = (await res.json()) as SFMCTokenResponse;
+    tokenCache = {
+      data,
+      expiresAt: now + CACHE_TTL,
+    };
     return data;
   } catch (error) {
     console.error("SFMC Auth Error:", error);
@@ -62,6 +81,11 @@ export async function getSFMCToken(): Promise<SFMCTokenResponse | null> {
 }
 
 export async function fetchSFMCProducts(): Promise<SFMCProductRow[] | null> {
+  const now = Date.now();
+  if (productsCache && productsCache.expiresAt > now) {
+    return productsCache.data;
+  }
+
   const tokenData = await getSFMCToken();
   if (!tokenData) return null;
 
@@ -81,7 +105,12 @@ export async function fetchSFMCProducts(): Promise<SFMCProductRow[] | null> {
     }
 
     const data = (await res.json()) as SFMCRowsetResponse;
-    return data.items || [];
+    const items = data.items || [];
+    productsCache = {
+      data: items,
+      expiresAt: now + CACHE_TTL,
+    };
+    return items;
   } catch (error) {
     console.error("SFMC Fetch Error:", error);
     return null;

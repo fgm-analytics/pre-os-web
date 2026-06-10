@@ -62,6 +62,13 @@ const colorMap: Record<string, string> = {
   light_blue: "#34d399" //Light Blue
 };
 
+const formatCurrency = (val: number) => {
+  return new Intl.NumberFormat("pt-BR", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }).format(val);
+};
+
 interface Product {
   codigo: string;
   material: string;
@@ -204,9 +211,9 @@ export default function Home() {
     const query = searchQuery.toLowerCase().trim();
     if (!query) {
       if (role === "administrador") return allProducts;
-      return productsByBU[buKeys[vendedorTab]] || [];
+      return (productsByBU[buKeys[vendedorTab]] || []).filter((p) => p.promotionIsActive !== false);
     }
-    const baseList = role === "administrador" ? allProducts : (productsByBU[buKeys[vendedorTab]] || []);
+    const baseList = role === "administrador" ? allProducts : (productsByBU[buKeys[vendedorTab]] || []).filter((p) => p.promotionIsActive !== false);
     return baseList.filter(
       (p) =>
         p.codigo.includes(query) ||
@@ -763,28 +770,6 @@ export default function Home() {
 
         {/* Seleção de Perfil & Logout */}
         <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-          <ToggleButtonGroup
-            value={role}
-            exclusive
-            onChange={(_, val) => {
-              if (val) {
-                setRole(val);
-                setSearchQuery("");
-              }
-            }}
-            size="small"
-            sx={{ border: "1px solid rgba(255, 255, 255, 0.05)", bgcolor: "rgba(255, 255, 255, 0.02)" }}
-          >
-            <ToggleButton value="vendedor" sx={{ gap: 1 }}>
-              <ShoppingCartIcon fontSize="small" />
-              Vendedor
-            </ToggleButton>
-            <ToggleButton value="administrador" sx={{ gap: 1 }}>
-              <AdminPanelSettingsIcon fontSize="small" />
-              Administrador
-            </ToggleButton>
-          </ToggleButtonGroup>
-
           <Button
             variant="outlined"
             color="error"
@@ -889,14 +874,14 @@ export default function Home() {
                       </TableCell>
                     </TableRow>
                   ) : (
-                    filteredProducts.map((p) => {
+                    filteredProducts.filter(p => p.promotionIsActive !== false).map((p) => {
                       const bu = buKeys[vendedorTab];
                       const cItem = cart[bu]?.[p.codigo] || { quantidade: 0, desconto: 0, bonificados: 0 };
                       const isSobConsulta = bu === "Home_Care" || bu === "Whiteness";
                       const price = isSobConsulta ? 0 : (prices[p.codigo] || 0);
                       const displayColor = p.cor && colorMap[p.cor] ? colorMap[p.cor] : "#f3f4f6";
                       const isInactive = p.promotionIsActive === false;
-                      const totalPrice = isSobConsulta ? 0 : price * (1 - cItem.desconto / 100);
+                      const totalPrice = isSobConsulta ? 0 : (price * cItem.quantidade) * (1 - cItem.desconto / 100);
 
                       return (
                         <TableRow key={p.codigo} hover sx={{ opacity: isInactive ? 0.4 : 1, transition: "opacity 0.2s" }}>
@@ -909,7 +894,7 @@ export default function Home() {
                           <TableCell sx={{ color: "text.secondary" }}>{p.promotionName || "-"}</TableCell>
                           <TableCell sx={{ color: "text.secondary" }}>{p.categoria}</TableCell>
                           <TableCell align="right" sx={{ fontWeight: 600 }}>
-                            {isSobConsulta ? "Sob consulta" : (price > 0 ? `R$ ${price.toFixed(2).replace(".", ",")}` : "Sob consulta")}
+                            {isSobConsulta ? "Sob consulta" : (price > 0 ? `R$ ${formatCurrency(price)}` : "Sob consulta")}
                           </TableCell>
 
                           {/* Quantidade */}
@@ -946,7 +931,7 @@ export default function Home() {
 
                           {/* Preço Total */}
                           <TableCell align="right" sx={{ fontWeight: 600 }}>
-                            {isSobConsulta ? "Sob consulta" : `R$ ${totalPrice.toFixed(2).replace(".", ",")}`}
+                            {isSobConsulta ? "Sob consulta" : `R$ ${formatCurrency(totalPrice)}`}
                           </TableCell>
 
                           {/* Bonificados */}
@@ -1063,7 +1048,7 @@ export default function Home() {
                     <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
                       <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>Total Final:</Typography>
                       <Typography variant="h5" sx={{ fontWeight: 700, color: "primary.light" }}>
-                        R$ {cartSummary.totalValue.toFixed(2).replace(".", ",")}
+                        R$ {formatCurrency(cartSummary.totalValue)}
                       </Typography>
                     </Box>
                   </CardContent>
