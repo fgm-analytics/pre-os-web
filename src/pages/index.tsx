@@ -79,6 +79,36 @@ interface CartItem {
 }
 
 export default function Home() {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loginError, setLoginError] = useState("");
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const auth = localStorage.getItem("temp_auth");
+      if (auth === "true") {
+        setIsAuthenticated(true);
+      }
+    }
+  }, []);
+
+  const handleLogin = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (email === "sean.quadros@fgmdentalgroup.com" && password === "1729") {
+      setIsAuthenticated(true);
+      localStorage.setItem("temp_auth", "true");
+      setLoginError("");
+    } else {
+      setLoginError("E-mail ou senha incorretos.");
+    }
+  };
+
+  const handleLogout = () => {
+    setIsAuthenticated(false);
+    localStorage.removeItem("temp_auth");
+  };
+
   // Estado de Perfil (Vendedor ou Administrador)
   const [role, setRole] = useState<"vendedor" | "administrador">("vendedor");
 
@@ -589,6 +619,110 @@ export default function Home() {
     return { totalItems, totalValue, totalBonificados };
   }, [vendedorTab, cart, prices]);
 
+  if (!isAuthenticated) {
+    return (
+      <Box
+        sx={{
+          minHeight: "100vh",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          bgcolor: "background.default",
+          background: "radial-gradient(circle at 50% 50%, #0c1524 0%, #030712 100%)",
+        }}
+      >
+        <Head>
+          <title>Login - FGM Planilha de Preços</title>
+          <meta name="robots" content="noindex, nofollow" />
+        </Head>
+        <Container maxWidth="xs">
+          <Paper
+            elevation={4}
+            sx={{
+              p: 4,
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              borderRadius: 3,
+              bgcolor: "rgba(11, 15, 25, 0.8)",
+              backdropFilter: "blur(12px)",
+              border: "1px solid rgba(255, 255, 255, 0.05)",
+            }}
+          >
+            <Box
+              component="img"
+              src="/logo-fgm.png"
+              alt="FGM Logo"
+              sx={{
+                height: 48,
+                mb: 3,
+                objectFit: "contain",
+              }}
+            />
+            <Typography variant="h5" align="center" sx={{ fontWeight: 700, mb: 1, letterSpacing: "-0.5px" }}>
+              Planilha de <Typography component="span" variant="h5" sx={{ color: "primary.main", fontWeight: 700 }}>Preços Web</Typography>
+            </Typography>
+            <Typography variant="body2" color="text.secondary" align="center" sx={{ mb: 3 }}>
+              Faça login para acessar a plataforma comercial
+            </Typography>
+
+            {loginError && (
+              <Alert severity="error" sx={{ width: "100%", mb: 2, borderRadius: 2 }}>
+                {loginError}
+              </Alert>
+            )}
+
+            <Box component="form" onSubmit={handleLogin} sx={{ width: "100%" }}>
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                id="email"
+                label="Endereço de E-mail"
+                name="email"
+                autoComplete="email"
+                autoFocus
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                sx={{ mb: 2 }}
+              />
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                name="password"
+                label="Senha"
+                type="password"
+                id="password"
+                autoComplete="current-password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                sx={{ mb: 3 }}
+              />
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                size="large"
+                sx={{
+                  py: 1.5,
+                  fontWeight: 700,
+                  background: "linear-gradient(90deg, #6366f1 0%, #4f46e5 100%)",
+                  boxShadow: "0 4px 20px rgba(99, 102, 241, 0.3)",
+                  "&:hover": {
+                    background: "linear-gradient(90deg, #818cf8 0%, #6366f1 100%)",
+                  },
+                }}
+              >
+                Entrar
+              </Button>
+            </Box>
+          </Paper>
+        </Container>
+      </Box>
+    );
+  }
+
   return (
     <Box sx={{ minHeight: "100vh", display: "flex", flexDirection: "column", bgcolor: "background.default" }}>
       <Head>
@@ -627,28 +761,50 @@ export default function Home() {
           </Typography>
         </Box>
 
-        {/* Seleção de Perfil */}
-        <ToggleButtonGroup
-          value={role}
-          exclusive
-          onChange={(_, val) => {
-            if (val) {
-              setRole(val);
-              setSearchQuery("");
-            }
-          }}
-          size="small"
-          sx={{ border: "1px solid rgba(255, 255, 255, 0.05)", bgcolor: "rgba(255, 255, 255, 0.02)" }}
-        >
-          <ToggleButton value="vendedor" sx={{ gap: 1 }}>
-            <ShoppingCartIcon fontSize="small" />
-            Vendedor
-          </ToggleButton>
-          <ToggleButton value="administrador" sx={{ gap: 1 }}>
-            <AdminPanelSettingsIcon fontSize="small" />
-            Administrador
-          </ToggleButton>
-        </ToggleButtonGroup>
+        {/* Seleção de Perfil & Logout */}
+        <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+          <ToggleButtonGroup
+            value={role}
+            exclusive
+            onChange={(_, val) => {
+              if (val) {
+                setRole(val);
+                setSearchQuery("");
+              }
+            }}
+            size="small"
+            sx={{ border: "1px solid rgba(255, 255, 255, 0.05)", bgcolor: "rgba(255, 255, 255, 0.02)" }}
+          >
+            <ToggleButton value="vendedor" sx={{ gap: 1 }}>
+              <ShoppingCartIcon fontSize="small" />
+              Vendedor
+            </ToggleButton>
+            <ToggleButton value="administrador" sx={{ gap: 1 }}>
+              <AdminPanelSettingsIcon fontSize="small" />
+              Administrador
+            </ToggleButton>
+          </ToggleButtonGroup>
+
+          <Button
+            variant="outlined"
+            color="error"
+            size="small"
+            onClick={handleLogout}
+            sx={{
+              borderColor: "rgba(239, 68, 68, 0.4)",
+              color: "#f87171",
+              textTransform: "none",
+              "&:hover": {
+                borderColor: "rgb(239, 68, 68)",
+                bgcolor: "rgba(239, 68, 68, 0.05)",
+                transform: "none",
+                boxShadow: "none"
+              }
+            }}
+          >
+            Sair
+          </Button>
+        </Box>
       </Box>
 
       {/* Main Container */}
