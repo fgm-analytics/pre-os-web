@@ -3,1428 +3,1666 @@
     "codigo": "5500000041",
     "material": "QUAZAR ROCKET GRAY - SILVER",
     "categoria": "Fotopolimerizadores",
-    "cor": "white"
+    "cor": "white",
+    "segmentacao": 40
   },
   {
     "codigo": "5500000044",
     "material": "QUAZAR NEBULA ROSE & GRAY",
     "categoria": "Fotopolimerizadores",
-    "cor": "white"
+    "cor": "white",
+    "segmentacao": 40
   },
   {
     "codigo": "5500000057",
     "material": "CAPAS PROTETORA DESCARTÁVEIS QUAZAR",
     "categoria": "Fotopolimerizadores",
-    "cor": "white"
+    "cor": "white",
+    "segmentacao": 40
   },
   {
     "codigo": "5500000049",
     "material": "LENTE SPOTCURE QUAZAR",
     "categoria": "Fotopolimerizadores",
-    "cor": "white"
+    "cor": "white",
+    "segmentacao": 40
   },
   {
     "codigo": "5500000055",
     "material": "PROTETOR OCULAR QUAZAR",
     "categoria": "Fotopolimerizadores",
-    "cor": "white"
+    "cor": "white",
+    "segmentacao": 40
   },
   {
     "codigo": "4000000266",
     "material": "DIAMOND MASTER",
     "categoria": "Acabamento",
-    "cor": "red"
+    "cor": "red",
+    "segmentacao": 40
   },
   {
     "codigo": "4000002090",
     "material": "DIAMOND ACI  ACII - 2 seringas 4G cada",
     "categoria": "Acabamento",
-    "cor": "red"
+    "cor": "red",
+    "segmentacao": 40
   },
   {
     "codigo": "4000002091",
     "material": "DIAMOND EXCEL - seringa 2G",
     "categoria": "Acabamento",
-    "cor": "red"
+    "cor": "red",
+    "segmentacao": 40
   },
   {
     "codigo": "4000055820",
     "material": "DIAMOND EXCEL ULTRAFINE",
     "categoria": "Acabamento",
-    "cor": "red"
+    "cor": "red",
+    "segmentacao": 40
   },
   {
     "codigo": "4000002092",
     "material": "DIAMOND R - seringa 4G",
     "categoria": "Acabamento",
-    "cor": "red"
+    "cor": "red",
+    "segmentacao": 40
   },
   {
     "codigo": "4000002096",
     "material": "FELTROS DIAMOND 8/12MM - 24 discos",
     "categoria": "Acabamento",
-    "cor": "red"
+    "cor": "red",
+    "segmentacao": 40
   },
   {
     "codigo": "4000002099",
     "material": "DIAMOND FLEX 8/12MM - 24 discos",
     "categoria": "Acabamento",
-    "cor": "red"
+    "cor": "red",
+    "segmentacao": 40
   },
   {
     "codigo": "4000002102",
     "material": "DIAMOND PRO G 8/12MM - 26 discos",
     "categoria": "Acabamento",
-    "cor": "red"
+    "cor": "red",
+    "segmentacao": 40
   },
   {
     "codigo": "4000002103",
     "material": "DIAMOND PRO M 8/12MM - 26 discos",
     "categoria": "Acabamento",
-    "cor": "red"
+    "cor": "red",
+    "segmentacao": 40
   },
   {
     "codigo": "4000002106",
     "material": "DIAMOND PRO SORTIDO 8/12MM - 56 discos",
     "categoria": "Acabamento",
-    "cor": "red"
+    "cor": "red",
+    "segmentacao": 40
   },
   {
     "codigo": "4000001609",
     "material": "PORTA MOLDEIRA AZUL CLARO 10UN",
     "categoria": "Acessórios",
-    "cor": "blue"
+    "cor": "blue",
+    "segmentacao": 40
   },
   {
     "codigo": "4000001611",
     "material": "PORTA MOLDEIRA PRETO 10UN",
     "categoria": "Acessórios",
-    "cor": "blue"
+    "cor": "blue",
+    "segmentacao": 40
   },
   {
     "codigo": "4000005387",
     "material": "JOGO DE PLACA QUADRADA 1MM 5UN ",
     "categoria": "Acessórios",
-    "cor": "blue"
+    "cor": "blue",
+    "segmentacao": 40
   },
   {
     "codigo": "4000005389",
     "material": "JOGO DE PLACA QUADRADA 2MM 2UN ",
     "categoria": "Acessórios",
-    "cor": "blue"
+    "cor": "blue",
+    "segmentacao": 40
   },
   {
     "codigo": "4000005392",
     "material": "JOGO DE PLACA QUADRADA 3MM 2UN ",
     "categoria": "Acessórios",
-    "cor": "blue"
+    "cor": "blue",
+    "segmentacao": 40
   },
   {
     "codigo": "4000002769",
     "material": "ARCFLEX M",
     "categoria": "Acessórios",
-    "cor": "blue"
+    "cor": "blue",
+    "segmentacao": 40
   },
   {
     "codigo": "4000002770",
     "material": "ARCFLEX G",
     "categoria": "Acessórios",
-    "cor": "blue"
+    "cor": "blue",
+    "segmentacao": 40
   },
   {
     "codigo": "4000002772",
     "material": "ARCFLEX M/G 2UN",
     "categoria": "Acessórios",
-    "cor": "blue"
+    "cor": "blue",
+    "segmentacao": 40
   },
   {
     "codigo": "4000056651",
     "material": "KIT PONT PRIMMA ART REFIL 7G 5UN CE/FDA",
     "categoria": "Acessórios",
-    "cor": "blue"
+    "cor": "blue",
+    "segmentacao": 40
   },
   {
     "codigo": "4000056650",
     "material": "KIT PONT PRIMMA ART REFIL 7G 20UN CE/FDA",
     "categoria": "Acessórios",
-    "cor": "blue"
+    "cor": "blue",
+    "segmentacao": 40
   },
   {
     "codigo": "4000056649",
     "material": "KIT PONT PRIMMA ART CARTUCHO 75G 5UN CE/FDA",
     "categoria": "Acessórios",
-    "cor": "blue"
+    "cor": "blue",
+    "segmentacao": 40
   },
   {
     "codigo": "4000056648",
     "material": "KIT PONT PRIMMA ART CARTUCHO 75G 20UN CE/FDA",
     "categoria": "Acessórios",
-    "cor": "blue"
+    "cor": "blue",
+    "segmentacao": 40
   },
   {
     "codigo": "4000056016",
     "material": "AMBAR 4ML (BR)",
     "categoria": "Adesivos",
-    "cor": "orange"
+    "cor": "orange",
+    "segmentacao": 40
   },
   {
     "codigo": "4000056017",
     "material": "AMBAR 6ML (BR)",
     "categoria": "Adesivos",
-    "cor": "orange"
+    "cor": "orange",
+    "segmentacao": 40
   },
   {
     "codigo": "4000056018",
     "material": "AMBAR APS 6ML (BR)",
     "categoria": "Adesivos",
-    "cor": "orange"
+    "cor": "orange",
+    "segmentacao": 40
   },
   {
     "codigo": "4000055963",
     "material": "AMBAR APS ORTHO 6ML ",
     "categoria": "Adesivos",
-    "cor": "orange"
+    "cor": "orange",
+    "segmentacao": 40
   },
   {
     "codigo": "4000056019",
     "material": "AMBAR UNIV APS 5ML (BR)",
     "categoria": "Adesivos",
-    "cor": "orange"
+    "cor": "orange",
+    "segmentacao": 40
   },
   {
     "codigo": "4000056743",
     "material": "AMBAR UNIV APS PLUS 3ML CE (BR)",
     "categoria": "Adesivos",
-    "cor": "orange"
+    "cor": "orange",
+    "segmentacao": 40
   },
   {
     "codigo": "4000002172",
     "material": "TOP DAM BLUE - seringa 2G",
     "categoria": "Barreira Gengival",
-    "cor": "olive"
+    "cor": "olive",
+    "segmentacao": 40
   },
   {
     "codigo": "4000002174",
     "material": "TOP DAM GREEN - seringas 2G",
     "categoria": "Barreira Gengival",
-    "cor": "olive"
+    "cor": "olive",
+    "segmentacao": 40
   },
   {
     "codigo": "4000002625",
     "material": "ALLCEM A1 BASE 2,5G CE",
     "categoria": "Cimento Resinoso",
-    "cor": "brown"
+    "cor": "brown",
+    "segmentacao": 40
   },
   {
     "codigo": "4000002626",
     "material": "ALLCEM A2 BASE 2,5G CE",
     "categoria": "Cimento Resinoso",
-    "cor": "brown"
+    "cor": "brown",
+    "segmentacao": 40
   },
   {
     "codigo": "4000002402",
     "material": "ALLCEM A3 BASE 2,5G CE",
     "categoria": "Cimento Resinoso",
-    "cor": "brown"
+    "cor": "brown",
+    "segmentacao": 40
   },
   {
     "codigo": "4000002403",
     "material": "ALLCEM CATALISADOR 2,5G",
     "categoria": "Cimento Resinoso",
-    "cor": "brown"
+    "cor": "brown",
+    "segmentacao": 40
   },
   {
     "codigo": "4000019276",
     "material": "ALLCEM A1 B/CAT 5G CE",
     "categoria": "Cimento Resinoso",
-    "cor": "brown"
+    "cor": "brown",
+    "segmentacao": 40
   },
   {
     "codigo": "4000019277",
     "material": "ALLCEM A2 B/CAT 5G CE",
     "categoria": "Cimento Resinoso",
-    "cor": "brown"
+    "cor": "brown",
+    "segmentacao": 40
   },
   {
     "codigo": "4000019278",
     "material": "ALLCEM A3 B/CAT 5G CE",
     "categoria": "Cimento Resinoso",
-    "cor": "brown"
+    "cor": "brown",
+    "segmentacao": 40
   },
   {
     "codigo": "4000019279",
     "material": "ALLCEM TRANS B/CAT 5G CE",
     "categoria": "Cimento Resinoso",
-    "cor": "brown"
+    "cor": "brown",
+    "segmentacao": 40
   },
   {
     "codigo": "4000019280",
     "material": "ALLCEM CORE A1 6G CE",
     "categoria": "Cimento Resinoso",
-    "cor": "brown"
+    "cor": "brown",
+    "segmentacao": 40
   },
   {
     "codigo": "4000019281",
     "material": "ALLCEM CORE A2 6G CE",
     "categoria": "Cimento Resinoso",
-    "cor": "brown"
+    "cor": "brown",
+    "segmentacao": 40
   },
   {
     "codigo": "4000019282",
     "material": "ALLCEM CORE A3 6G CE",
     "categoria": "Cimento Resinoso",
-    "cor": "brown"
+    "cor": "brown",
+    "segmentacao": 40
   },
   {
     "codigo": "4000019283",
     "material": "ALLCEM CORE OPAQUE PEARL 6G CE",
     "categoria": "Cimento Resinoso",
-    "cor": "brown"
+    "cor": "brown",
+    "segmentacao": 40
   },
   {
     "codigo": "4000002730",
     "material": "KIT PONTS AUTOM ALLCEM 20UN",
     "categoria": "Cimento Resinoso",
-    "cor": "brown"
+    "cor": "brown",
+    "segmentacao": 40
   },
   {
     "codigo": "4000007094",
     "material": "KIT PONTS AUTOM CORE 10UN",
     "categoria": "Cimento Resinoso",
-    "cor": "brown"
+    "cor": "brown",
+    "segmentacao": 40
   },
   {
     "codigo": "4000056009",
     "material": "CONDAC 37% 2,5 G BLUE (BR)",
     "categoria": "Condicionador Ácido",
-    "cor": "salmon"
+    "cor": "salmon",
+    "segmentacao": 40
   },
   {
     "codigo": "4000055788",
     "material": "CONDAC PORC 10% (BR)  -  seringa 2,5G",
     "categoria": "Condicionador Ácido",
-    "cor": "salmon"
+    "cor": "salmon",
+    "segmentacao": 40
   },
   {
     "codigo": "4000055789",
     "material": "CONDAC PORC 5% (BR)  -  seringa 2,5G",
     "categoria": "Condicionador Ácido",
-    "cor": "salmon"
+    "cor": "salmon",
+    "segmentacao": 40
   },
   {
     "codigo": "4000020927",
     "material": "NANOSYNT 200 a 500 | 2x 0,27cc",
     "categoria": "Enxerto/Membrana",
-    "cor": "light_blue"
+    "cor": "light_blue",
+    "segmentacao": 40
   },
   {
     "codigo": "4000020934",
     "material": "NANOSYNT 500 a 1000 | 2x 0,27cc ",
     "categoria": "Enxerto/Membrana",
-    "cor": "light_blue"
+    "cor": "light_blue",
+    "segmentacao": 40
   },
   {
     "codigo": "4000020938",
     "material": "NANOSYNT 200 a 500 | 4x 0,27cc",
     "categoria": "Enxerto/Membrana",
-    "cor": "light_blue"
+    "cor": "light_blue",
+    "segmentacao": 40
   },
   {
     "codigo": "4000020943",
     "material": "NANOSYNT 500 a 1000 | 4x 0,27cc",
     "categoria": "Enxerto/Membrana",
-    "cor": "light_blue"
+    "cor": "light_blue",
+    "segmentacao": 40
   },
   {
     "codigo": "4000023798",
     "material": "NANOSYNT 1000 a 2000 |2X0,53cc",
     "categoria": "Enxerto/Membrana",
-    "cor": "light_blue"
+    "cor": "light_blue",
+    "segmentacao": 40
   },
   {
     "codigo": "4000019984",
     "material": "DUOSYNT 300UM 20X20MM ",
     "categoria": "Enxerto/Membrana",
-    "cor": "light_blue"
+    "cor": "light_blue",
+    "segmentacao": 40
   },
   {
     "codigo": "4000002112",
     "material": "CAVIBRUSH EXTRA FINO (LARANJA) - 100 un",
     "categoria": "Haste flexível",
-    "cor": "orange"
+    "cor": "orange",
+    "segmentacao": 40
   },
   {
     "codigo": "4000002114",
     "material": "CAVIBRUSH FINO (AZUL) - 100 un",
     "categoria": "Haste flexível",
-    "cor": "orange"
+    "cor": "orange",
+    "segmentacao": 40
   },
   {
     "codigo": "4000002117",
     "material": "CAVIBRUSH REGULAR (VERDE) - 100 un ",
     "categoria": "Haste flexível",
-    "cor": "orange"
+    "cor": "orange",
+    "segmentacao": 40
   },
   {
     "codigo": "4000056732",
     "material": "VOXELPRINT CERAMIC A1-LT 250 G BR",
     "categoria": "Impressão 3D",
-    "cor": "orange"
+    "cor": "orange",
+    "segmentacao": 40
   },
   {
     "codigo": "4000056733",
     "material": "VOXELPRINT CERAMIC A2-LT 250 G BR",
     "categoria": "Impressão 3D",
-    "cor": "orange"
+    "cor": "orange",
+    "segmentacao": 40
   },
   {
     "codigo": "4000056734",
     "material": "VOXELPRINT CERAMIC A2-MT 250 G BR",
     "categoria": "Impressão 3D",
-    "cor": "orange"
+    "cor": "orange",
+    "segmentacao": 40
   },
   {
     "codigo": "4000056735",
     "material": "VOXELPRINT CERAMIC A3-LT 250 G BR",
     "categoria": "Impressão 3D",
-    "cor": "orange"
+    "cor": "orange",
+    "segmentacao": 40
   },
   {
     "codigo": "4000056736",
     "material": "VOXELPRINT CERAMIC B1-HT 250 G BR",
     "categoria": "Impressão 3D",
-    "cor": "orange"
+    "cor": "orange",
+    "segmentacao": 40
   },
   {
     "codigo": "4000056737",
     "material": "VOXELPRINT CERAMIC B1-LT 250 G BR",
     "categoria": "Impressão 3D",
-    "cor": "orange"
+    "cor": "orange",
+    "segmentacao": 40
   },
   {
     "codigo": "4000056738",
     "material": "VOXELPRINT CERAMIC B1-MT 250 G BR",
     "categoria": "Impressão 3D",
-    "cor": "orange"
+    "cor": "orange",
+    "segmentacao": 40
   },
   {
     "codigo": "4000056739",
     "material": "VOXELPRINT CERAMIC B2-LT 250 G BR",
     "categoria": "Impressão 3D",
-    "cor": "orange"
+    "cor": "orange",
+    "segmentacao": 40
   },
   {
     "codigo": "4000056740",
     "material": "VOXELPRINT CERAMIC BL-HT 250 G BR",
     "categoria": "Impressão 3D",
-    "cor": "orange"
+    "cor": "orange",
+    "segmentacao": 40
   },
   {
     "codigo": "4000056741",
     "material": "VOXELPRINT CERAMIC BL-LT 250 G BR",
     "categoria": "Impressão 3D",
-    "cor": "orange"
+    "cor": "orange",
+    "segmentacao": 40
   },
   {
     "codigo": "4000056742",
     "material": "VOXELPRINT CERAMIC BL-MT 250 G BR",
     "categoria": "Impressão 3D",
-    "cor": "orange"
+    "cor": "orange",
+    "segmentacao": 40
   },
   {
     "codigo": "4000000855",
     "material": "MAXXION R POWDER A 2 – 10G",
     "categoria": "Ionômero de vidro",
-    "cor": "green"
+    "cor": "green",
+    "segmentacao": 40
   },
   {
     "codigo": "4000000856",
     "material": "MAXXION R POWDER A 3 – 10G",
     "categoria": "Ionômero de vidro",
-    "cor": "green"
+    "cor": "green",
+    "segmentacao": 40
   },
   {
     "codigo": "4000000857",
     "material": "MAXXION R  LIQ – 8G",
     "categoria": "Ionômero de vidro",
-    "cor": "green"
+    "cor": "green",
+    "segmentacao": 40
   },
   {
     "codigo": "4000055253",
     "material": "ORTHOCEM RASTREADOR + CONDAC 37%",
     "categoria": "Ortodontia",
-    "cor": "red"
+    "cor": "red",
+    "segmentacao": 40
   },
   {
     "codigo": "4000019364",
     "material": "ORTHOCEM UV TRACE CE",
     "categoria": "Ortodontia",
-    "cor": "red"
+    "cor": "red",
+    "segmentacao": 40
   },
   {
     "codigo": "4000019365",
     "material": "ORTHO BITE BLUE CE FDA (U)",
     "categoria": "Ortodontia",
-    "cor": "red"
+    "cor": "red",
+    "segmentacao": 40
   },
   {
     "codigo": "4000004393",
     "material": "TOP COMFORT - seringa 2G (Protetor para bráquetes e acessórios) ",
     "categoria": "Ortodontia",
-    "cor": "red"
+    "cor": "red",
+    "segmentacao": 40
   },
   {
     "codigo": "4000055283",
     "material": "WHITEPOST SYSTEM DC 0,5 INTRO",
     "categoria": "Pino de Fibra",
-    "cor": "green"
+    "cor": "green",
+    "segmentacao": 40
   },
   {
     "codigo": "4000055281",
     "material": "WHITEPOST SYSTEM DC 1 INTRO",
     "categoria": "Pino de Fibra",
-    "cor": "green"
+    "cor": "green",
+    "segmentacao": 40
   },
   {
     "codigo": "4000055278",
     "material": "WHITEPOST SYSTEM DC 2 INTRO",
     "categoria": "Pino de Fibra",
-    "cor": "green"
+    "cor": "green",
+    "segmentacao": 40
   },
   {
     "codigo": "4000055273",
     "material": "WHITEPOST SYSTEM DC 3 INTRO",
     "categoria": "Pino de Fibra",
-    "cor": "green"
+    "cor": "green",
+    "segmentacao": 40
   },
   {
     "codigo": "4000055340",
     "material": "WHITEPOST SYSTEM DC FIT 0,4 INTRO",
     "categoria": "Pino de Fibra",
-    "cor": "green"
+    "cor": "green",
+    "segmentacao": 40
   },
   {
     "codigo": "4000055395",
     "material": "WHITEPOST SYSTEM DC E 0,5 INTRO",
     "categoria": "Pino de Fibra",
-    "cor": "green"
+    "cor": "green",
+    "segmentacao": 40
   },
   {
     "codigo": "4000055279",
     "material": "WHITEPOST SYSTEM DC E 1 INTRO",
     "categoria": "Pino de Fibra",
-    "cor": "green"
+    "cor": "green",
+    "segmentacao": 40
   },
   {
     "codigo": "4000055275",
     "material": "WHITEPOST SYSTEM DC E 2 INTRO",
     "categoria": "Pino de Fibra",
-    "cor": "green"
+    "cor": "green",
+    "segmentacao": 40
   },
   {
     "codigo": "4000055929",
     "material": "WHITEPOST SYSTEM DC 0,5 / 1 REFIL",
     "categoria": "Pino de Fibra",
-    "cor": "green"
+    "cor": "green",
+    "segmentacao": 40
   },
   {
     "codigo": "4000055270",
     "material": "WHITEPOST SYSTEM DC FIT 0,4 REFIL",
     "categoria": "Pino de Fibra",
-    "cor": "green"
+    "cor": "green",
+    "segmentacao": 40
   },
   {
     "codigo": "4000055268",
     "material": "WHITEPOST SYSTEM DC 0,5 REFIL",
     "categoria": "Pino de Fibra",
-    "cor": "green"
+    "cor": "green",
+    "segmentacao": 40
   },
   {
     "codigo": "4000055282",
     "material": "WHITEPOST SYSTEM DC 1 REFIL",
     "categoria": "Pino de Fibra",
-    "cor": "green"
+    "cor": "green",
+    "segmentacao": 40
   },
   {
     "codigo": "4000055272",
     "material": "WHITEPOST SYSTEM DC 2 REFIL",
     "categoria": "Pino de Fibra",
-    "cor": "green"
+    "cor": "green",
+    "segmentacao": 40
   },
   {
     "codigo": "4000055271",
     "material": "WHITEPOST SYSTEM DC 3 REFIL",
     "categoria": "Pino de Fibra",
-    "cor": "green"
+    "cor": "green",
+    "segmentacao": 40
   },
   {
     "codigo": "4000005026",
     "material": "PREVENT MATIZADO 2G",
     "categoria": "Selante",
-    "cor": "blue"
+    "cor": "blue",
+    "segmentacao": 40
   },
   {
     "codigo": "4000005027",
     "material": "PREVENT OPAQUE WHITE 2G",
     "categoria": "Selante",
-    "cor": "blue"
+    "cor": "blue",
+    "segmentacao": 40
   },
   {
     "codigo": "4000000070",
     "material": "PROSIL - 4G",
     "categoria": "Silano",
-    "cor": "blue"
+    "cor": "blue",
+    "segmentacao": 40
   },
   {
     "codigo": "4000056236",
     "material": "ELORA APS A1 4G",
     "categoria": "Resinas",
-    "cor": "navy"
+    "cor": "navy",
+    "segmentacao": 40
   },
   {
     "codigo": "4000056237",
     "material": "ELORA APS A2 4G",
     "categoria": "Resinas",
-    "cor": "navy"
+    "cor": "navy",
+    "segmentacao": 40
   },
   {
     "codigo": "4000056240",
     "material": "ELORA APS A3 4G",
     "categoria": "Resinas",
-    "cor": "navy"
+    "cor": "navy",
+    "segmentacao": 40
   },
   {
     "codigo": "4000056241",
     "material": "ELORA APS A3.5 4G",
     "categoria": "Resinas",
-    "cor": "navy"
+    "cor": "navy",
+    "segmentacao": 40
   },
   {
     "codigo": "4000056242",
     "material": "ELORA APS B1 4G",
     "categoria": "Resinas",
-    "cor": "navy"
+    "cor": "navy",
+    "segmentacao": 40
   },
   {
     "codigo": "4000056243",
     "material": "ELORA APS BL 4G",
     "categoria": "Resinas",
-    "cor": "navy"
+    "cor": "navy",
+    "segmentacao": 40
   },
   {
     "codigo": "4000056244",
     "material": "ELORA APS XBL 4G",
     "categoria": "Resinas",
-    "cor": "navy"
+    "cor": "navy",
+    "segmentacao": 40
   },
   {
     "codigo": "4000056246",
     "material": "ELORA APS DA1 4G",
     "categoria": "Resinas",
-    "cor": "navy"
+    "cor": "navy",
+    "segmentacao": 40
   },
   {
     "codigo": "4000056247",
     "material": "ELORA APS DA3 4G",
     "categoria": "Resinas",
-    "cor": "navy"
+    "cor": "navy",
+    "segmentacao": 40
   },
   {
     "codigo": "4000056600",
     "material": "ELORA APS DB1 4G",
     "categoria": "Resinas",
-    "cor": "navy"
+    "cor": "navy",
+    "segmentacao": 40
   },
   {
     "codigo": "4000056601",
     "material": "ELORA APS WE 2G",
     "categoria": "Resinas",
-    "cor": "navy"
+    "cor": "navy",
+    "segmentacao": 40
   },
   {
     "codigo": "4000056245",
     "material": "ELORA APS TRANS 2G",
     "categoria": "Resinas",
-    "cor": "navy"
+    "cor": "navy",
+    "segmentacao": 40
   },
   {
     "codigo": "4000019371",
     "material": "OPUS B FILL FLOW APS A1 2G CE",
     "categoria": "Resinas",
-    "cor": "navy"
+    "cor": "navy",
+    "segmentacao": 40
   },
   {
     "codigo": "4000019372",
     "material": "OPUS B FILL FLOW APS A2 2G CE",
     "categoria": "Resinas",
-    "cor": "navy"
+    "cor": "navy",
+    "segmentacao": 40
   },
   {
     "codigo": "4000019373",
     "material": "OPUS B FILL FLOW APS A3 2G CE",
     "categoria": "Resinas",
-    "cor": "navy"
+    "cor": "navy",
+    "segmentacao": 40
   },
   {
     "codigo": "4000019368",
     "material": "OPUS B FILL APS A1 4G CE",
     "categoria": "Resinas",
-    "cor": "navy"
+    "cor": "navy",
+    "segmentacao": 40
   },
   {
     "codigo": "4000019369",
     "material": "OPUS B FILL APS A2 4G CE",
     "categoria": "Resinas",
-    "cor": "navy"
+    "cor": "navy",
+    "segmentacao": 40
   },
   {
     "codigo": "4000019370",
     "material": "OPUS B FILL APS A3 4G CE",
     "categoria": "Resinas",
-    "cor": "navy"
+    "cor": "navy",
+    "segmentacao": 40
   },
   {
     "codigo": "4000019428",
     "material": "OPALLIS DA1 4G CE",
     "categoria": "Resinas",
-    "cor": "navy"
+    "cor": "navy",
+    "segmentacao": 40
   },
   {
     "codigo": "4000019429",
     "material": "OPALLIS DA2 4G CE",
     "categoria": "Resinas",
-    "cor": "navy"
+    "cor": "navy",
+    "segmentacao": 40
   },
   {
     "codigo": "4000019430",
     "material": "OPALLIS DA3 4G CE",
     "categoria": "Resinas",
-    "cor": "navy"
+    "cor": "navy",
+    "segmentacao": 40
   },
   {
     "codigo": "4000019439",
     "material": "OPALLIS EA1 4G CE",
     "categoria": "Resinas",
-    "cor": "navy"
+    "cor": "navy",
+    "segmentacao": 40
   },
   {
     "codigo": "4000019440",
     "material": "OPALLIS EA2 4G CE",
     "categoria": "Resinas",
-    "cor": "navy"
+    "cor": "navy",
+    "segmentacao": 40
   },
   {
     "codigo": "4000019441",
     "material": "OPALLIS EA3 4G CE",
     "categoria": "Resinas",
-    "cor": "navy"
+    "cor": "navy",
+    "segmentacao": 40
   },
   {
     "codigo": "4000019431",
     "material": "OPALLIS DA3,5 4G CE",
     "categoria": "Resinas",
-    "cor": "navy"
+    "cor": "navy",
+    "segmentacao": 40
   },
   {
     "codigo": "4000019432",
     "material": "OPALLIS DA4 2G CE",
     "categoria": "Resinas",
-    "cor": "navy"
+    "cor": "navy",
+    "segmentacao": 40
   },
   {
     "codigo": "4000019433",
     "material": "OPALLIS DB1 4G CE",
     "categoria": "Resinas",
-    "cor": "navy"
+    "cor": "navy",
+    "segmentacao": 40
   },
   {
     "codigo": "4000019434",
     "material": "OPALLIS DB2 4G CE",
     "categoria": "Resinas",
-    "cor": "navy"
+    "cor": "navy",
+    "segmentacao": 40
   },
   {
     "codigo": "4000019436",
     "material": "OPALLIS DC2 2G CE",
     "categoria": "Resinas",
-    "cor": "navy"
+    "cor": "navy",
+    "segmentacao": 40
   },
   {
     "codigo": "4000019438",
     "material": "OPALLIS D BLEACH 2G CE",
     "categoria": "Resinas",
-    "cor": "navy"
+    "cor": "navy",
+    "segmentacao": 40
   },
   {
     "codigo": "4000019442",
     "material": "OPALLIS EA3,5 4G CE",
     "categoria": "Resinas",
-    "cor": "navy"
+    "cor": "navy",
+    "segmentacao": 40
   },
   {
     "codigo": "4000019443",
     "material": "OPALLIS EA4 2G CE",
     "categoria": "Resinas",
-    "cor": "navy"
+    "cor": "navy",
+    "segmentacao": 40
   },
   {
     "codigo": "4000019444",
     "material": "OPALLIS EB1 4G CE",
     "categoria": "Resinas",
-    "cor": "navy"
+    "cor": "navy",
+    "segmentacao": 40
   },
   {
     "codigo": "4000019445",
     "material": "OPALLIS EB2 4G CE",
     "categoria": "Resinas",
-    "cor": "navy"
+    "cor": "navy",
+    "segmentacao": 40
   },
   {
     "codigo": "4000019446",
     "material": "OPALLIS EB3 2G CE",
     "categoria": "Resinas",
-    "cor": "navy"
+    "cor": "navy",
+    "segmentacao": 40
   },
   {
     "codigo": "4000019447",
     "material": "OPALLIS EC2 2G CE",
     "categoria": "Resinas",
-    "cor": "navy"
+    "cor": "navy",
+    "segmentacao": 40
   },
   {
     "codigo": "4000019448",
     "material": "OPALLIS EC3 2G CE",
     "categoria": "Resinas",
-    "cor": "navy"
+    "cor": "navy",
+    "segmentacao": 40
   },
   {
     "codigo": "4000019450",
     "material": "OPALLIS E BLEACH H 2G CE",
     "categoria": "Resinas",
-    "cor": "navy"
+    "cor": "navy",
+    "segmentacao": 40
   },
   {
     "codigo": "4000019451",
     "material": "OPALLIS E BLEACH M 2G CE",
     "categoria": "Resinas",
-    "cor": "navy"
+    "cor": "navy",
+    "segmentacao": 40
   },
   {
     "codigo": "4000019449",
     "material": "OPALLIS E BLEACH L 2G CE",
     "categoria": "Resinas",
-    "cor": "navy"
+    "cor": "navy",
+    "segmentacao": 40
   },
   {
     "codigo": "4000019452",
     "material": "OPALLIS T BLUE 2G CE",
     "categoria": "Resinas",
-    "cor": "navy"
+    "cor": "navy",
+    "segmentacao": 40
   },
   {
     "codigo": "4000019455",
     "material": "OPALLIS T NEUTRAL 2G CE",
     "categoria": "Resinas",
-    "cor": "navy"
+    "cor": "navy",
+    "segmentacao": 40
   },
   {
     "codigo": "4000019456",
     "material": "OPALLIS OP PEARL 2G CE",
     "categoria": "Resinas",
-    "cor": "navy"
+    "cor": "navy",
+    "segmentacao": 40
   },
   {
     "codigo": "4000019457",
     "material": "OPALLIS OP WHITE 2G CE",
     "categoria": "Resinas",
-    "cor": "navy"
+    "cor": "navy",
+    "segmentacao": 40
   },
   {
     "codigo": "4000019613",
     "material": "OPALLIS ODONTOP A0,5 2G CE",
     "categoria": "Resinas",
-    "cor": "navy"
+    "cor": "navy",
+    "segmentacao": 40
   },
   {
     "codigo": "4000019614",
     "material": "OPALLIS ODONTOP B0,5 2G CE",
     "categoria": "Resinas",
-    "cor": "navy"
+    "cor": "navy",
+    "segmentacao": 40
   },
   {
     "codigo": "4000055979",
     "material": "OPALLIS DBL1 2G",
     "categoria": "Resinas",
-    "cor": "navy"
+    "cor": "navy",
+    "segmentacao": 40
   },
   {
     "codigo": "4000055980",
     "material": "OPALLIS DBL2 2G",
     "categoria": "Resinas",
-    "cor": "navy"
+    "cor": "navy",
+    "segmentacao": 40
   },
   {
     "codigo": "4000055981",
     "material": "OPALLIS DBL3 2G",
     "categoria": "Resinas",
-    "cor": "navy"
+    "cor": "navy",
+    "segmentacao": 40
   },
   {
     "codigo": "4000055975",
     "material": "OPALLIS EBL1 2G",
     "categoria": "Resinas",
-    "cor": "navy"
+    "cor": "navy",
+    "segmentacao": 40
   },
   {
     "codigo": "4000055977",
     "material": "OPALLIS EBL2 2G",
     "categoria": "Resinas",
-    "cor": "navy"
+    "cor": "navy",
+    "segmentacao": 40
   },
   {
     "codigo": "4000055978",
     "material": "OPALLIS EBL3 2G",
     "categoria": "Resinas",
-    "cor": "navy"
+    "cor": "navy",
+    "segmentacao": 40
   },
   {
     "codigo": "4000019377",
     "material": "OPALLIS FLOW OA3,5 2G CE",
     "categoria": "Resinas",
-    "cor": "navy"
+    "cor": "navy",
+    "segmentacao": 40
   },
   {
     "codigo": "4000019378",
     "material": "OPALLIS FLOW T 2G CE",
     "categoria": "Resinas",
-    "cor": "navy"
+    "cor": "navy",
+    "segmentacao": 40
   },
   {
     "codigo": "4000019379",
     "material": "OPALLIS FLOW OP 2G CE",
     "categoria": "Resinas",
-    "cor": "navy"
+    "cor": "navy",
+    "segmentacao": 40
   },
   {
     "codigo": "4000019381",
     "material": "OPALLIS FLOW B0,5 2G CE",
     "categoria": "Resinas",
-    "cor": "navy"
+    "cor": "navy",
+    "segmentacao": 40
   },
   {
     "codigo": "4000019380",
     "material": "OPALLIS FLOW A0,5 2G CE",
     "categoria": "Resinas",
-    "cor": "navy"
+    "cor": "navy",
+    "segmentacao": 40
   },
   {
     "codigo": "4000019374",
     "material": "OPALLIS FLOW A1 2G CE",
     "categoria": "Resinas",
-    "cor": "navy"
+    "cor": "navy",
+    "segmentacao": 40
   },
   {
     "codigo": "4000019375",
     "material": "OPALLIS FLOW A2 2G CE",
     "categoria": "Resinas",
-    "cor": "navy"
+    "cor": "navy",
+    "segmentacao": 40
   },
   {
     "codigo": "4000019376",
     "material": "OPALLIS FLOW A3 2G CE",
     "categoria": "Resinas",
-    "cor": "navy"
+    "cor": "navy",
+    "segmentacao": 40
   },
   {
     "codigo": "4000019407",
     "material": "LLIS DA1 4G CE FDA",
     "categoria": "Resinas",
-    "cor": "navy"
+    "cor": "navy",
+    "segmentacao": 40
   },
   {
     "codigo": "4000019408",
     "material": "LLIS DA2 4G CE FDA",
     "categoria": "Resinas",
-    "cor": "navy"
+    "cor": "navy",
+    "segmentacao": 40
   },
   {
     "codigo": "4000019409",
     "material": "LLIS DA3 4G CE FDA",
     "categoria": "Resinas",
-    "cor": "navy"
+    "cor": "navy",
+    "segmentacao": 40
   },
   {
     "codigo": "4000019410",
     "material": "LLIS DA3,5 4G CE FDA",
     "categoria": "Resinas",
-    "cor": "navy"
+    "cor": "navy",
+    "segmentacao": 40
   },
   {
     "codigo": "4000019412",
     "material": "LLIS EA1 4G CE FDA",
     "categoria": "Resinas",
-    "cor": "navy"
+    "cor": "navy",
+    "segmentacao": 40
   },
   {
     "codigo": "4000019413",
     "material": "LLIS EA2 4G CE FDA",
     "categoria": "Resinas",
-    "cor": "navy"
+    "cor": "navy",
+    "segmentacao": 40
   },
   {
     "codigo": "4000019414",
     "material": "LLIS EA3 4G CE FDA",
     "categoria": "Resinas",
-    "cor": "navy"
+    "cor": "navy",
+    "segmentacao": 40
   },
   {
     "codigo": "4000019415",
     "material": "LLIS EA3,5 4G CE FDA",
     "categoria": "Resinas",
-    "cor": "navy"
+    "cor": "navy",
+    "segmentacao": 40
   },
   {
     "codigo": "4000019416",
     "material": "LLIS EA4 4G CE FDA",
     "categoria": "Resinas",
-    "cor": "navy"
+    "cor": "navy",
+    "segmentacao": 40
   },
   {
     "codigo": "4000019417",
     "material": "LLIS EB1 4G CE FDA",
     "categoria": "Resinas",
-    "cor": "navy"
+    "cor": "navy",
+    "segmentacao": 40
   },
   {
     "codigo": "4000019418",
     "material": "LLIS EB2 4G CE FDA",
     "categoria": "Resinas",
-    "cor": "navy"
+    "cor": "navy",
+    "segmentacao": 40
   },
   {
     "codigo": "4000019419",
     "material": "LLIS EB3 4G CE FDA",
     "categoria": "Resinas",
-    "cor": "navy"
+    "cor": "navy",
+    "segmentacao": 40
   },
   {
     "codigo": "4000019411",
     "material": "LLIS DB2 4G CE FDA",
     "categoria": "Resinas",
-    "cor": "navy"
+    "cor": "navy",
+    "segmentacao": 40
   },
   {
     "codigo": "4000019420",
     "material": "LLIS EC2 4G CE FDA",
     "categoria": "Resinas",
-    "cor": "navy"
+    "cor": "navy",
+    "segmentacao": 40
   },
   {
     "codigo": "4000019421",
     "material": "LLIS EC3 4G CE FDA",
     "categoria": "Resinas",
-    "cor": "navy"
+    "cor": "navy",
+    "segmentacao": 40
   },
   {
     "codigo": "4000019422",
     "material": "LLIS INCISAL 4G CE FDA",
     "categoria": "Resinas",
-    "cor": "navy"
+    "cor": "navy",
+    "segmentacao": 40
   },
   {
     "codigo": "4000019385",
     "material": "VITTRA APS DA1 4G CE",
     "categoria": "Resinas",
-    "cor": "navy"
+    "cor": "navy",
+    "segmentacao": 40
   },
   {
     "codigo": "4000019386",
     "material": "VITTRA APS DA2 4G CE",
     "categoria": "Resinas",
-    "cor": "navy"
+    "cor": "navy",
+    "segmentacao": 40
   },
   {
     "codigo": "4000019387",
     "material": "VITTRA APS DA3 4G CE",
     "categoria": "Resinas",
-    "cor": "navy"
+    "cor": "navy",
+    "segmentacao": 40
   },
   {
     "codigo": "4000019388",
     "material": "VITTRA APS DA3,5 4G CE",
     "categoria": "Resinas",
-    "cor": "navy"
+    "cor": "navy",
+    "segmentacao": 40
   },
   {
     "codigo": "4000019392",
     "material": "VITTRA APS EA1 4G CE",
     "categoria": "Resinas",
-    "cor": "navy"
+    "cor": "navy",
+    "segmentacao": 40
   },
   {
     "codigo": "4000019393",
     "material": "VITTRA APS EA2 4G CE",
     "categoria": "Resinas",
-    "cor": "navy"
+    "cor": "navy",
+    "segmentacao": 40
   },
   {
     "codigo": "4000019394",
     "material": "VITTRA APS EA3 4G CE",
     "categoria": "Resinas",
-    "cor": "navy"
+    "cor": "navy",
+    "segmentacao": 40
   },
   {
     "codigo": "4000055607",
     "material": "VITTRA APS EA3,5 4G",
     "categoria": "Resinas",
-    "cor": "navy"
+    "cor": "navy",
+    "segmentacao": 40
   },
   {
     "codigo": "4000019398",
     "material": "VITTRA APS TRANS OPL 2G CE",
     "categoria": "Resinas",
-    "cor": "navy"
+    "cor": "navy",
+    "segmentacao": 40
   },
   {
     "codigo": "4000055611",
     "material": "VITTRA APS DB1 4G",
     "categoria": "Resinas",
-    "cor": "navy"
+    "cor": "navy",
+    "segmentacao": 40
   },
   {
     "codigo": "4000019395",
     "material": "VITTRA APS EB1 4G CE",
     "categoria": "Resinas",
-    "cor": "navy"
+    "cor": "navy",
+    "segmentacao": 40
   },
   {
     "codigo": "4000055609",
     "material": "VITTRA APS DBL1 4G",
     "categoria": "Resinas",
-    "cor": "navy"
+    "cor": "navy",
+    "segmentacao": 40
   },
   {
     "codigo": "4000055610",
     "material": "VITTRA APS DBL2 4G",
     "categoria": "Resinas",
-    "cor": "navy"
+    "cor": "navy",
+    "segmentacao": 40
   },
   {
     "codigo": "4000055727",
     "material": "VITTRA APS DBL3 4G",
     "categoria": "Resinas",
-    "cor": "navy"
+    "cor": "navy",
+    "segmentacao": 40
   },
   {
     "codigo": "4000055599",
     "material": "VITTRA APS EBL1 4G",
     "categoria": "Resinas",
-    "cor": "navy"
+    "cor": "navy",
+    "segmentacao": 40
   },
   {
     "codigo": "4000055600",
     "material": "VITTRA APS EBL2 4G",
     "categoria": "Resinas",
-    "cor": "navy"
+    "cor": "navy",
+    "segmentacao": 40
   },
   {
     "codigo": "4000055726",
     "material": "VITTRA APS EBL3 4G",
     "categoria": "Resinas",
-    "cor": "navy"
+    "cor": "navy",
+    "segmentacao": 40
   },
   {
     "codigo": "4000055160",
     "material": "VITTRA APS UNIQUE 4G",
     "categoria": "Resinas",
-    "cor": "navy"
+    "cor": "navy",
+    "segmentacao": 40
   },
   {
     "codigo": "4000055624",
     "material": "VITTRA APS UNIQUE FLOW CE",
     "categoria": "Resinas",
-    "cor": "navy"
+    "cor": "navy",
+    "segmentacao": 40
   },
   {
     "codigo": "4000056729",
     "material": "VITTRA APS FLOW OA2 CE",
     "categoria": "Resinas",
-    "cor": "navy"
+    "cor": "navy",
+    "segmentacao": 40
   },
   {
     "codigo": "4000056562",
     "material": "VITTRA APS FLOW XBL CE",
     "categoria": "Resinas",
-    "cor": "navy"
+    "cor": "navy",
+    "segmentacao": 40
   },
   {
     "codigo": "4000056728",
     "material": "VITTRA APS FLOW BL BR",
     "categoria": "Resinas",
-    "cor": "navy"
+    "cor": "navy",
+    "segmentacao": 40
   },
   {
     "codigo": "4000056727",
     "material": "VITTRA APS FLOW B1 BR",
     "categoria": "Resinas",
-    "cor": "navy"
+    "cor": "navy",
+    "segmentacao": 40
   },
   {
     "codigo": "4000056565",
     "material": "VITTRA APS FLOW A3 CE",
     "categoria": "Resinas",
-    "cor": "navy"
+    "cor": "navy",
+    "segmentacao": 40
   },
   {
     "codigo": "4000056566",
     "material": "VITTRA APS FLOW A2 CE",
     "categoria": "Resinas",
-    "cor": "navy"
+    "cor": "navy",
+    "segmentacao": 40
   },
   {
     "codigo": "4000056567",
     "material": "VITTRA APS FLOW A1 CE",
     "categoria": "Resinas",
-    "cor": "navy"
+    "cor": "navy",
+    "segmentacao": 40
   },
   {
     "codigo": "4000055965",
     "material": "ASSIST APS MODELING",
     "categoria": "Resinas",
-    "cor": "navy"
+    "cor": "navy",
+    "segmentacao": 40
   },
   {
     "codigo": "4000055973",
     "material": "ASSIST APS OPAQUER OW",
     "categoria": "Resinas",
-    "cor": "navy"
+    "cor": "navy",
+    "segmentacao": 40
   },
   {
     "codigo": "4000055972",
     "material": "ASSIST APS OPAQUER UNIV",
     "categoria": "Resinas",
-    "cor": "navy"
+    "cor": "navy",
+    "segmentacao": 40
   },
   {
     "codigo": "4000055971",
     "material": "ASSIST APS OPAQUER PINK",
     "categoria": "Resinas",
-    "cor": "navy"
+    "cor": "navy",
+    "segmentacao": 40
   },
   {
     "codigo": "4000055213",
     "material": "PRIMMA ART A1 75G CE",
     "categoria": "Resinas",
-    "cor": "navy"
+    "cor": "navy",
+    "segmentacao": 40
   },
   {
     "codigo": "4000055219",
     "material": "PRIMMA ART A2 75G CE",
     "categoria": "Resinas",
-    "cor": "navy"
+    "cor": "navy",
+    "segmentacao": 40
   },
   {
     "codigo": "4000055218",
     "material": "PRIMMA ART A3 75G CE",
     "categoria": "Resinas",
-    "cor": "navy"
+    "cor": "navy",
+    "segmentacao": 40
   },
   {
     "codigo": "4000055227",
     "material": "PRIMMA ART BLEACH 75G CE",
     "categoria": "Resinas",
-    "cor": "navy"
+    "cor": "navy",
+    "segmentacao": 40
   },
   {
     "codigo": "4000055223",
     "material": "PRIMMA ART B1 75G CE",
     "categoria": "Resinas",
-    "cor": "navy"
+    "cor": "navy",
+    "segmentacao": 40
   },
   {
     "codigo": "4000055217",
     "material": "PRIMMA ART A1 7G CE",
     "categoria": "Resinas",
-    "cor": "navy"
+    "cor": "navy",
+    "segmentacao": 40
   },
   {
     "codigo": "4000055216",
     "material": "PRIMMA ART A2 7G CE",
     "categoria": "Resinas",
-    "cor": "navy"
+    "cor": "navy",
+    "segmentacao": 40
   },
   {
     "codigo": "4000055211",
     "material": "PRIMMA ART A3 7G CE",
     "categoria": "Resinas",
-    "cor": "navy"
+    "cor": "navy",
+    "segmentacao": 40
   },
   {
     "codigo": "4000055228",
     "material": "PRIMMA ART BLEACH 7G CE",
     "categoria": "Resinas",
-    "cor": "navy"
+    "cor": "navy",
+    "segmentacao": 40
   },
   {
     "codigo": "4000055224",
     "material": "PRIMMA ART B1 7G CE",
     "categoria": "Resinas",
-    "cor": "navy"
+    "cor": "navy",
+    "segmentacao": 40
   },
   {
     "codigo": "4000019284",
     "material": "ALLCEM VENEER APS A1 2,5G CE",
     "categoria": "Veneer",
-    "cor": "olive"
+    "cor": "olive",
+    "segmentacao": 40
   },
   {
     "codigo": "4000019285",
     "material": "ALLCEM VENEER APS A2 2,5G CE",
     "categoria": "Veneer",
-    "cor": "olive"
+    "cor": "olive",
+    "segmentacao": 40
   },
   {
     "codigo": "4000019286",
     "material": "ALLCEM VENEER APS A3 2,5G CE",
     "categoria": "Veneer",
-    "cor": "olive"
+    "cor": "olive",
+    "segmentacao": 40
   },
   {
     "codigo": "4000019287",
     "material": "ALLCEM VENEER APS E BLEACH M 2,5G CE",
     "categoria": "Veneer",
-    "cor": "olive"
+    "cor": "olive",
+    "segmentacao": 40
   },
   {
     "codigo": "4000019288",
     "material": "ALLCEM VENEER APS OP WHITE 2,5G CE",
     "categoria": "Veneer",
-    "cor": "olive"
+    "cor": "olive",
+    "segmentacao": 40
   },
   {
     "codigo": "4000019289",
     "material": "ALLCEM VENEER APS TRANS 2,5G CE",
     "categoria": "Veneer",
-    "cor": "olive"
+    "cor": "olive",
+    "segmentacao": 40
   },
   {
     "codigo": "4000056583",
     "material": "ALLCEM VENEER APS XOW 2,5G CE",
     "categoria": "Veneer",
-    "cor": "olive"
+    "cor": "olive",
+    "segmentacao": 40
   },
   {
     "codigo": "4000055052",
     "material": "ALLCEM VENEER TRY IN A1 2G CE FDA",
     "categoria": "Veneer",
-    "cor": "olive"
+    "cor": "olive",
+    "segmentacao": 40
   },
   {
     "codigo": "4000055065",
     "material": "ALLCEM VENEER TRY IN A2 2G CE FDA",
     "categoria": "Veneer",
-    "cor": "olive"
+    "cor": "olive",
+    "segmentacao": 40
   },
   {
     "codigo": "4000055051",
     "material": "ALLCEM VENEER TRY IN A3 2G CE FDA",
     "categoria": "Veneer",
-    "cor": "olive"
+    "cor": "olive",
+    "segmentacao": 40
   },
   {
     "codigo": "4000055057",
     "material": "ALLCEM VENEER TRYIN E BLEACH M 2G CE FDA",
     "categoria": "Veneer",
-    "cor": "olive"
+    "cor": "olive",
+    "segmentacao": 40
   },
   {
     "codigo": "4000055059",
     "material": "ALLCEM VENEER TRY IN OW 2G CE FDA",
     "categoria": "Veneer",
-    "cor": "olive"
+    "cor": "olive",
+    "segmentacao": 40
   },
   {
     "codigo": "4000055060",
     "material": "ALLCEM VENEER TRY IN TRANS 2G CE FDA",
     "categoria": "Veneer",
-    "cor": "olive"
+    "cor": "olive",
+    "segmentacao": 40
   },
   {
     "codigo": "4000056584",
     "material": "ALLCEM VENEER TRY IN XOW 2G CE FDA",
     "categoria": "Veneer",
-    "cor": "olive"
+    "cor": "olive",
+    "segmentacao": 40
   },
   {
     "codigo": "4000002868",
     "material": "FLUOR CARE MORANGO",
     "categoria": "Fluor Care",
-    "cor": "red"
+    "cor": "red",
+    "segmentacao": 40
   },
   {
     "codigo": "4000002869",
     "material": "FLUOR CARE UVA",
     "categoria": "Fluor Care",
-    "cor": "red"
+    "cor": "red",
+    "segmentacao": 40
   },
   {
     "codigo": "4000002870",
     "material": "FLUOR CARE TUTTI FRUTI",
     "categoria": "Fluor Care",
-    "cor": "red"
+    "cor": "red",
+    "segmentacao": 40
   },
   {
     "codigo": "4000000544",
     "material": "DUOFLUORID XII - 10ML",
     "categoria": "Verniz Fluoretado",
-    "cor": "red"
+    "cor": "red",
+    "segmentacao": 40
   },
   {
     "codigo": "4000013847",
     "material": "BRAVA BLOCK A1 LT 14L SIRONA",
     "categoria": "Bloco para CAD CAM",
-    "cor": "brown"
+    "cor": "brown",
+    "segmentacao": 40
   },
   {
     "codigo": "4000013948",
     "material": "BRAVA BLOCK A2 LT 14L SIRONA",
     "categoria": "Bloco para CAD CAM",
-    "cor": "brown"
+    "cor": "brown",
+    "segmentacao": 40
   },
   {
     "codigo": "4000013949",
     "material": "BRAVA BLOCK A3 LT 14L SIRONA",
     "categoria": "Bloco para CAD CAM",
-    "cor": "brown"
+    "cor": "brown",
+    "segmentacao": 40
   },
   {
     "codigo": "4000013951",
     "material": "BRAVA BLOCK B1 LT 14L SIRONA",
     "categoria": "Bloco para CAD CAM",
-    "cor": "brown"
+    "cor": "brown",
+    "segmentacao": 40
   },
   {
     "codigo": "4000013957",
     "material": "BRAVA BLOCK B1 HT 14L SIRONA",
     "categoria": "Bloco para CAD CAM",
-    "cor": "brown"
+    "cor": "brown",
+    "segmentacao": 40
   },
   {
     "codigo": "4000013952",
     "material": "BRAVA BLOCK BLEACH 14L SIRONA",
     "categoria": "Bloco para CAD CAM",
-    "cor": "brown"
+    "cor": "brown",
+    "segmentacao": 40
   },
   {
     "codigo": "4000013956",
     "material": "BRAVA BLOCK A3 HT 14L SIRONA",
     "categoria": "Bloco para CAD CAM",
-    "cor": "brown"
+    "cor": "brown",
+    "segmentacao": 40
   },
   {
     "codigo": "4000013953",
     "material": "BRAVA BLOCK C2LT 14L SIRONA",
     "categoria": "Bloco para CAD CAM",
-    "cor": "brown"
+    "cor": "brown",
+    "segmentacao": 40
   }
 ]

@@ -3,174 +3,203 @@
     "codigo": "4000056602",
     "material": "WITSMILE FRESHNESS 60 ML",
     "categoria": "Higiene Oral",
-    "cor": "green"
+    "cor": "green",
+    "segmentacao": 40
   },
   {
     "codigo": "4000056603",
     "material": "WITSMILE FRESHNESS 1L",
     "categoria": "Higiene Oral",
-    "cor": "green"
+    "cor": "green",
+    "segmentacao": 40
   },
   {
     "codigo": "5500000096",
     "material": "ESCOVA DENTAL WITSMILE COMFORT SENSE - 1UN",
     "categoria": "Higiene Oral",
-    "cor": "green"
+    "cor": "green",
+    "segmentacao": 40
   },
   {
     "codigo": "5500000086",
     "material": "FIO DENTAL WITSMILE - 50M",
     "categoria": "Higiene Oral",
-    "cor": "green"
+    "cor": "green",
+    "segmentacao": 40
   },
   {
     "codigo": "5500000088",
     "material": "FIO DENTAL EXPANSIVEL WITSMILE - 50 M",
     "categoria": "Higiene Oral",
-    "cor": "green"
+    "cor": "green",
+    "segmentacao": 40
   },
   {
     "codigo": "5500000089",
     "material": "FITA DENTAL WITSMILE - 50 M",
     "categoria": "Higiene Oral",
-    "cor": "green"
+    "cor": "green",
+    "segmentacao": 40
   },
   {
     "codigo": "4000056208",
     "material": "WHITE CARE 15% KIT 6 APLIC (HC)",
     "categoria": "Clareadores",
-    "cor": "green"
+    "cor": "green",
+    "segmentacao": 40
   },
   {
     "codigo": "4000056156",
     "material": "WHITENESS PERFECT 16% M KIT (HC)",
     "categoria": "Clareadores",
-    "cor": "blue"
+    "cor": "blue",
+    "segmentacao": 40
   },
   {
     "codigo": "4000056162",
     "material": "WHITENESS PERFECT 10% KIT (HC)",
     "categoria": "Clareadores",
-    "cor": "blue"
+    "cor": "blue",
+    "segmentacao": 40
   },
   {
     "codigo": "4000056155",
     "material": "WHITENESS PERFECT 16% KIT (HC)",
     "categoria": "Clareadores",
-    "cor": "blue"
+    "cor": "blue",
+    "segmentacao": 40
   },
   {
     "codigo": "4000056154",
     "material": "WHITENESS PERFECT 22% KIT (HC)",
     "categoria": "Clareadores",
-    "cor": "blue"
+    "cor": "blue",
+    "segmentacao": 40
   },
   {
     "codigo": "4000056157",
     "material": "WHITENESS PERFECT 10% BULK (HC)",
     "categoria": "Clareadores",
-    "cor": "blue"
+    "cor": "blue",
+    "segmentacao": 40
   },
   {
     "codigo": "4000056158",
     "material": "WHITENESS PERFECT 16% BULK (HC)",
     "categoria": "Clareadores",
-    "cor": "blue"
+    "cor": "blue",
+    "segmentacao": 40
   },
   {
     "codigo": "4000056159",
     "material": "WHITENESS PERFECT 22% BULK (HC)",
     "categoria": "Clareadores",
-    "cor": "blue"
+    "cor": "blue",
+    "segmentacao": 40
   },
   {
     "codigo": "4000056168",
     "material": "WHITENESS SIMPLE 16% KIT 3APLIC (HC)",
     "categoria": "Clareadores",
-    "cor": "brown"
+    "cor": "brown",
+    "segmentacao": 40
   },
   {
     "codigo": "4000056172",
     "material": "WHITENESS SIMPLE 22% KIT 3APLIC (HC)",
     "categoria": "Clareadores",
-    "cor": "brown"
+    "cor": "brown",
+    "segmentacao": 40
   },
   {
     "codigo": "4000056170",
     "material": "WHITENESS SIMPLE 10% KIT 3APLIC (HC)",
     "categoria": "Clareadores",
-    "cor": "brown"
+    "cor": "brown",
+    "segmentacao": 40
   },
   {
     "codigo": "4000056171",
     "material": "WHITENESS SIMPLE 10% KIT 5APLIC (HC)",
     "categoria": "Clareadores",
-    "cor": "brown"
+    "cor": "brown",
+    "segmentacao": 40
   },
   {
     "codigo": "4000056169",
     "material": "WHITENESS SIMPLE 16% KIT 5APLIC (HC)",
     "categoria": "Clareadores",
-    "cor": "brown"
+    "cor": "brown",
+    "segmentacao": 40
   },
   {
     "codigo": "4000056173",
     "material": "WHITENESS SIMPLE 22% KIT 5APLIC (HC)",
     "categoria": "Clareadores",
-    "cor": "brown"
+    "cor": "brown",
+    "segmentacao": 40
   },
   {
     "codigo": "4000056175",
     "material": "WHITENESS SIMPLE 10% KIT 10UN (HC)",
     "categoria": "Clareadores",
-    "cor": "brown"
+    "cor": "brown",
+    "segmentacao": 40
   },
   {
     "codigo": "4000056176",
     "material": "WHITENESS SIMPLE 16% KIT 10UN (HC)",
     "categoria": "Clareadores",
-    "cor": "brown"
+    "cor": "brown",
+    "segmentacao": 40
   },
   {
     "codigo": "4000056177",
     "material": "WHITENESS SIMPLE 22% KIT 10UN (HC)",
     "categoria": "Clareadores",
-    "cor": "brown"
+    "cor": "brown",
+    "segmentacao": 40
   },
   {
     "codigo": "4000056161",
     "material": "WHITE CLASS 7,5% KIT (HC)",
     "categoria": "Clareadores",
-    "cor": "dark_gray"
+    "cor": "dark_gray",
+    "segmentacao": 40
   },
   {
     "codigo": "4000056166",
     "material": "WHITE CLASS 6% BULK 50UN (HC)",
     "categoria": "Clareadores",
-    "cor": "dark_gray"
+    "cor": "dark_gray",
+    "segmentacao": 40
   },
   {
     "codigo": "4000056164",
     "material": "WHITE CLASS 7,5% BULK 15UN (HC)",
     "categoria": "Clareadores",
-    "cor": "dark_gray"
+    "cor": "dark_gray",
+    "segmentacao": 40
   },
   {
     "codigo": "4000056167",
     "material": "WHITE CLASS 7,5% BULK 50UN (HC)",
     "categoria": "Clareadores",
-    "cor": "dark_gray"
+    "cor": "dark_gray",
+    "segmentacao": 40
   },
   {
     "codigo": "4000056160",
     "material": "WHITE CLASS 10% BULK 50UN (HC)",
     "categoria": "Clareadores",
-    "cor": "dark_gray"
+    "cor": "dark_gray",
+    "segmentacao": 40
   },
   {
     "codigo": "4000056153",
     "material": "DESENSIBILIZE KF 0,2% (HC)",
     "categoria": "Desensibilizante",
-    "cor": "cyan"
+    "cor": "cyan",
+    "segmentacao": 40
   }
 ]

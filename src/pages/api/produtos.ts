@@ -123,6 +123,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
               businessUnit: targetBU,
               promotionName: sfmcData.promotionName,
               promotionIsActive: sfmcData.promotionIsActive,
+              segmentacao: item.segmentacao !== undefined ? item.segmentacao : 40,
             };
           } else {
             return {
@@ -133,6 +134,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
               businessUnit: targetBU,
               promotionName: "",
               promotionIsActive: false,
+              segmentacao: item.segmentacao !== undefined ? item.segmentacao : 40,
             };
           }
         });
@@ -154,6 +156,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         p.promotionName = "Promoção FGM Inativa";
         p.promotionIsActive = false;
       }
+      p.segmentacao = p.segmentacao !== undefined ? p.segmentacao : 40;
       return p;
     };
 

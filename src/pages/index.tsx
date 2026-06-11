@@ -77,6 +77,7 @@ interface Product {
   businessUnit?: string;
   promotionName?: string;
   promotionIsActive?: boolean;
+  segmentacao?: number;
 }
 
 interface CartItem {
@@ -291,19 +292,21 @@ export default function Home() {
     // Gerar dados para exportar
     const rows = buProducts.map((p) => {
       const cItem = buCart[p.codigo] || { quantidade: 0, desconto: 0, bonificados: 0 };
-      const isSobConsulta = bu === "Home_Care" || bu === "Whiteness";
-      const tablePrice = isSobConsulta ? 0 : (prices[p.codigo] || 0);
-      const totalPrice = isSobConsulta ? 0 : tablePrice * (1 - cItem.desconto / 100);
+      const tablePrice = prices[p.codigo] || 0;
+      const segmentacaoVal = p.segmentacao ?? 40;
+      const segmentacaoPrice = tablePrice * (1 - segmentacaoVal / 100);
+      const totalPrice = (segmentacaoPrice * cItem.quantidade) * (1 - cItem.desconto / 100);
       return {
         aba: bu,
         codigo: p.codigo,
         produto: p.material,
         promocao: p.promotionName || "-",
         categoria: p.categoria,
-        preco_tabela: isSobConsulta ? "Sob consulta" : tablePrice,
+        preco_tabela: tablePrice > 0 ? tablePrice : "Sob consulta",
+        segmentacao: `${segmentacaoVal}%`,
         quantidade: cItem.quantidade,
         desconto: cItem.desconto,
-        preco_total: isSobConsulta ? "Sob consulta" : totalPrice,
+        preco_total: tablePrice > 0 ? totalPrice : "Sob consulta",
         bonificados: cItem.bonificados,
       };
     });
@@ -318,6 +321,7 @@ export default function Home() {
       { header: "promocao", key: "promocao", width: 25 },
       { header: "categoria", key: "categoria", width: 20 },
       { header: "preco_tabela", key: "preco_tabela", width: 15 },
+      { header: "segmentacao", key: "segmentacao", width: 15 },
       { header: "quantidade", key: "quantidade", width: 12 },
       { header: "desconto", key: "desconto", width: 12 },
       { header: "preco_total", key: "preco_total", width: 15 },
@@ -614,9 +618,11 @@ export default function Home() {
     let totalBonificados = 0;
 
     Object.entries(buCart).forEach(([code, data]) => {
-      const isSobConsulta = bu === "Home_Care" || bu === "Whiteness";
-      const price = isSobConsulta ? 0 : (prices[code] || 0);
-      const subtotal = data.quantidade * price * (1 - data.desconto / 100);
+      const price = prices[code] || 0;
+      const prod = (productsByBU[bu] || []).find((p) => p.codigo === code);
+      const segmentacaoVal = prod?.segmentacao ?? 40;
+      const segmentacaoPrice = price * (1 - segmentacaoVal / 100);
+      const subtotal = data.quantidade * segmentacaoPrice * (1 - data.desconto / 100);
 
       totalItems += data.quantidade;
       totalValue += subtotal;
@@ -853,11 +859,12 @@ export default function Home() {
               <Table stickyHeader size="small">
                 <TableHead>
                   <TableRow>
-                    <TableCell width="10%">Código</TableCell>
-                    <TableCell width="28%">Produto</TableCell>
+                    <TableCell width="8%">Código</TableCell>
+                    <TableCell width="24%">Produto</TableCell>
                     <TableCell width="12%">Promoção</TableCell>
                     <TableCell width="12%">Categoria</TableCell>
                     <TableCell width="10%" align="right">Preço Tabela</TableCell>
+                    <TableCell width="8%" align="center">Segmentação (%)</TableCell>
                     <TableCell width="8%" align="center">Quantidade</TableCell>
                     <TableCell width="6%" align="center">Desconto (%)</TableCell>
                     <TableCell width="8%" align="right">Preço Total</TableCell>
@@ -867,7 +874,7 @@ export default function Home() {
                 <TableBody>
                   {filteredProducts.length === 0 ? (
                     <TableRow>
-                      <TableCell colSpan={9} align="center" sx={{ py: 6 }}>
+                      <TableCell colSpan={10} align="center" sx={{ py: 6 }}>
                         <Typography variant="body1" sx={{ color: "text.secondary" }}>
                           Nenhum produto encontrado.
                         </Typography>
@@ -877,11 +884,12 @@ export default function Home() {
                     filteredProducts.filter(p => p.promotionIsActive !== false).map((p) => {
                       const bu = buKeys[vendedorTab];
                       const cItem = cart[bu]?.[p.codigo] || { quantidade: 0, desconto: 0, bonificados: 0 };
-                      const isSobConsulta = bu === "Home_Care" || bu === "Whiteness";
-                      const price = isSobConsulta ? 0 : (prices[p.codigo] || 0);
+                      const price = prices[p.codigo] || 0;
                       const displayColor = p.cor && colorMap[p.cor] ? colorMap[p.cor] : "#f3f4f6";
                       const isInactive = p.promotionIsActive === false;
-                      const totalPrice = isSobConsulta ? 0 : (price * cItem.quantidade) * (1 - cItem.desconto / 100);
+                      const segmentacaoVal = p.segmentacao ?? 40;
+                      const segmentacaoPrice = price * (1 - segmentacaoVal / 100);
+                      const totalPrice = (segmentacaoPrice * cItem.quantidade) * (1 - cItem.desconto / 100);
 
                       return (
                         <TableRow key={p.codigo} hover sx={{ opacity: isInactive ? 0.4 : 1, transition: "opacity 0.2s" }}>
@@ -894,7 +902,12 @@ export default function Home() {
                           <TableCell sx={{ color: "text.secondary" }}>{p.promotionName || "-"}</TableCell>
                           <TableCell sx={{ color: "text.secondary" }}>{p.categoria}</TableCell>
                           <TableCell align="right" sx={{ fontWeight: 600 }}>
-                            {isSobConsulta ? "Sob consulta" : (price > 0 ? `R$ ${formatCurrency(price)}` : "Sob consulta")}
+                            {price > 0 ? `R$ ${formatCurrency(price)}` : "Sob consulta"}
+                          </TableCell>
+
+                          {/* Segmentação */}
+                          <TableCell align="center" sx={{ fontWeight: 600 }}>
+                            {`${segmentacaoVal}%`}
                           </TableCell>
 
                           {/* Quantidade */}
@@ -931,7 +944,7 @@ export default function Home() {
 
                           {/* Preço Total */}
                           <TableCell align="right" sx={{ fontWeight: 600 }}>
-                            {isSobConsulta ? "Sob consulta" : `R$ ${formatCurrency(totalPrice)}`}
+                            {price > 0 ? `R$ ${formatCurrency(totalPrice)}` : "Sob consulta"}
                           </TableCell>
 
                           {/* Bonificados */}
