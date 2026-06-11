@@ -1,5 +1,5 @@
 // Planilha de Preços Web - FGM
-import { useState, useEffect, useMemo, useRef } from "react";
+import { useState, useEffect, useMemo, useRef, Fragment } from "react";
 import Head from "next/head";
 import {
   Container,
@@ -78,6 +78,7 @@ interface Product {
   promotionName?: string;
   promotionIsActive?: boolean;
   segmentacao?: number;
+  ipi?: number;
 }
 
 interface CartItem {
@@ -223,6 +224,19 @@ export default function Home() {
     );
   }, [role, vendedorTab, productsByBU, allProducts, searchQuery]);
 
+  // Agrupar produtos ativos por categoria
+  const groupedProducts = useMemo(() => {
+    const groups: Record<string, Product[]> = {};
+    filteredProducts.filter(p => p.promotionIsActive !== false).forEach((p) => {
+      const cat = p.categoria || "Geral";
+      if (!groups[cat]) {
+        groups[cat] = [];
+      }
+      groups[cat].push(p);
+    });
+    return groups;
+  }, [filteredProducts]);
+
   // Manipulação de Pedido (Vendedor)
   const handleCartChange = (bu: string, code: string, field: keyof CartItem, val: number) => {
     setCart((prev) => {
@@ -301,8 +315,9 @@ export default function Home() {
         codigo: p.codigo,
         produto: p.material,
         promocao: p.promotionName || "-",
-        categoria: p.categoria,
-        preco_tabela: tablePrice > 0 ? tablePrice : "Sob consulta",
+        ipi: tablePrice > 0 ? `${p.ipi ?? 0}%` : "-",
+        preco_dentista: tablePrice > 0 ? tablePrice : "Sob consulta",
+        preco_dental_sem_ipi: tablePrice > 0 ? segmentacaoPrice : "Sob consulta",
         segmentacao: `${segmentacaoVal}%`,
         quantidade: cItem.quantidade,
         desconto: cItem.desconto,
@@ -319,8 +334,9 @@ export default function Home() {
       { header: "codigo", key: "codigo", width: 15 },
       { header: "produto", key: "produto", width: 40 },
       { header: "promocao", key: "promocao", width: 25 },
-      { header: "categoria", key: "categoria", width: 20 },
-      { header: "preco_tabela", key: "preco_tabela", width: 15 },
+      { header: "ipi", key: "ipi", width: 10 },
+      { header: "preco_dentista", key: "preco_dentista", width: 18 },
+      { header: "preco_dental_sem_ipi", key: "preco_dental_sem_ipi", width: 22 },
       { header: "segmentacao", key: "segmentacao", width: 15 },
       { header: "quantidade", key: "quantidade", width: 12 },
       { header: "desconto", key: "desconto", width: 12 },
@@ -720,10 +736,10 @@ export default function Home() {
                 sx={{
                   py: 1.5,
                   fontWeight: 700,
-                  background: "linear-gradient(90deg, #6366f1 0%, #4f46e5 100%)",
-                  boxShadow: "0 4px 20px rgba(99, 102, 241, 0.3)",
+                  background: "linear-gradient(90deg, #4f46e5ff 0%, #4f46e5ff 100%)",
+                  boxShadow: "0 4px 20px rgba(79, 70, 229, 0.3)",
                   "&:hover": {
-                    background: "linear-gradient(90deg, #818cf8 0%, #6366f1 100%)",
+                    background: "linear-gradient(90deg, #4f46e5ff 0%, #4f46e5ff 100%)",
                   },
                 }}
               >
@@ -860,10 +876,22 @@ export default function Home() {
                 <TableHead>
                   <TableRow>
                     <TableCell width="8%">Código</TableCell>
-                    <TableCell width="24%">Produto</TableCell>
+                    <TableCell
+                      width="22%"
+                      sx={{
+                        position: "sticky",
+                        left: 0,
+                        bgcolor: "background.paper",
+                        zIndex: 3,
+                        boxShadow: "2px 0 5px -2px rgba(0,0,0,0.5)",
+                      }}
+                    >
+                      Produto
+                    </TableCell>
                     <TableCell width="12%">Promoção</TableCell>
-                    <TableCell width="12%">Categoria</TableCell>
-                    <TableCell width="10%" align="right">Preço Tabela</TableCell>
+                    <TableCell width="6%" align="center">IPI</TableCell>
+                    <TableCell width="10%" align="right">Preço Dentista</TableCell>
+                    <TableCell width="10%" align="right">Preço dental (sem IPI)</TableCell>
                     <TableCell width="8%" align="center">Segmentação (%)</TableCell>
                     <TableCell width="8%" align="center">Quantidade</TableCell>
                     <TableCell width="6%" align="center">Desconto (%)</TableCell>
@@ -874,95 +902,135 @@ export default function Home() {
                 <TableBody>
                   {filteredProducts.length === 0 ? (
                     <TableRow>
-                      <TableCell colSpan={10} align="center" sx={{ py: 6 }}>
+                      <TableCell colSpan={11} align="center" sx={{ py: 6 }}>
                         <Typography variant="body1" sx={{ color: "text.secondary" }}>
                           Nenhum produto encontrado.
                         </Typography>
                       </TableCell>
                     </TableRow>
                   ) : (
-                    filteredProducts.filter(p => p.promotionIsActive !== false).map((p) => {
-                      const bu = buKeys[vendedorTab];
-                      const cItem = cart[bu]?.[p.codigo] || { quantidade: 0, desconto: 0, bonificados: 0 };
-                      const price = prices[p.codigo] || 0;
-                      const displayColor = p.cor && colorMap[p.cor] ? colorMap[p.cor] : "#f3f4f6";
-                      const isInactive = p.promotionIsActive === false;
-                      const segmentacaoVal = p.segmentacao ?? 40;
-                      const segmentacaoPrice = price * (1 - segmentacaoVal / 100);
-                      const totalPrice = (segmentacaoPrice * cItem.quantidade) * (1 - cItem.desconto / 100);
+                    Object.entries(groupedProducts).map(([category, products]) => {
+                      const firstProd = products[0];
+                      const categoryColor = firstProd?.cor && colorMap[firstProd.cor] ? colorMap[firstProd.cor] : "#f3f4f6";
 
                       return (
-                        <TableRow key={p.codigo} hover sx={{ opacity: isInactive ? 0.4 : 1, transition: "opacity 0.2s" }}>
-                          <TableCell sx={{ fontFamily: "monospace", fontWeight: 500 }}>
-                            {p.codigo}
-                          </TableCell>
-                          <TableCell sx={{ color: displayColor, fontWeight: 600 }}>
-                            {p.material}
-                          </TableCell>
-                          <TableCell sx={{ color: "text.secondary" }}>{p.promotionName || "-"}</TableCell>
-                          <TableCell sx={{ color: "text.secondary" }}>{p.categoria}</TableCell>
-                          <TableCell align="right" sx={{ fontWeight: 600 }}>
-                            {price > 0 ? `R$ ${formatCurrency(price)}` : "Sob consulta"}
-                          </TableCell>
+                        <Fragment key={category}>
+                          <TableRow>
+                            <TableCell
+                              colSpan={11}
+                              sx={{
+                                bgcolor: "rgba(15, 23, 42, 0.8)",
+                                color: categoryColor,
+                                fontWeight: 700,
+                                py: 1.5,
+                                fontSize: "1rem",
+                                borderBottom: "1px solid rgba(255, 255, 255, 0.08)",
+                                borderLeft: `4px solid ${categoryColor}`,
+                              }}
+                            >
+                              {category}
+                            </TableCell>
+                          </TableRow>
+                          {products.map((p) => {
+                            const bu = buKeys[vendedorTab];
+                            const cItem = cart[bu]?.[p.codigo] || { quantidade: 0, desconto: 0, bonificados: 0 };
+                            const price = prices[p.codigo] || 0;
+                            const displayColor = p.cor && colorMap[p.cor] ? colorMap[p.cor] : "#f3f4f6";
+                            const isInactive = p.promotionIsActive === false;
+                            const segmentacaoVal = p.segmentacao ?? 40;
+                            const segmentacaoPrice = price * (1 - segmentacaoVal / 100);
+                            const totalPrice = (segmentacaoPrice * cItem.quantidade) * (1 - cItem.desconto / 100);
 
-                          {/* Segmentação */}
-                          <TableCell align="center" sx={{ fontWeight: 600 }}>
-                            {`${segmentacaoVal}%`}
-                          </TableCell>
+                            return (
+                              <TableRow key={p.codigo} hover sx={{ opacity: isInactive ? 0.4 : 1, transition: "opacity 0.2s" }}>
+                                <TableCell sx={{ fontFamily: "monospace", fontWeight: 500 }}>
+                                  {p.codigo}
+                                </TableCell>
+                                <TableCell
+                                  sx={{
+                                    color: displayColor,
+                                    fontWeight: 600,
+                                    position: "sticky",
+                                    left: 0,
+                                    bgcolor: "background.paper",
+                                    zIndex: 1,
+                                    boxShadow: "2px 0 5px -2px rgba(0,0,0,0.5)",
+                                  }}
+                                >
+                                  {p.material}
+                                </TableCell>
+                                <TableCell sx={{ color: "text.secondary" }}>{p.promotionName || "-"}</TableCell>
+                                <TableCell align="center" sx={{ color: "text.secondary" }}>
+                                  {price > 0 ? `${p.ipi ?? 0}%` : "-"}
+                                </TableCell>
+                                <TableCell align="right" sx={{ fontWeight: 600 }}>
+                                  {price > 0 ? `R$ ${formatCurrency(price)}` : "Sob consulta"}
+                                </TableCell>
+                                <TableCell align="right" sx={{ fontWeight: 600, color: "secondary.light" }}>
+                                  {price > 0 ? `R$ ${formatCurrency(segmentacaoPrice)}` : "Sob consulta"}
+                                </TableCell>
 
-                          {/* Quantidade */}
-                          <TableCell align="center">
-                            <TextField
-                              type="number"
-                              size="small"
-                              variant="outlined"
-                              disabled={isInactive}
-                              slotProps={{ htmlInput: { min: 0, style: { textAlign: "center", padding: "6px" } } }}
-                              value={cItem.quantidade || ""}
-                              onChange={(e) =>
-                                handleCartChange(bu, p.codigo, "quantidade", parseInt(e.target.value) || 0)
-                              }
-                              sx={{ width: 80 }}
-                            />
-                          </TableCell>
+                                {/* Segmentação */}
+                                <TableCell align="center" sx={{ fontWeight: 600 }}>
+                                  {`${segmentacaoVal}%`}
+                                </TableCell>
 
-                          {/* Desconto */}
-                          <TableCell align="center">
-                            <TextField
-                              type="number"
-                              size="small"
-                              variant="outlined"
-                              disabled={isInactive}
-                              slotProps={{ htmlInput: { min: 0, max: 100, style: { textAlign: "center", padding: "6px" } } }}
-                              value={cItem.desconto || ""}
-                              onChange={(e) =>
-                                handleCartChange(bu, p.codigo, "desconto", parseFloat(e.target.value) || 0)
-                              }
-                              sx={{ width: 65 }}
-                            />
-                          </TableCell>
+                                {/* Quantidade */}
+                                <TableCell align="center">
+                                  <TextField
+                                    type="number"
+                                    size="small"
+                                    variant="outlined"
+                                    disabled={isInactive}
+                                    slotProps={{ htmlInput: { min: 0, style: { textAlign: "center", padding: "6px" } } }}
+                                    value={cItem.quantidade || ""}
+                                    onChange={(e) =>
+                                      handleCartChange(bu, p.codigo, "quantidade", parseInt(e.target.value) || 0)
+                                    }
+                                    sx={{ width: 80 }}
+                                  />
+                                </TableCell>
 
-                          {/* Preço Total */}
-                          <TableCell align="right" sx={{ fontWeight: 600 }}>
-                            {price > 0 ? `R$ ${formatCurrency(totalPrice)}` : "Sob consulta"}
-                          </TableCell>
+                                {/* Desconto */}
+                                <TableCell align="center">
+                                  <TextField
+                                    type="number"
+                                    size="small"
+                                    variant="outlined"
+                                    disabled={isInactive}
+                                    slotProps={{ htmlInput: { min: 0, max: 100, style: { textAlign: "center", padding: "6px" } } }}
+                                    value={cItem.desconto || ""}
+                                    onChange={(e) =>
+                                      handleCartChange(bu, p.codigo, "desconto", parseFloat(e.target.value) || 0)
+                                    }
+                                    sx={{ width: 65 }}
+                                  />
+                                </TableCell>
 
-                          {/* Bonificados */}
-                          <TableCell align="center">
-                            <TextField
-                              type="number"
-                              size="small"
-                              variant="outlined"
-                              disabled={isInactive}
-                              slotProps={{ htmlInput: { min: 0, style: { textAlign: "center", padding: "6px" } } }}
-                              value={cItem.bonificados || ""}
-                              onChange={(e) =>
-                                handleCartChange(bu, p.codigo, "bonificados", parseInt(e.target.value) || 0)
-                              }
-                              sx={{ width: 65 }}
-                            />
-                          </TableCell>
-                        </TableRow>
+                                {/* Preço Total */}
+                                <TableCell align="right" sx={{ fontWeight: 600 }}>
+                                  {price > 0 ? `R$ ${formatCurrency(totalPrice)}` : "Sob consulta"}
+                                </TableCell>
+
+                                {/* Bonificados */}
+                                <TableCell align="center">
+                                  <TextField
+                                    type="number"
+                                    size="small"
+                                    variant="outlined"
+                                    disabled={isInactive}
+                                    slotProps={{ htmlInput: { min: 0, style: { textAlign: "center", padding: "6px" } } }}
+                                    value={cItem.bonificados || ""}
+                                    onChange={(e) =>
+                                      handleCartChange(bu, p.codigo, "bonificados", parseInt(e.target.value) || 0)
+                                    }
+                                    sx={{ width: 65 }}
+                                  />
+                                </TableCell>
+                              </TableRow>
+                            );
+                          })}
+                        </Fragment>
                       );
                     })
                   )}

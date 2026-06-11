@@ -11,8 +11,8 @@ export default function App({ Component, pageProps }: AppProps) {
         palette: {
           mode: "dark",
           primary: {
-            main: "#6366f1", // Indigo
-            light: "#818cf8",
+            main: "#4f46e5", // Indigo
+            light: "#4f46e5",
             dark: "#4f46e5",
           },
           secondary: {
@@ -72,7 +72,7 @@ export default function App({ Component, pageProps }: AppProps) {
                 transition: "all 0.2s ease-in-out",
                 "&:hover": {
                   transform: "translateY(-1px)",
-                  boxShadow: "0 4px 12px rgba(99, 102, 241, 0.2)",
+                  boxShadow: "0 4px 12px rgba(79, 70, 229, 0.2)",
                 },
               },
             },

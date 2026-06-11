@@ -124,6 +124,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
               promotionName: sfmcData.promotionName,
               promotionIsActive: sfmcData.promotionIsActive,
               segmentacao: item.segmentacao !== undefined ? item.segmentacao : 40,
+              ipi: item.ipi !== undefined ? item.ipi : 0,
             };
           } else {
             return {
@@ -135,6 +136,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
               promotionName: "",
               promotionIsActive: false,
               segmentacao: item.segmentacao !== undefined ? item.segmentacao : 40,
+              ipi: item.ipi !== undefined ? item.ipi : 0,
             };
           }
         });
@@ -157,6 +159,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         p.promotionIsActive = false;
       }
       p.segmentacao = p.segmentacao !== undefined ? p.segmentacao : 40;
+      p.ipi = p.ipi !== undefined ? p.ipi : 0;
       return p;
     };
 

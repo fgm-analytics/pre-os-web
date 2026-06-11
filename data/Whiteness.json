@@ -4,90 +4,103 @@
     "material": "WHITENESS HP MAXX KIT (W) - (COM TOP DAM)",
     "categoria": "Clareadores",
     "cor": "green",
-    "segmentacao": 40
+    "segmentacao": 40,
+    "ipi": 0
   },
   {
     "codigo": "4000030172",
     "material": "WHITENESS HP MAXX 1PAC (W) - (COM TOP DAM)",
     "categoria": "Clareadores",
     "cor": "green",
-    "segmentacao": 40
+    "segmentacao": 40,
+    "ipi": 0
   },
   {
     "codigo": "4000030177",
     "material": "WHITENESS HP BLUE 35% UN (W) - (COM TOP DAM)",
     "categoria": "Clareadores",
     "cor": "purple",
-    "segmentacao": 40
+    "segmentacao": 40,
+    "ipi": 0
   },
   {
     "codigo": "4000030176",
     "material": "WHITENESS HP BLUE 35% KIT (W) - (COM TOP DAM)",
     "categoria": "Clareadores",
     "cor": "purple",
-    "segmentacao": 40
+    "segmentacao": 40,
+    "ipi": 0
   },
   {
     "codigo": "4000030174",
     "material": "WHITENESS HP 1PAC (W)",
     "categoria": "Clareadores",
     "cor": "red",
-    "segmentacao": 40
+    "segmentacao": 40,
+    "ipi": 0
   },
   {
     "codigo": "4000030175",
     "material": "WHITENESS HP 3PAC (W) - KIT - (COM TOP DAM)",
     "categoria": "Clareadores",
     "cor": "red",
-    "segmentacao": 40
+    "segmentacao": 40,
+    "ipi": 0
   },
   {
     "codigo": "4000055838",
     "material": "WHITENESS HP AUTOMIXX PLUS 35% KIT VSP (W)",
     "categoria": "Clareadores",
     "cor": "green",
-    "segmentacao": 40
+    "segmentacao": 40,
+    "ipi": 0
   },
   {
     "codigo": "4000055839",
     "material": "WHITENESS HP AUTOMIXX PLUS 35% M KIT VSP (W)",
     "categoria": "Clareadores",
     "cor": "green",
-    "segmentacao": 40
+    "segmentacao": 40,
+    "ipi": 0
   },
   {
     "codigo": "4000055840",
     "material": "WHITENESS HP AUTOMIXX 6% VSP (W)",
     "categoria": "Clareadores",
     "cor": "green",
-    "segmentacao": 40
+    "segmentacao": 40,
+    "ipi": 0
   },
   {
     "codigo": "4000030184",
     "material": "WHITENESS SUPER ENDO 37% (W)",
     "categoria": "Clareadores",
     "cor": "green",
-    "segmentacao": 40
+    "segmentacao": 40,
+    "ipi": 0
   },
   {
     "codigo": "4000030185",
     "material": "WHITENESS PERBORATO (W)",
     "categoria": "Clareadores",
     "cor": "dark_green",
-    "segmentacao": 40
+    "segmentacao": 40,
+    "ipi": 0
   },
   {
     "codigo": "4000030162",
     "material": "WHITENESS RM (W) - seringa 2G",
     "categoria": "Clareadores",
     "cor": "blue",
-    "segmentacao": 40
+    "segmentacao": 40,
+    "ipi": 0
   },
   {
     "codigo": "4000030161",
     "material": "DESENSIBILIZE KF 2% (W) - seringa 2,5G",
     "categoria": "Desensibilizante",
     "cor": "cyan",
-    "segmentacao": 40
+    "segmentacao": 40,
+    "ipi": 0
   }
 ]
