@@ -1,4 +1,4 @@
-// Planilha de Preços Web - FGM
+// Planilha de Preços - FGM
 import { useState, useEffect, useMemo, useRef, Fragment } from "react";
 import Head from "next/head";
 import {
@@ -92,6 +92,8 @@ export default function Home() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loginError, setLoginError] = useState("");
+  const [globalSegmentacao, setGlobalSegmentacao] = useState<number | "">("");
+  const [overriddenSegmentacao, setOverriddenSegmentacao] = useState<Record<string, string>>({});
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -269,7 +271,7 @@ export default function Home() {
       ...prev,
       [bu]: {},
     }));
-    showMsg(`Pedido da aba ${bu} foi limpo.`);
+    showMsg(`Pedido da aba ${bu.replace("_", " ")} foi limpo.`);
   };
 
   // Copiar Pedido para o Clipboard (Apenas Código\tQuantidade)
@@ -290,7 +292,7 @@ export default function Home() {
     const textToCopy = itemsToCopy.join("\r\n");
     navigator.clipboard.writeText(textToCopy)
       .then(() => {
-        showMsg(`Pedido ${bu} copiado para a área de transferência!`);
+        showMsg(`Pedido ${bu.replace("_", " ")} copiado para a área de transferência!`);
       })
       .catch(() => {
         showMsg("Falha ao copiar pedido.", "error");
@@ -303,34 +305,24 @@ export default function Home() {
     const buCart = cart[bu] || {};
     const buProducts = productsByBU[bu] || [];
 
-    // Gerar dados para exportar
-    const rows = buProducts.map((p) => {
-      const cItem = buCart[p.codigo] || { quantidade: 0, desconto: 0, bonificados: 0 };
-      const tablePrice = prices[p.codigo] || 0;
-      const segmentacaoVal = p.segmentacao ?? 40;
-      const segmentacaoPrice = tablePrice * (1 - segmentacaoVal / 100);
-      const totalPrice = (segmentacaoPrice * cItem.quantidade) * (1 - cItem.desconto / 100);
-      return {
-        aba: bu,
-        codigo: p.codigo,
-        produto: p.material,
-        promocao: p.promotionName || "-",
-        ipi: tablePrice > 0 ? `${p.ipi ?? 0}%` : "-",
-        preco_dentista: tablePrice > 0 ? tablePrice : "Sob consulta",
-        preco_dental_sem_ipi: tablePrice > 0 ? segmentacaoPrice : "Sob consulta",
-        segmentacao: `${segmentacaoVal}%`,
-        quantidade: cItem.quantidade,
-        desconto: cItem.desconto,
-        preco_total: tablePrice > 0 ? totalPrice : "Sob consulta",
-        bonificados: cItem.bonificados,
-      };
+    // Filtra apenas produtos com promoção ativa (conforme a plataforma)
+    const activeProducts = buProducts.filter(p => p.promotionIsActive !== false);
+
+    // Agrupar produtos por categoria
+    const grouped: Record<string, Product[]> = {};
+    activeProducts.forEach((p) => {
+      const cat = p.categoria || "Geral";
+      if (!grouped[cat]) {
+        grouped[cat] = [];
+      }
+      grouped[cat].push(p);
     });
 
     const workbook = new ExcelJS.Workbook();
     const worksheet = workbook.addWorksheet(`Pedido ${bu}`);
 
     worksheet.columns = [
-      { header: "aba", key: "aba", width: 15 },
+      { header: "Unidade", key: "aba", width: 15 },
       { header: "codigo", key: "codigo", width: 15 },
       { header: "produto", key: "produto", width: 40 },
       { header: "promocao", key: "promocao", width: 25 },
@@ -344,26 +336,107 @@ export default function Home() {
       { header: "bonificados", key: "bonificados", width: 12 },
     ];
 
-    rows.forEach((r) => worksheet.addRow(r));
-
     // Estilizar cabeçalho
-    worksheet.getRow(1).font = { bold: true };
+    worksheet.getRow(1).height = 28;
+    worksheet.getRow(1).font = { color: { argb: "FFFFFFFF" }, bold: true, name: "Arial", size: 10 };
     worksheet.getRow(1).fill = {
       type: "pattern",
       pattern: "solid",
-      fgColor: { argb: "FF4F46E5" }, // Indigo
+      fgColor: { argb: "FF0A1233" }, // Cabeçalho da cor #0A1233
     };
-    worksheet.getRow(1).font = { color: { argb: "FFFFFFFF" }, bold: true };
+    worksheet.getRow(1).alignment = { vertical: "middle", horizontal: "center" };
+    worksheet.getRow(1).getCell(1).alignment = { vertical: "middle", horizontal: "left" };
+    worksheet.getRow(1).getCell(2).alignment = { vertical: "middle", horizontal: "left" };
+    worksheet.getRow(1).getCell(3).alignment = { vertical: "middle", horizontal: "left" };
+
+    const getArgbColor = (hex: string) => {
+      if (hex.startsWith("#")) {
+        return "FF" + hex.substring(1).toUpperCase();
+      }
+      return "FFFFFFFF";
+    };
+
+    // Adicionar linhas agrupadas por categoria
+    Object.entries(grouped).forEach(([category, products]) => {
+      const firstProd = products[0];
+      const categoryColor = firstProd?.cor && colorMap[firstProd.cor] ? colorMap[firstProd.cor] : "#f3f4f6";
+      const argbCategoryColor = getArgbColor(categoryColor);
+
+      // Adicionar linha da categoria
+      const catRow = worksheet.addRow({
+        aba: category
+      });
+      const catRowNum = catRow.number;
+      worksheet.mergeCells(catRowNum, 1, catRowNum, 12);
+      
+      const firstCell = catRow.getCell(1);
+      firstCell.value = category;
+      firstCell.font = {
+        name: "Arial",
+        bold: true,
+        size: 11,
+        color: { argb: argbCategoryColor }
+      };
+      firstCell.fill = {
+        type: "pattern",
+        pattern: "solid",
+        fgColor: { argb: "FF0F172A" } // Fundo escuro igual da plataforma
+      };
+      firstCell.alignment = { vertical: "middle", horizontal: "left" };
+      catRow.height = 24;
+
+      // Adicionar os produtos da categoria
+      products.forEach((p) => {
+        const cItem = buCart[p.codigo] || { quantidade: 0, desconto: 0, bonificados: 0 };
+        const tablePrice = prices[p.codigo] || 0;
+        const segmentacaoVal = overriddenSegmentacao[p.codigo] !== undefined && overriddenSegmentacao[p.codigo] !== ""
+          ? Number(overriddenSegmentacao[p.codigo])
+          : (globalSegmentacao !== "" ? Number(globalSegmentacao) : (p.segmentacao ?? 40));
+        const segmentacaoPrice = tablePrice * (1 - segmentacaoVal / 100);
+        const totalPrice = (segmentacaoPrice * cItem.quantidade) * (1 - cItem.desconto / 100);
+        const displayColor = p.cor && colorMap[p.cor] ? colorMap[p.cor] : "#f3f4f6";
+
+        const pRow = worksheet.addRow({
+          aba: bu.replace("_", " "),
+          codigo: p.codigo,
+          produto: p.material,
+          promocao: p.promotionName || "-",
+          ipi: tablePrice > 0 ? `${p.ipi ?? 0}%` : "-",
+          preco_dentista: tablePrice > 0 ? tablePrice : "Sob consulta",
+          preco_dental_sem_ipi: tablePrice > 0 ? segmentacaoPrice : "Sob consulta",
+          segmentacao: `${segmentacaoVal}%`,
+          quantidade: cItem.quantidade,
+          desconto: cItem.desconto,
+          preco_total: tablePrice > 0 ? totalPrice : "Sob consulta",
+          bonificados: cItem.bonificados,
+        });
+
+        // Estilizar cor do texto do produto
+        const prodCell = pRow.getCell(3); // coluna 'produto' (C)
+        prodCell.font = {
+          name: "Arial",
+          bold: true,
+          color: { argb: getArgbColor(displayColor) }
+        };
+
+        // Formatação de valores numéricos para melhor leitura em Excel
+        if (tablePrice > 0) {
+          pRow.getCell(6).numFmt = '"R$"#,##0.00';
+          pRow.getCell(7).numFmt = '"R$"#,##0.00';
+          pRow.getCell(11).numFmt = '"R$"#,##0.00';
+        }
+      });
+    });
 
     const buffer = await workbook.xlsx.writeBuffer();
     const blob = new Blob([buffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = `Pedido_${bu}_${new Date().toISOString().slice(0, 10)}.xlsx`;
+    a.download = `Pedido_${bu.replace("_", " ")}_${new Date().toISOString().slice(0, 10)}.xlsx`;
     a.click();
     URL.revokeObjectURL(url);
-    showMsg(`Pedido da aba ${bu} exportado com sucesso!`);
+    showMsg(`Pedido da aba ${bu.replace("_", " ")} exportado com sucesso!`);
   };
 
   // Importar Pedido via Excel
@@ -383,12 +456,14 @@ export default function Home() {
         const currentBU = buKeys[vendedorTab];
         const buProducts = productsByBU[currentBU] || [];
         const buCodesSet = new Set(buProducts.map((p) => p.codigo));
+        const newSegOverrides: Record<string, string> = {};
 
         // Encontrar os índices das colunas corretas
         let colIndexCodigo = -1;
         let colIndexQtd = -1;
         let colIndexDesc = -1;
         let colIndexBonif = -1;
+        let colIndexSeg = -1;
 
         const firstRow = worksheet.getRow(1);
         firstRow.eachCell((cell, colNum) => {
@@ -397,6 +472,7 @@ export default function Home() {
           if (val === "quantidade") colIndexQtd = colNum;
           if (val === "desconto") colIndexDesc = colNum;
           if (val === "bonificados") colIndexBonif = colNum;
+          if (val === "segmentacao" || val === "segmentação") colIndexSeg = colNum;
         });
 
         if (colIndexCodigo === -1 || colIndexQtd === -1) {
@@ -416,13 +492,14 @@ export default function Home() {
           const rawQtd = row.getCell(colIndexQtd).value;
           const rawDesc = colIndexDesc !== -1 ? row.getCell(colIndexDesc).value : 0;
           const rawBonif = colIndexBonif !== -1 ? row.getCell(colIndexBonif).value : 0;
+          const rawSeg = colIndexSeg !== -1 ? row.getCell(colIndexSeg).value : null;
 
           const qtd = Number(rawQtd);
           const desc = Number(rawDesc);
           const bonif = Number(rawBonif);
 
           if (!buCodesSet.has(code)) {
-            inconsistencies.push(`Linha ${rowNum}: Código '${code}' não pertence à unidade de negócio ${currentBU}.`);
+            inconsistencies.push(`Linha ${rowNum}: Código '${code}' não pertence à unidade de negócio ${currentBU.replace("_", " ")}.`);
             return;
           }
 
@@ -436,6 +513,13 @@ export default function Home() {
             desconto: !isNaN(desc) && desc >= 0 ? desc : 0,
             bonificados: !isNaN(bonif) && bonif >= 0 ? bonif : 0,
           };
+
+          if (rawSeg !== null && rawSeg !== undefined) {
+            const segStr = rawSeg.toString().replace("%", "").trim();
+            if (segStr && !isNaN(Number(segStr))) {
+              newSegOverrides[code] = segStr;
+            }
+          }
         });
 
         // Atualizar o carrinho com os novos itens
@@ -446,6 +530,13 @@ export default function Home() {
             ...newCartItems,
           },
         }));
+
+        if (Object.keys(newSegOverrides).length > 0) {
+          setOverriddenSegmentacao((prev) => ({
+            ...prev,
+            ...newSegOverrides,
+          }));
+        }
 
         if (inconsistencies.length > 0) {
           setInconsistencyDialog({
@@ -636,7 +727,9 @@ export default function Home() {
     Object.entries(buCart).forEach(([code, data]) => {
       const price = prices[code] || 0;
       const prod = (productsByBU[bu] || []).find((p) => p.codigo === code);
-      const segmentacaoVal = prod?.segmentacao ?? 40;
+      const segmentacaoVal = overriddenSegmentacao[code] !== undefined && overriddenSegmentacao[code] !== ""
+        ? Number(overriddenSegmentacao[code])
+        : (globalSegmentacao !== "" ? Number(globalSegmentacao) : (prod?.segmentacao ?? 40));
       const segmentacaoPrice = price * (1 - segmentacaoVal / 100);
       const subtotal = data.quantidade * segmentacaoPrice * (1 - data.desconto / 100);
 
@@ -646,7 +739,7 @@ export default function Home() {
     });
 
     return { totalItems, totalValue, totalBonificados };
-  }, [vendedorTab, cart, prices]);
+  }, [vendedorTab, cart, prices, productsByBU, globalSegmentacao, overriddenSegmentacao]);
 
   if (!isAuthenticated) {
     return (
@@ -689,7 +782,7 @@ export default function Home() {
               }}
             />
             <Typography variant="h5" align="center" sx={{ fontWeight: 700, mb: 1, letterSpacing: "-0.5px" }}>
-              Planilha de <Typography component="span" variant="h5" sx={{ color: "primary.main", fontWeight: 700 }}>Preços Web</Typography>
+              Planilha de <Typography component="span" variant="h5" sx={{ color: "primary.main", fontWeight: 700 }}>Preços</Typography>
             </Typography>
             <Typography variant="body2" color="text.secondary" align="center" sx={{ mb: 3 }}>
               Faça login para acessar a plataforma comercial
@@ -786,7 +879,7 @@ export default function Home() {
             }}
           />
           <Typography variant="h5" sx={{ fontWeight: 700, letterSpacing: "-0.5px" }}>
-            Planilha de <Typography component="span" variant="h5" sx={{ color: "primary.main", fontWeight: 700 }}>Preços Web</Typography>
+            Planilha de <Typography component="span" variant="h5" sx={{ color: "primary.main", fontWeight: 700 }}>Preços</Typography>
           </Typography>
         </Box>
 
@@ -837,7 +930,32 @@ export default function Home() {
             />
           </Box>
 
-          <Box sx={{ display: "flex", gap: 1.5 }}>
+          <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+            {role === "vendedor" && (
+              <Box sx={{ display: "flex", alignItems: "center", gap: 1, mr: 1 }}>
+                <Typography variant="body2" color="text.secondary" sx={{ textAlign: "right", lineHeight: 1.1, fontSize: "0.85rem" }}>
+                  Desconto<br />Segmentação
+                </Typography>
+                <TextField
+                  type="number"
+                  size="small"
+                  value={globalSegmentacao}
+                  onChange={(e) => {
+                    const val = e.target.value;
+                    if (val === "") {
+                      setGlobalSegmentacao("");
+                    } else {
+                      const num = Number(val);
+                      if (num >= 0 && num <= 100) {
+                        setGlobalSegmentacao(num);
+                      }
+                    }
+                  }}
+                  slotProps={{ htmlInput: { min: 0, max: 100, style: { textAlign: "center", padding: "6px" } } }}
+                  sx={{ width: 80 }}
+                />
+              </Box>
+            )}
             <Button
               variant="outlined"
               size="small"
@@ -937,7 +1055,14 @@ export default function Home() {
                             const price = prices[p.codigo] || 0;
                             const displayColor = p.cor && colorMap[p.cor] ? colorMap[p.cor] : "#f3f4f6";
                             const isInactive = p.promotionIsActive === false;
-                            const segmentacaoVal = p.segmentacao ?? 40;
+                            const segmentacaoVal = overriddenSegmentacao[p.codigo] !== undefined && overriddenSegmentacao[p.codigo] !== ""
+                              ? Number(overriddenSegmentacao[p.codigo])
+                              : (globalSegmentacao !== "" ? Number(globalSegmentacao) : (p.segmentacao ?? 40));
+                            
+                            const displaySegmentacaoVal = overriddenSegmentacao[p.codigo] !== undefined
+                              ? overriddenSegmentacao[p.codigo]
+                              : (globalSegmentacao !== "" ? globalSegmentacao.toString() : (p.segmentacao ?? 40).toString());
+
                             const segmentacaoPrice = price * (1 - segmentacaoVal / 100);
                             const totalPrice = (segmentacaoPrice * cItem.quantidade) * (1 - cItem.desconto / 100);
 
@@ -970,10 +1095,34 @@ export default function Home() {
                                   {price > 0 ? `R$ ${formatCurrency(segmentacaoPrice)}` : "Sob consulta"}
                                 </TableCell>
 
-                                {/* Segmentação */}
-                                <TableCell align="center" sx={{ fontWeight: 600 }}>
-                                  {`${segmentacaoVal}%`}
-                                </TableCell>
+                                 {/* Segmentação */}
+                                 <TableCell align="center">
+                                   <TextField
+                                     type="number"
+                                     size="small"
+                                     variant="outlined"
+                                     disabled={isInactive}
+                                     slotProps={{ htmlInput: { min: 0, max: 100, style: { textAlign: "center", padding: "6px" } } }}
+                                     value={displaySegmentacaoVal}
+                                     onChange={(e) => {
+                                       const val = e.target.value;
+                                       setOverriddenSegmentacao((prev) => ({
+                                         ...prev,
+                                         [p.codigo]: val,
+                                       }));
+                                     }}
+                                     onBlur={() => {
+                                       if (overriddenSegmentacao[p.codigo] === "") {
+                                         setOverriddenSegmentacao((prev) => {
+                                           const updated = { ...prev };
+                                           delete updated[p.codigo];
+                                           return updated;
+                                         });
+                                       }
+                                     }}
+                                     sx={{ width: 75 }}
+                                   />
+                                 </TableCell>
 
                                 {/* Quantidade */}
                                 <TableCell align="center">
@@ -1043,7 +1192,7 @@ export default function Home() {
                 <Card sx={{ bgcolor: "background.paper", display: "flex", flexDirection: "column", height: "100%" }}>
                   <CardContent sx={{ flexGrow: 1 }}>
                     <Typography variant="h6" sx={{ mb: 2, display: "flex", alignItems: "center", gap: 1 }}>
-                      <ShoppingCartIcon color="primary" /> Ações do Pedido ({buKeys[vendedorTab]})
+                      <ShoppingCartIcon color="primary" /> Ações do Pedido ({buKeys[vendedorTab].replace("_", " ")})
                     </Typography>
 
                     <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap" }}>
@@ -1111,7 +1260,7 @@ export default function Home() {
                 >
                   <CardContent>
                     <Typography variant="h6" sx={{ mb: 2, color: "text.primary" }}>
-                      Resumo da Aba {buKeys[vendedorTab]}
+                      Resumo da Aba {buKeys[vendedorTab].replace("_", " ")}
                     </Typography>
 
                     <Box sx={{ display: "flex", justifyContent: "space-between", mb: 1.5 }}>
