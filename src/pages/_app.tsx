@@ -11,44 +11,69 @@ export default function App({ Component, pageProps }: AppProps) {
         palette: {
           mode: "dark",
           primary: {
-            main: "#4f46e5", // Indigo
-            light: "#4f46e5",
-            dark: "#4f46e5",
+            main: "#007FFF", // Primary 500 (Azul Institucional)
+            light: "#0068D6", // Primary 600
+            dark: "#003C82", // Primary 800
           },
           secondary: {
-            main: "#14b8a6", // Teal
-            light: "#2dd4bf",
-            dark: "#0f766e",
+            main: "#00B7B3", // Turquesa 500
+            light: "#2FD1CD", // Turquesa 400
+            dark: "#0051A8", // Azul 700 (Primary 700)
+          },
+          success: {
+            main: "#00A870", // Destaque - Verde Clínico
           },
           background: {
-            default: "#030712", // Very dark blue/gray
-            paper: "#0b0f19",   // Dark paper container
+            default: "#111827", // Neutrals 900
+            paper: "#1F2937",   // Neutrals 800
           },
           text: {
-            primary: "#f3f4f6",
-            secondary: "#9ca3af",
+            primary: "#F9FAFB", // Neutrals 50
+            secondary: "#9CA3AF", // Neutrals 400
           },
-          divider: "rgba(255, 255, 255, 0.08)",
+          divider: "#374151", // Neutrals 700
         },
         typography: {
-          fontFamily: "'Outfit', 'Plus Jakarta Sans', sans-serif",
+          fontFamily: "'Inter', sans-serif",
           h1: {
             fontWeight: 700,
+            fontSize: "64px",
+            lineHeight: "72px",
           },
           h2: {
             fontWeight: 700,
+            fontSize: "48px",
+            lineHeight: "56px",
           },
           h3: {
             fontWeight: 600,
+            fontSize: "36px",
+            lineHeight: "44px",
           },
           h4: {
             fontWeight: 600,
+            fontSize: "28px",
+            lineHeight: "36px",
           },
           h5: {
-            fontWeight: 500,
+            fontWeight: 600,
+            fontSize: "24px",
+            lineHeight: "32px",
           },
           h6: {
             fontWeight: 500,
+          },
+          body1: {
+            fontSize: "16px",
+            lineHeight: "28px", // FGM Body
+          },
+          body2: {
+            fontSize: "14px",
+            lineHeight: "20px", // FGM Caption/Body Small
+          },
+          caption: {
+            fontSize: "12px",
+            lineHeight: "16px",
           },
           button: {
             textTransform: "none",
@@ -60,31 +85,40 @@ export default function App({ Component, pageProps }: AppProps) {
             styleOverrides: {
               root: {
                 backgroundImage: "none",
-                borderRadius: 12,
-                border: "1px solid rgba(255, 255, 255, 0.05)",
+                borderRadius: 12, // CARDS 12px
+                border: "1px solid #374151", // Neutrals 700
+                boxShadow: "0px 8px 24px rgba(0,0,0,0.10)", // Shadow MEDIUM
               },
             },
           },
           MuiButton: {
             styleOverrides: {
               root: {
-                borderRadius: 8,
+                borderRadius: 8, // BOTÕES 8px
                 transition: "all 0.2s ease-in-out",
+                boxShadow: "0px 2px 8px rgba(0,0,0,0.08)", // Shadow SMALL
                 "&:hover": {
                   transform: "translateY(-1px)",
-                  boxShadow: "0 4px 12px rgba(79, 70, 229, 0.2)",
+                  boxShadow: "0px 8px 24px rgba(0, 127, 255, 0.2)", // Medium shadow with primary glow
                 },
+              },
+            },
+          },
+          MuiOutlinedInput: {
+            styleOverrides: {
+              root: {
+                borderRadius: 8, // Shapes border radius (Inputs 8px)
               },
             },
           },
           MuiTableCell: {
             styleOverrides: {
               root: {
-                borderBottom: "1px solid rgba(255, 255, 255, 0.05)",
+                borderBottom: "1px solid #374151",
               },
               head: {
                 fontWeight: 600,
-                backgroundColor: "rgba(11, 15, 25, 0.95)",
+                backgroundColor: "#1F2937",
                 backdropFilter: "blur(8px)",
               },
             },

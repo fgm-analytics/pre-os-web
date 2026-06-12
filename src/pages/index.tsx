@@ -48,18 +48,18 @@ import ExcelJS from "exceljs";
 
 // Cores mapeadas para o design escuro premium
 const colorMap: Record<string, string> = {
-  green: "#34d399",      // Emerald claro
-  purple: "#c084fc",     // Purple claro
-  red: "#f87171",        // Red claro
-  blue: "#60a5fa",       // Blue claro
-  cyan: "#22d3ee",       // Cyan claro
-  dark_green: "#10b981", // Emerald médio
-  brown: "#fbbf24",      // Amber claro
-  dark_gray: "#9ca3af",  // Cinza claro
-  navy: "#c084fc",     // Navy
-  olive: "#34d399",  //Olive
-  orange: "#fbbf24",  //Orange
-  light_blue: "#34d399" //Light Blue
+  green: "#00A870",      // Verde Clínico / Success FGM
+  purple: "#7B61FF",     // Digital FGM
+  red: "#f87171",        // Red
+  blue: "#007FFF",       // Primary 500 FGM
+  cyan: "#00B7B3",       // Secondary 500 / Turquesa FGM
+  dark_green: "#009966", // Biomateriais FGM
+  brown: "#fbbf24",      // Amber
+  dark_gray: "#9ca3af",  // Neutrals 400 FGM
+  navy: "#0051A8",       // Primary 700 / Implantodontia FGM
+  olive: "#00A870",      // Olive -> Success FGM
+  orange: "#fbbf24",     // Orange
+  light_blue: "#2FD1CD"  // Turquesa 400 FGM
 };
 
 const formatCurrency = (val: number) => {

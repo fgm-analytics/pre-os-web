@@ -5,5 +5,5 @@ This version has breaking changes — APIs, conventions, and file structure may 
 <!-- END:nextjs-agent-rules -->
 
 # Regras de Git e Integração Contínua
-Neste projeto, as operações de **commit** e **push** no GitHub devem sempre ser realizadas e validadas em conjunto com o modelo local **gemma4:e4b** via **Ollama**. Qualquer geração de mensagens de commit ou verificação antes de push deve utilizar essa configuração de modelo.
+Neste projeto, as operações de **commit** e **push** no GitHub devem sempre ser realizadas e validadas em conjunto com o modelo **gpt-4o-mini** via **OpenAI**. Qualquer geração de mensagens de commit ou verificação antes de push deve utilizar essa configuração de modelo.
 

@@ -3,12 +3,23 @@ llm_providers:
     api_type: "openai" # Ollama expõe uma API compatível com o formato da OpenAI
     base_url: "http://localhost:11434/v1"
     api_key: "ollama" # O Ollama não exige chave, mas o driver requer um preenchimento padrão
+  openai:
+    api_type: "openai"
+    base_url: "https://api.openai.com/v1"
+    api_key: "${OPENAI_API_KEY}"
 
 agents:
+  - name: "Lead Developer"
+    profile: "lead_developer_agent.md"
+    llm_config:
+      provider: "openai"
+      model: "gpt-5.4"
+      temperature: 0.2
+      top_p: 0.95
   - name: "Quality Assurance & Reviewer"
     profile: "qa_reviewer_agent.md"
     llm_config:
-      provider: "local_ollama"
-      model: "gemma4:e4b" # Nome exato do modelo com aspas para evitar erro de sintaxe
-      temperature: 0.1 # Temperatura baixa é crítica para QA não alucinar em regras de código
+      provider: "openai"
+      model: "gpt-4o-mini"
+      temperature: 0.1
       top_p: 0.9
