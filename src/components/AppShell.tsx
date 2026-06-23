@@ -69,9 +69,13 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1, fontWeight: 700, color: 'primary.main' }}>
-            FGM DENTAL GROUP
-          </Typography>
+          <Box sx={{ flexGrow: 1, display: 'flex', alignItems: 'center' }}>
+            <img 
+              src="/fgm-logo.png" 
+              alt="FGM Dental Group" 
+              style={{ height: '24px', width: 'auto', objectFit: 'contain' }} 
+            />
+          </Box>
 
           {profile && (
             <>
