@@ -46,8 +46,8 @@ export function PerformanceProvider({ children }: { children: ReactNode }) {
     error,
   } = usePerformanceData();
 
-  // Local state synced with URL
-  const [selectedSeller, setLocalSeller] = useState<string>('todos');
+  // Local state synced with URL. Default to empty string instead of 'todos'.
+  const [selectedSeller, setLocalSeller] = useState<string>('');
   const [selectedClient, setLocalClient] = useState<string>('todos');
   const [clientCodeInput, setClientCodeInput] = useState<string>('');
 
@@ -112,6 +112,17 @@ export function PerformanceProvider({ children }: { children: ReactNode }) {
     });
     return Array.from(list).sort();
   }, [billingData, performanceData]);
+
+  // Auto-select first seller if none is selected (removes 'todos' behavior)
+  useEffect(() => {
+    if (sellers.length > 0 && (!selectedSeller || selectedSeller === 'todos')) {
+      if (!router.query.seller) {
+        // Default to logged in user if they are in the list, else first seller
+        const defaultSeller = profile?.nome && sellers.includes(profile.nome) ? profile.nome : sellers[0];
+        setLocalSeller(defaultSeller);
+      }
+    }
+  }, [sellers, selectedSeller, router.query.seller, profile]);
 
   const clients = useMemo(() => {
     const list = new Map<string, string>();

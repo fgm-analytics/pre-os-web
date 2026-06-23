@@ -64,7 +64,6 @@ function LayoutInner({ children }: { children: ReactNode }) {
               label="Vendedor"
               onChange={(e) => setSelectedSeller(e.target.value)}
             >
-              <MenuItem value="todos">Todos os Vendedores</MenuItem>
               {sellers.map(s => (
                 <MenuItem key={s} value={s}>{s}</MenuItem>
               ))}
