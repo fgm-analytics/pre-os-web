@@ -143,8 +143,8 @@ export default function FaturadoVendedorMes() {
       </Head>
 
       {/* Top Summary Table & Toggle */}
-      <Box sx={{ display: 'flex', gap: 4, mb: 4, alignItems: 'flex-start' }}>
-        <TableContainer component={Paper} sx={{ width: 'auto', border: '1px solid', borderColor: 'divider' }}>
+      <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, gap: 4, mb: 4, alignItems: 'flex-start' }}>
+        <TableContainer component={Paper} sx={{ width: { xs: '100%', md: 'auto' }, border: '1px solid', borderColor: 'divider', order: { xs: 2, md: 1 } }}>
           <Table size="small">
             <TableHead>
               <TableRow sx={{ bgcolor: 'rgba(255, 255, 255, 0.05)' }}>
@@ -203,19 +203,19 @@ export default function FaturadoVendedorMes() {
           </Table>
         </TableContainer>
 
-        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, width: { xs: '100%', md: 'auto' }, order: { xs: 1, md: 2 } }}>
           <ToggleButtonGroup
             value={metric}
             exclusive
             onChange={handleMetricChange}
             aria-label="metric toggle"
             color="primary"
-            sx={{ bgcolor: 'background.paper' }}
+            sx={{ bgcolor: 'background.paper', width: '100%' }}
           >
-            <ToggleButton value="volume" sx={{ px: 4, fontWeight: 700 }}>
+            <ToggleButton value="volume" sx={{ px: 4, fontWeight: 700, flex: 1 }}>
               Volume
             </ToggleButton>
-            <ToggleButton value="valor" sx={{ px: 4, fontWeight: 700 }}>
+            <ToggleButton value="valor" sx={{ px: 4, fontWeight: 700, flex: 1 }}>
               Valor
             </ToggleButton>
           </ToggleButtonGroup>
@@ -229,7 +229,7 @@ export default function FaturadoVendedorMes() {
           <Table size="small" stickyHeader>
           <TableHead>
             <TableRow>
-              <TableCell rowSpan={2} sx={{ fontWeight: 700, minWidth: 200, whiteSpace: 'nowrap', bgcolor: 'background.paper', borderBottom: '2px solid rgba(255,255,255,0.1)' }}>
+              <TableCell rowSpan={2} sx={{ fontWeight: 700, minWidth: 200, whiteSpace: 'nowrap', bgcolor: 'background.paper', borderBottom: '2px solid rgba(255,255,255,0.1)', position: 'sticky', left: 0, zIndex: 3 }}>
                 Grupo de Produto | Mês
               </TableCell>
               {['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'].map(m => (
@@ -250,7 +250,7 @@ export default function FaturadoVendedorMes() {
           <TableBody>
             {/* Total Row */}
             <TableRow sx={{ bgcolor: 'rgba(255, 255, 255, 0.08)' }}>
-              <TableCell sx={{ fontWeight: 800, whiteSpace: 'nowrap' }}>Total</TableCell>
+              <TableCell sx={{ fontWeight: 800, whiteSpace: 'nowrap', position: 'sticky', left: 0, zIndex: 1, bgcolor: 'background.paper' }}>Total</TableCell>
               {tableData.totals.meses.map((m: any, idx: number) => {
                 const isRealizadoSuccess = m.meta > 0 && m.realizado >= m.meta;
                 const isRealizadoWarning = m.meta > 0 && m.realizado < m.meta;
@@ -268,7 +268,7 @@ export default function FaturadoVendedorMes() {
             {tableData.subgroups.map((sub, sIdx) => {
               return (
                 <TableRow key={sub.subgrupo} hover sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                  <TableCell sx={{ fontWeight: 500, whiteSpace: 'nowrap' }}>{sub.subgrupo}</TableCell>
+                  <TableCell sx={{ fontWeight: 500, whiteSpace: 'nowrap', position: 'sticky', left: 0, zIndex: 1, bgcolor: 'background.paper' }}>{sub.subgrupo}</TableCell>
                   {sub.meses.map((m: any, idx: number) => {
                     const isMSuccess = m.meta > 0 && m.realizado >= m.meta;
                     const isMWarning = m.meta > 0 && m.realizado < m.meta;
@@ -295,7 +295,7 @@ export default function FaturadoVendedorMes() {
           <Table size="small" stickyHeader>
             <TableHead>
               <TableRow>
-                <TableCell sx={{ fontWeight: 700, minWidth: 200, bgcolor: 'background.paper', borderBottom: '2px solid rgba(255,255,255,0.1)' }}>
+                <TableCell sx={{ fontWeight: 700, minWidth: 200, bgcolor: 'background.paper', borderBottom: '2px solid rgba(255,255,255,0.1)', position: 'sticky', left: 0, zIndex: 3 }}>
                   Grupo de Produto
                 </TableCell>
                 <TableCell align="center" sx={{ fontWeight: 700, bgcolor: 'background.paper', borderBottom: '2px solid rgba(255,255,255,0.1)' }}>
@@ -318,7 +318,7 @@ export default function FaturadoVendedorMes() {
             <TableBody>
               {/* Total Row */}
               <TableRow sx={{ bgcolor: 'rgba(255, 255, 255, 0.08)' }}>
-                <TableCell sx={{ fontWeight: 800, whiteSpace: 'nowrap' }}>Total</TableCell>
+                <TableCell sx={{ fontWeight: 800, whiteSpace: 'nowrap', position: 'sticky', left: 0, zIndex: 1, bgcolor: 'background.paper' }}>Total</TableCell>
                 {(() => {
                   const totReal = tableData.totals.totalRealizado;
                   const totMeta = tableData.totals.totalMeta;
@@ -350,7 +350,7 @@ export default function FaturadoVendedorMes() {
 
                 return (
                   <TableRow key={sub.subgrupo} hover sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                    <TableCell sx={{ fontWeight: 500, whiteSpace: 'nowrap' }}>{sub.subgrupo}</TableCell>
+                    <TableCell sx={{ fontWeight: 500, whiteSpace: 'nowrap', position: 'sticky', left: 0, zIndex: 1, bgcolor: 'background.paper' }}>{sub.subgrupo}</TableCell>
                     <TableCell align="right" sx={{ fontWeight: 600, color: atingColor, whiteSpace: 'nowrap' }}>{sub.totalRealizado !== 0 ? formatValue(sub.totalRealizado) : ''}</TableCell>
                     <TableCell align="right" sx={{ fontWeight: 600, whiteSpace: 'nowrap' }}>{sub.totalMeta !== 0 ? formatValue(sub.totalMeta) : ''}</TableCell>
                     <TableCell align="right" sx={{ fontWeight: 600, color: atingColor, whiteSpace: 'nowrap' }}>{formatPercent(atingTotal)}</TableCell>

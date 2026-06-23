@@ -738,7 +738,7 @@ export default function Home() {
       </Head>
 
       {/* Main Container */}
-      <Container maxWidth="xl" sx={{ mt: 1, mb: 6, flexGrow: 1, display: "flex", flexDirection: "column" }} className="fade-in">
+      <Container maxWidth="xl" sx={{ mt: 1, mb: 6, px: { xs: 0, sm: 2, md: 3 }, flexGrow: 1, display: "flex", flexDirection: "column" }} className="fade-in">
         {/* Barra de Filtros e Ações */}
         <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 2, mb: 3 }}>
           <Box sx={{ flexGrow: 1, minWidth: 280, maxWidth: { md: 500 } }}>

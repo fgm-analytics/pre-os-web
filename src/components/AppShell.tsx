@@ -173,8 +173,8 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
         component="main" 
         sx={{ 
           flexGrow: 1, 
-          p: 3, 
-          pt: 11,
+          p: { xs: 1, sm: 2, md: 3 }, 
+          pt: { xs: 10, sm: 11, md: 11 },
           minWidth: 0,
           overflow: 'hidden',
           width: drawerOpen && !isMobile ? 'calc(100% - 240px)' : '100%',

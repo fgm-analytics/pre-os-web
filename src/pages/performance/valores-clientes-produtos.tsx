@@ -171,7 +171,7 @@ export default function ValoresClientesProdutos() {
             <Table size="small" stickyHeader sx={{ minWidth: 1400 }}>
               <TableHead>
                 <TableRow>
-                  <TableCell rowSpan={2} sx={{ fontWeight: 700, minWidth: 200, bgcolor: 'background.paper', borderBottom: '2px solid rgba(255,255,255,0.1)' }}>Produto</TableCell>
+                  <TableCell rowSpan={2} sx={{ fontWeight: 700, minWidth: 200, bgcolor: 'background.paper', borderBottom: '2px solid rgba(255,255,255,0.1)', position: 'sticky', left: 0, zIndex: 3 }}>Produto</TableCell>
                   <TableCell rowSpan={2} align="center" sx={{ fontWeight: 700, minWidth: 150, bgcolor: 'background.paper', borderBottom: '2px solid rgba(255,255,255,0.1)' }}>Status do Cliente</TableCell>
                   
                   {/* Volume Headers */}
@@ -206,7 +206,7 @@ export default function ValoresClientesProdutos() {
               <TableBody>
                 {/* Total Row */}
                 <TableRow sx={{ bgcolor: 'rgba(255, 255, 255, 0.08)' }}>
-                  <TableCell sx={{ fontWeight: 800, whiteSpace: 'nowrap' }}>Total</TableCell>
+                  <TableCell sx={{ fontWeight: 800, whiteSpace: 'nowrap', position: 'sticky', left: 0, zIndex: 1, bgcolor: 'background.paper' }}>Total</TableCell>
                   <TableCell></TableCell>
 
                   {/* Volume Totals */}
@@ -238,7 +238,7 @@ export default function ValoresClientesProdutos() {
                 {/* Data Rows */}
                 {tableData.rows.map((row) => (
                   <TableRow key={row.produto} hover>
-                    <TableCell sx={{ fontWeight: 600, whiteSpace: 'nowrap' }}>{row.produto}</TableCell>
+                    <TableCell sx={{ fontWeight: 600, whiteSpace: 'nowrap', position: 'sticky', left: 0, zIndex: 1, bgcolor: 'background.paper' }}>{row.produto}</TableCell>
                     <TableCell align="center" sx={{ p: 1 }}>
                       <Box sx={{ 
                         bgcolor: row.status.bg, 

@@ -105,7 +105,7 @@ export default function UltimosPedidos() {
           <Table stickyHeader size="small">
             <TableHead>
               <TableRow>
-                <TableCell sx={{ fontWeight: 700, bgcolor: 'background.paper' }}>
+                <TableCell sx={{ fontWeight: 700, bgcolor: 'background.paper', position: 'sticky', left: 0, zIndex: 3 }}>
                   <TableSortLabel
                     active={orderBy === 'cliente_nome'}
                     direction={orderBy === 'cliente_nome' ? order : 'asc'}
@@ -152,7 +152,7 @@ export default function UltimosPedidos() {
 
                 return (
                   <TableRow hover key={row.cliente_code}>
-                    <TableCell sx={{ fontWeight: 600 }}>{row.cliente_nome}</TableCell>
+                    <TableCell sx={{ fontWeight: 600, position: 'sticky', left: 0, zIndex: 1, bgcolor: 'background.paper' }}>{row.cliente_nome}</TableCell>
                     <TableCell align="center">{formattedDate}</TableCell>
                     <TableCell align="center" sx={{ fontWeight: 700 }}>{row.dias_desde_ultima_compra}</TableCell>
                     <TableCell align="center">
