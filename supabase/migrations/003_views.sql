@@ -1,7 +1,7 @@
 -- Migrations 003: Views for FGM Performance Dashboard
 
 -- 1. View for historical billing summary grouped by vendedor, ano, mes
-CREATE OR REPLACE VIEW public.v_hist_vendedor AS
+CREATE OR REPLACE VIEW public.v_hist_vendedor WITH (security_invoker = true) AS
 SELECT 
     vendedor_code,
     vendedor_nome,
@@ -13,7 +13,7 @@ FROM public.historico_faturamento
 GROUP BY vendedor_code, vendedor_nome, ano, mes;
 
 -- 2. View for historical billing summary grouped by cliente, ano
-CREATE OR REPLACE VIEW public.v_hist_cliente AS
+CREATE OR REPLACE VIEW public.v_hist_cliente WITH (security_invoker = true) AS
 SELECT 
     vendedor_code,
     cliente_code,
@@ -25,7 +25,7 @@ FROM public.historico_faturamento
 GROUP BY vendedor_code, cliente_code, cliente_nome, ano;
 
 -- 3. View for quarterly performance aggregation (2026)
-CREATE OR REPLACE VIEW public.v_perf_trimestral AS
+CREATE OR REPLACE VIEW public.v_perf_trimestral WITH (security_invoker = true) AS
 SELECT 
     vendedor_code,
     vendedor_nome,

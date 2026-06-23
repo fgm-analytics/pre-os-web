@@ -186,12 +186,16 @@ export default function ValoresClientesProdutos() {
         onChange={(_, val) => {
           if (val === 0) router.push('/performance');
           if (val === 1) router.push('/performance/faturamento');
+          if (val === 3) router.push('/performance/ultimos-pedidos');
         }}
         sx={{ mb: 4, borderBottom: 1, borderColor: 'divider' }}
+        variant="scrollable"
+        scrollButtons="auto"
       >
         <Tab label="Menu Histórico" sx={{ fontWeight: 700 }} />
         <Tab label="Faturado Vendedor Mês" sx={{ fontWeight: 700 }} />
         <Tab label="Valores Clientes Produtos" sx={{ fontWeight: 700 }} />
+        <Tab label="Últimos Pedidos" sx={{ fontWeight: 700 }} />
       </Tabs>
 
       {/* Filters */}

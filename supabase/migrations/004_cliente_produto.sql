@@ -42,25 +42,16 @@ ALTER TABLE public.historico_cliente_produto ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.meta_cliente_produto_2026 ENABLE ROW LEVEL SECURITY;
 
 -- Policies for historico_cliente_produto
-CREATE POLICY "Admins ver tudo historico_cp"
-ON public.historico_cliente_produto
-FOR ALL
-TO authenticated
-USING (
-    EXISTS (SELECT 1 FROM public.usuarios WHERE email = auth.jwt() ->> 'email' AND role = 'admin')
-);
+CREATE POLICY select_historico_cp ON public.historico_cliente_produto
+    FOR SELECT
+    USING (
+        public.is_admin()
+        OR vendedor_code = ANY(public.get_visible_seller_codes())
+    );
 
-CREATE POLICY "Vendedor ver proprio historico_cp"
-ON public.historico_cliente_produto
-FOR SELECT
-TO authenticated
-USING (
-    vendedor_code IN (
-        SELECT u.vendedor_code 
-        FROM public.usuarios u 
-        WHERE u.email = auth.jwt() ->> 'email' AND u.role = 'vendedor'
-    )
-);
+CREATE POLICY all_historico_cp ON public.historico_cliente_produto
+    FOR ALL
+    USING (public.is_admin());
 
 CREATE POLICY "Gerente ver subordinados historico_cp"
 ON public.historico_cliente_produto
@@ -82,25 +73,16 @@ USING (
 );
 
 -- Policies for meta_cliente_produto_2026
-CREATE POLICY "Admins ver tudo meta_cp"
-ON public.meta_cliente_produto_2026
-FOR ALL
-TO authenticated
-USING (
-    EXISTS (SELECT 1 FROM public.usuarios WHERE email = auth.jwt() ->> 'email' AND role = 'admin')
-);
+CREATE POLICY select_meta_cp ON public.meta_cliente_produto_2026
+    FOR SELECT
+    USING (
+        public.is_admin()
+        OR vendedor_code = ANY(public.get_visible_seller_codes())
+    );
 
-CREATE POLICY "Vendedor ver proprio meta_cp"
-ON public.meta_cliente_produto_2026
-FOR SELECT
-TO authenticated
-USING (
-    vendedor_code IN (
-        SELECT u.vendedor_code 
-        FROM public.usuarios u 
-        WHERE u.email = auth.jwt() ->> 'email' AND u.role = 'vendedor'
-    )
-);
+CREATE POLICY all_meta_cp ON public.meta_cliente_produto_2026
+    FOR ALL
+    USING (public.is_admin());
 
 CREATE POLICY "Gerente ver subordinados meta_cp"
 ON public.meta_cliente_produto_2026

@@ -47,12 +47,22 @@ export interface MetaClienteProdutoRecord {
   meta_volume: number;
 }
 
+export interface UltimosPedidosRecord {
+  vendedor_code: number;
+  cliente_code: string;
+  cliente_nome: string;
+  data_ultimo_pedido: string;
+  dias_desde_ultima_compra: number;
+  oportunidade_recompra: string;
+}
+
 export function usePerformanceData() {
   const { user, profile } = useAuth();
   const [billingData, setBillingData] = useState<BillingRecord[]>([]);
   const [performanceData, setPerformanceData] = useState<PerformanceRecord[]>([]);
   const [clienteProdutoData, setClienteProdutoData] = useState<ClienteProdutoRecord[]>([]);
   const [metaClienteProdutoData, setMetaClienteProdutoData] = useState<MetaClienteProdutoRecord[]>([]);
+  const [ultimosPedidosData, setUltimosPedidosData] = useState<UltimosPedidosRecord[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -138,10 +148,14 @@ export function usePerformanceData() {
       // 4. Fetch Cliente x Produto metas
       const metaCpData = await fetchAllRows<MetaClienteProdutoRecord>('meta_cliente_produto_2026');
 
+      // 5. Fetch Últimos Pedidos
+      const ultimosPedidos = await fetchAllRows<UltimosPedidosRecord>('v_ultimos_pedidos');
+
       setBillingData(billing);
       setPerformanceData(performance);
       setClienteProdutoData(cpData);
       setMetaClienteProdutoData(metaCpData);
+      setUltimosPedidosData(ultimosPedidos);
     } catch (err: any) {
       console.error('Error fetching performance data:', err);
       setError(err.message || 'Erro ao carregar dados de performance.');
@@ -159,6 +173,7 @@ export function usePerformanceData() {
     performanceData,
     clienteProdutoData,
     metaClienteProdutoData,
+    ultimosPedidosData,
     loading,
     error,
     refetch: fetchData

@@ -341,12 +341,16 @@ export default function PerformanceDashboard() {
         onChange={(_, val) => {
           if (val === 1) router.push('/performance/faturamento');
           if (val === 2) router.push('/performance/valores-clientes-produtos');
+          if (val === 3) router.push('/performance/ultimos-pedidos');
         }}
         sx={{ mb: 4, borderBottom: 1, borderColor: 'divider' }}
+        variant="scrollable"
+        scrollButtons="auto"
       >
         <Tab label="Menu Histórico" sx={{ fontWeight: 700 }} />
         <Tab label="Faturado Vendedor Mês" sx={{ fontWeight: 700 }} />
         <Tab label="Valores Clientes Produtos" sx={{ fontWeight: 700 }} />
+        <Tab label="Últimos Pedidos" sx={{ fontWeight: 700 }} />
       </Tabs>
 
       {/* Filters */}
