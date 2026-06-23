@@ -4,9 +4,10 @@ import {
   Box, Typography, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow,
   CircularProgress, Alert, Tabs, Tab, FormControl, InputLabel, Select, MenuItem, TextField
 } from '@mui/material';
-import { usePerformanceData } from '../../hooks/usePerformanceData';
-import { useAuth } from '../../contexts/AuthProvider';
+import { usePerformanceContext } from '../../contexts/PerformanceContext';
 import { useRouter } from 'next/router';
+import PerformanceLayout from '../../components/PerformanceLayout';
+import { ReactElement } from 'react';
 
 const formatCurrency = (val: number) => {
   if (!val) return 'R$ -';
@@ -38,43 +39,10 @@ const getStatus = (vol24: number, vol25: number, vol26: number) => {
 
 export default function ValoresClientesProdutos() {
   const router = useRouter();
-  const { profile } = useAuth();
-  const { clienteProdutoData, metaClienteProdutoData, loading, error } = usePerformanceData();
-
-  const [selectedSeller, setSelectedSeller] = useState<string>('todos');
-  const [selectedClient, setSelectedClient] = useState<string>('');
-  const [clientCodeInput, setClientCodeInput] = useState<string>('');
-
-  const isVendedor = profile?.role === 'vendedor';
-  const profileVendedorCode = profile?.vendedor_code ?? null;
-
-  const matchesSelectedSeller = (r: { vendedor_code: number; vendedor_nome: string }) => {
-    if (isVendedor) {
-      return profileVendedorCode !== null && Number(r.vendedor_code) === Number(profileVendedorCode);
-    }
-    return selectedSeller === 'todos' || r.vendedor_nome === selectedSeller;
-  };
-
-  const sellers = useMemo(() => {
-    const list = new Set<string>();
-    clienteProdutoData.forEach(r => {
-      if (r.vendedor_nome) list.add(r.vendedor_nome);
-    });
-    return Array.from(list).sort();
-  }, [clienteProdutoData]);
-
-  const clients = useMemo(() => {
-    const list = new Map<string, string>();
-    clienteProdutoData.forEach(r => {
-      const matchSeller = matchesSelectedSeller(r);
-      if (matchSeller && r.cliente_code) {
-        list.set(r.cliente_code, r.cliente_nome || r.cliente_code);
-      }
-    });
-    return Array.from(list.entries())
-      .map(([code, name]) => ({ code, name }))
-      .sort((a, b) => a.name.localeCompare(b.name));
-  }, [clienteProdutoData, isVendedor, profileVendedorCode, selectedSeller]);
+  const { 
+    clienteProdutoData, metaClienteProdutoData, loading, error,
+    matchesSelectedSeller, clients, selectedClient, clientCodeInput
+  } = usePerformanceContext();
 
   const currentClientCode = useMemo(() => {
     if (clientCodeInput.trim() !== '') {
@@ -160,7 +128,7 @@ export default function ValoresClientesProdutos() {
     };
 
     return { rows, totals };
-  }, [currentClientCode, clienteProdutoData, metaClienteProdutoData, isVendedor, profileVendedorCode, selectedSeller]);
+  }, [currentClientCode, clienteProdutoData, metaClienteProdutoData, matchesSelectedSeller]);
 
   if (loading) {
     return (
@@ -179,79 +147,6 @@ export default function ValoresClientesProdutos() {
       <Head>
         <title>Performance - Valores Clientes Produtos</title>
       </Head>
-
-      {/* Tabs */}
-      <Tabs 
-        value={2} 
-        onChange={(_, val) => {
-          if (val === 0) router.push('/performance');
-          if (val === 1) router.push('/performance/faturamento');
-          if (val === 3) router.push('/performance/ultimos-pedidos');
-        }}
-        sx={{ mb: 4, borderBottom: 1, borderColor: 'divider' }}
-        variant="scrollable"
-        scrollButtons="auto"
-      >
-        <Tab label="Menu Histórico" sx={{ fontWeight: 700 }} />
-        <Tab label="Faturado Vendedor Mês" sx={{ fontWeight: 700 }} />
-        <Tab label="Valores Clientes Produtos" sx={{ fontWeight: 700 }} />
-        <Tab label="Últimos Pedidos" sx={{ fontWeight: 700 }} />
-      </Tabs>
-
-      {/* Filters */}
-      <Box sx={{ display: 'flex', gap: 2, mb: 4, flexWrap: 'wrap', alignItems: 'center' }}>
-        {isVendedor ? (
-          <Box sx={{ display: 'flex', alignItems: 'center', bgcolor: 'rgba(255,255,255,0.05)', px: 2, py: 1, borderRadius: 1, border: '1px solid', borderColor: 'divider', height: 40 }}>
-            <Typography variant="body2" sx={{ color: 'text.secondary', mr: 1, fontWeight: 500 }}>Vendedor:</Typography>
-            <Typography variant="body2" sx={{ fontWeight: 700 }}>{profile?.nome ?? '—'}</Typography>
-          </Box>
-        ) : (
-          <FormControl size="small" sx={{ minWidth: 200 }}>
-            <InputLabel>Vendedor</InputLabel>
-            <Select
-              value={selectedSeller}
-              label="Vendedor"
-              onChange={(e) => setSelectedSeller(e.target.value)}
-            >
-              <MenuItem value="todos">Todos os Vendedores</MenuItem>
-              {sellers.map(s => (
-                <MenuItem key={s} value={s}>{s}</MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-        )}
-
-        <FormControl size="small" sx={{ minWidth: 250 }}>
-          <InputLabel>Cliente</InputLabel>
-          <Select
-            value={selectedClient}
-            label="Cliente"
-            onChange={(e) => {
-              setSelectedClient(e.target.value);
-              setClientCodeInput('');
-            }}
-          >
-            <MenuItem value=""><em>Selecione um cliente</em></MenuItem>
-            {clients.map(c => (
-              <MenuItem key={c.code} value={c.code}>{c.code} - {c.name}</MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-
-        <Typography variant="body2" sx={{ color: 'text.secondary', mx: 1 }}>OU</Typography>
-
-        <TextField
-          size="small"
-          label="Pesquisar por Cód. Cliente"
-          variant="outlined"
-          value={clientCodeInput}
-          onChange={(e) => {
-            setClientCodeInput(e.target.value);
-            setSelectedClient('');
-          }}
-          sx={{ minWidth: 220 }}
-        />
-      </Box>
 
       {/* Client Context Banner */}
       {currentClientCode && clients.find(c => c.code === currentClientCode) && (
@@ -392,3 +287,7 @@ export default function ValoresClientesProdutos() {
     </Box>
   );
 }
+
+ValoresClientesProdutos.getLayout = function getLayout(page: ReactElement) {
+  return <PerformanceLayout>{page}</PerformanceLayout>;
+};

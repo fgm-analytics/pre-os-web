@@ -25,10 +25,12 @@ function AppContent({ Component, pageProps, router }: AppProps) {
     return <Component {...pageProps} />;
   }
 
+  const getLayout = (Component as any).getLayout || ((page: React.ReactNode) => page);
+
   // Wrap private pages in AppShell
   return (
     <AppShell>
-      <Component {...pageProps} />
+      {getLayout(<Component {...pageProps} />)}
     </AppShell>
   );
 }

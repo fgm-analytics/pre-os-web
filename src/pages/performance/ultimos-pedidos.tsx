@@ -4,14 +4,20 @@ import {
   Box, Typography, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow,
   CircularProgress, Alert, Tabs, Tab, TableSortLabel, Chip
 } from '@mui/material';
-import { usePerformanceData, UltimosPedidosRecord } from '../../hooks/usePerformanceData';
+import { usePerformanceContext } from '../../contexts/PerformanceContext';
+import { UltimosPedidosRecord } from '../../hooks/usePerformanceData';
 import { useRouter } from 'next/router';
+import PerformanceLayout from '../../components/PerformanceLayout';
+import { ReactElement } from 'react';
 
 type Order = 'asc' | 'desc';
 
 export default function UltimosPedidos() {
   const router = useRouter();
-  const { ultimosPedidosData, loading, error } = usePerformanceData();
+  const { 
+    ultimosPedidosData, loading, error,
+    matchesSelectedSeller, selectedClient, clientCodeInput, clients
+  } = usePerformanceContext();
   
   const [order, setOrder] = useState<Order>('asc');
   const [orderBy, setOrderBy] = useState<keyof UltimosPedidosRecord>('cliente_nome');
@@ -33,6 +39,22 @@ export default function UltimosPedidos() {
     }
   };
 
+  const currentClientCode = useMemo(() => {
+    if (clientCodeInput.trim() !== '') {
+      const matched = clients.find(c => c.code.toLowerCase().includes(clientCodeInput.trim().toLowerCase()));
+      return matched ? matched.code : clientCodeInput.trim();
+    }
+    return selectedClient !== 'todos' ? selectedClient : '';
+  }, [clientCodeInput, selectedClient, clients]);
+
+  const filteredData = useMemo(() => {
+    return ultimosPedidosData.filter(r => {
+      const matchSeller = matchesSelectedSeller(r);
+      const matchClient = currentClientCode ? r.cliente_code === currentClientCode : true;
+      return matchSeller && matchClient;
+    });
+  }, [ultimosPedidosData, matchesSelectedSeller, currentClientCode]);
+
   const sortedData = useMemo(() => {
     const comparator = (a: UltimosPedidosRecord, b: UltimosPedidosRecord) => {
       let aVal: any = a[orderBy];
@@ -51,8 +73,8 @@ export default function UltimosPedidos() {
       return 0;
     };
 
-    return [...ultimosPedidosData].sort(comparator);
-  }, [ultimosPedidosData, order, orderBy]);
+    return [...filteredData].sort(comparator);
+  }, [filteredData, order, orderBy]);
 
   if (loading) {
     return (
@@ -72,23 +94,7 @@ export default function UltimosPedidos() {
         <title>Performance - Últimos Pedidos</title>
       </Head>
 
-      {/* Tabs */}
-      <Tabs 
-        value={3} 
-        onChange={(_, val) => {
-          if (val === 0) router.push('/performance');
-          if (val === 1) router.push('/performance/faturamento');
-          if (val === 2) router.push('/performance/valores-clientes-produtos');
-        }}
-        sx={{ mb: 4, borderBottom: 1, borderColor: 'divider' }}
-        variant="scrollable"
-        scrollButtons="auto"
-      >
-        <Tab label="Menu Histórico" sx={{ fontWeight: 700 }} />
-        <Tab label="Faturado Vendedor Mês" sx={{ fontWeight: 700 }} />
-        <Tab label="Valores Clientes Produtos" sx={{ fontWeight: 700 }} />
-        <Tab label="Últimos Pedidos" sx={{ fontWeight: 700 }} />
-      </Tabs>
+
 
       <Typography variant="h5" sx={{ mb: 3, fontWeight: 800 }}>
         Últimos Pedidos por Cliente
@@ -180,3 +186,7 @@ export default function UltimosPedidos() {
     </Box>
   );
 }
+
+UltimosPedidos.getLayout = function getLayout(page: ReactElement) {
+  return <PerformanceLayout>{page}</PerformanceLayout>;
+};

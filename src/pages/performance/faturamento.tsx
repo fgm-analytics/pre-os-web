@@ -4,8 +4,10 @@ import {
   Box, Typography, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow,
   CircularProgress, Alert, Tabs, Tab, ToggleButton, ToggleButtonGroup
 } from '@mui/material';
-import { usePerformanceData } from '../../hooks/usePerformanceData';
+import { usePerformanceContext } from '../../contexts/PerformanceContext';
 import { useRouter } from 'next/router';
+import PerformanceLayout from '../../components/PerformanceLayout';
+import { ReactElement } from 'react';
 
 const formatCurrency = (val: number) => {
   if (!val) return '';
@@ -31,7 +33,7 @@ const formatPercent = (val: number | null) => {
 
 export default function FaturadoVendedorMes() {
   const router = useRouter();
-  const { performanceData, loading, error } = usePerformanceData();
+  const { performanceData, loading, error, matchesSelectedSeller } = usePerformanceContext();
   const [metric, setMetric] = useState<'valor' | 'volume'>('valor');
 
   const handleMetricChange = (
@@ -64,6 +66,8 @@ export default function FaturadoVendedorMes() {
       }));
 
       performanceData.forEach(r => {
+        if (!matchesSelectedSeller(r)) return;
+        
         if (r.subgrupo === subg && r.mes >= 1 && r.mes <= 12) {
           const meta = metric === 'valor' ? Number(r.meta_faturamento || 0) : Number(r.meta_volume || 0);
           const realizado = metric === 'valor' ? Number(r.realizado_faturamento || 0) : Number(r.realizado_volume || 0);
@@ -137,24 +141,6 @@ export default function FaturadoVendedorMes() {
       <Head>
         <title>Performance - Faturado Vendedor Mês</title>
       </Head>
-
-      {/* Tabs */}
-      <Tabs 
-        value={1} 
-        onChange={(_, val) => {
-          if (val === 0) router.push('/performance');
-          if (val === 2) router.push('/performance/valores-clientes-produtos');
-          if (val === 3) router.push('/performance/ultimos-pedidos');
-        }}
-        sx={{ mb: 4, borderBottom: 1, borderColor: 'divider' }}
-        variant="scrollable"
-        scrollButtons="auto"
-      >
-        <Tab label="Menu Histórico" sx={{ fontWeight: 700 }} />
-        <Tab label="Faturado Vendedor Mês" sx={{ fontWeight: 700 }} />
-        <Tab label="Valores Clientes Produtos" sx={{ fontWeight: 700 }} />
-        <Tab label="Últimos Pedidos" sx={{ fontWeight: 700 }} />
-      </Tabs>
 
       {/* Top Summary Table & Toggle */}
       <Box sx={{ display: 'flex', gap: 4, mb: 4, alignItems: 'flex-start' }}>
@@ -380,3 +366,7 @@ export default function FaturadoVendedorMes() {
     </Box>
   );
 }
+
+FaturadoVendedorMes.getLayout = function getLayout(page: ReactElement) {
+  return <PerformanceLayout>{page}</PerformanceLayout>;
+};

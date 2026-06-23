@@ -104,8 +104,21 @@ export function usePerformanceData() {
           }
         }
         visibleCodes = Array.from(codes);
+      } else if (profile.role === 'admin') {
+        // Admin sees all VALIDATED sellers (from hierarquia_vendedores)
+        const codes = new Set<number>();
+        const { data: allHierarchy } = await supabase
+          .from('hierarquia_vendedores')
+          .select('gerente_vendedor_code, subordinado_vendedor_code');
+        
+        if (allHierarchy) {
+          allHierarchy.forEach(h => {
+            if (h.gerente_vendedor_code) codes.add(h.gerente_vendedor_code);
+            if (h.subordinado_vendedor_code) codes.add(h.subordinado_vendedor_code);
+          });
+        }
+        visibleCodes = Array.from(codes);
       }
-      // admin: visibleCodes stays empty = fetch all (no vendedor_code filter)
 
       // Paginated fetch helper with optional vendedor_code filter
       const fetchAllRows = async <T,>(table: string): Promise<T[]> => {
@@ -116,13 +129,17 @@ export function usePerformanceData() {
         while (hasMore) {
           let query = supabase.from(table).select('*');
 
-          // Push vendedor_code filter into the query for non-admin roles
+          // Push vendedor_code filter into the query
+          // Non-admin roles and Admin roles now both have visibleCodes populated.
+          // This ensures we ONLY fetch validated hierarchy sellers!
           if (visibleCodes.length === 1) {
             query = query.eq('vendedor_code', visibleCodes[0]);
           } else if (visibleCodes.length > 1) {
             query = query.in('vendedor_code', visibleCodes);
+          } else {
+            // Safety fallback if no codes found (shouldn't happen, but just in case)
+            query = query.eq('vendedor_code', -1);
           }
-          // admin (visibleCodes.length === 0): no filter, RLS handles it
 
           const { data, error: fetchErr } = await query.range(from, from + PAGE_SIZE - 1);
 

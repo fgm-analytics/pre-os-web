@@ -6,10 +6,11 @@ import {
   Table, TableBody, TableCell, TableContainer, TableHead, TableRow,
   CircularProgress, Alert, Tabs, Tab
 } from '@mui/material';
-import { useAuth } from '../../contexts/AuthProvider';
-import { usePerformanceData, BillingRecord } from '../../hooks/usePerformanceData';
+import { usePerformanceContext } from '../../contexts/PerformanceContext';
 import { ResponsiveContainer, AreaChart, Area, ComposedChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts';
 import { useRouter } from 'next/router';
+import PerformanceLayout from '../../components/PerformanceLayout';
+import { ReactElement } from 'react';
 
 const formatCurrency = (val: number) => {
   return new Intl.NumberFormat('pt-BR', {
@@ -48,62 +49,13 @@ const getTrendIndicator = (valCurrent: number, valPrev: number | undefined) => {
 };
 
 export default function PerformanceDashboard() {
-  const router = useRouter();
-  const { profile } = useAuth();
-  const { billingData, loading, error } = usePerformanceData();
+  const { 
+    billingData, loading, error, 
+    selectedClient, clientCodeInput, matchesSelectedSeller 
+  } = usePerformanceContext();
 
-  const [selectedSeller, setSelectedSeller] = useState<string>('todos');
-  const [selectedClient, setSelectedClient] = useState<string>('todos');
-  const [clientCodeInput, setClientCodeInput] = useState<string>('');
   const [startDate, setStartDate] = useState<string>('2026-01-01');
   const [endDate, setEndDate] = useState<string>('2026-12-31');
-
-  // For vendedor role: filter by vendedor_code directly from profile (no name matching needed)
-  const isVendedor = profile?.role === 'vendedor';
-  const profileVendedorCode = profile?.vendedor_code ?? null;
-
-  // Helper: match seller for a given row (uses vendedor_code for vendedor role, nome for admin/gerente)
-  // IMPORTANT: declared before any useMemo that depends on it to avoid ReferenceError
-  const matchesSelectedSeller = (r: { vendedor_code: number; vendedor_nome: string }) => {
-    if (isVendedor) {
-      return profileVendedorCode !== null && Number(r.vendedor_code) === Number(profileVendedorCode);
-    }
-    return selectedSeller === 'todos' || r.vendedor_nome === selectedSeller;
-  };
-
-  // Available sellers from RLS visible data (only used for admin/gerente dropdown)
-  const sellers = useMemo(() => {
-    const list = new Set<string>();
-    billingData.forEach(r => {
-      if (r.vendedor_nome) list.add(r.vendedor_nome);
-    });
-    return Array.from(list).sort();
-  }, [billingData]);
-
-  // Available years
-  const years = useMemo(() => {
-    const list = new Set<number>();
-    billingData.forEach(r => {
-      if (r.ano) list.add(r.ano);
-    });
-    // Ensure 2026 is visible
-    list.add(2026);
-    return Array.from(list).sort((a, b) => b - a);
-  }, [billingData]);
-
-  // Clients in selected seller's portfolio
-  const clients = useMemo(() => {
-    const list = new Map<string, string>();
-    billingData.forEach(r => {
-      const matchSeller = matchesSelectedSeller(r);
-      if (matchSeller && r.cliente_code) {
-        list.set(r.cliente_code, r.cliente_nome || r.cliente_code);
-      }
-    });
-    return Array.from(list.entries())
-      .map(([code, name]) => ({ code, name }))
-      .sort((a, b) => a.name.localeCompare(b.name));
-  }, [billingData, isVendedor, profileVendedorCode, selectedSeller]);
 
   // Filtered data for general dashboard KPIs (respects startDate and endDate range)
   const filteredData = useMemo(() => {
@@ -130,7 +82,7 @@ export default function PerformanceDashboard() {
 
       return matchSeller && matchClient && matchPeriod;
     });
-  }, [billingData, isVendedor, profileVendedorCode, selectedSeller, selectedClient, clientCodeInput, startDate, endDate]);
+  }, [billingData, matchesSelectedSeller, selectedClient, clientCodeInput, startDate, endDate]);
 
   // Global totals
   const totals = useMemo(() => {
@@ -178,7 +130,7 @@ export default function PerformanceDashboard() {
       const matchPeriod = afterStart && beforeEnd;
       return matchSeller && matchClient && matchPeriod;
     });
-  }, [billingData, isVendedor, profileVendedorCode, selectedSeller, selectedClient, clientCodeInput, prevStartDate, prevEndDate]);
+  }, [billingData, matchesSelectedSeller, selectedClient, clientCodeInput, prevStartDate, prevEndDate]);
 
   const previousTotals = useMemo(() => {
     let faturamento = 0;
@@ -212,7 +164,7 @@ export default function PerformanceDashboard() {
 
       return matchSeller && matchClient && matchPeriod;
     });
-  }, [billingData, isVendedor, profileVendedorCode, selectedSeller, selectedClient, clientCodeInput, startDate, endDate]);
+  }, [billingData, matchesSelectedSeller, selectedClient, clientCodeInput, startDate, endDate]);
 
   // Monthly breakdown for comparative overlaid chart & table
   const chartData = useMemo(() => {
@@ -303,7 +255,7 @@ export default function PerformanceDashboard() {
     }
     
     return data;
-  }, [billingData, isVendedor, profileVendedorCode, selectedSeller, selectedClient, clientCodeInput, startDate, endDate, prevStartDate]);
+  }, [billingData, matchesSelectedSeller, selectedClient, clientCodeInput, startDate, endDate, prevStartDate]);
 
   // Client ranking
   const clientRanking = useMemo(() => {
@@ -335,75 +287,8 @@ export default function PerformanceDashboard() {
         <title>Performance Comercial - Histórico</title>
       </Head>
 
-      {/* Tabs */}
-      <Tabs 
-        value={0} 
-        onChange={(_, val) => {
-          if (val === 1) router.push('/performance/faturamento');
-          if (val === 2) router.push('/performance/valores-clientes-produtos');
-          if (val === 3) router.push('/performance/ultimos-pedidos');
-        }}
-        sx={{ mb: 4, borderBottom: 1, borderColor: 'divider' }}
-        variant="scrollable"
-        scrollButtons="auto"
-      >
-        <Tab label="Menu Histórico" sx={{ fontWeight: 700 }} />
-        <Tab label="Faturado Vendedor Mês" sx={{ fontWeight: 700 }} />
-        <Tab label="Valores Clientes Produtos" sx={{ fontWeight: 700 }} />
-        <Tab label="Últimos Pedidos" sx={{ fontWeight: 700 }} />
-      </Tabs>
-
-      {/* Filters */}
+      {/* Filters Specific to this Tab */}
       <Box sx={{ display: 'flex', gap: 2, mb: 4, flexWrap: 'wrap', alignItems: 'center' }}>
-        {isVendedor ? (
-          <Box sx={{ display: 'flex', alignItems: 'center', bgcolor: 'rgba(255,255,255,0.05)', px: 2, py: 1, borderRadius: 1, border: '1px solid', borderColor: 'divider', height: 40 }}>
-            <Typography variant="body2" sx={{ color: 'text.secondary', mr: 1, fontWeight: 500 }}>Vendedor:</Typography>
-            <Typography variant="body2" sx={{ fontWeight: 700 }}>{profile?.nome ?? '—'}</Typography>
-          </Box>
-        ) : (
-          <FormControl size="small" sx={{ minWidth: 200 }}>
-            <InputLabel>Vendedor</InputLabel>
-            <Select
-              value={selectedSeller}
-              label="Vendedor"
-              onChange={(e) => setSelectedSeller(e.target.value)}
-            >
-              <MenuItem value="todos">Todos os Vendedores</MenuItem>
-              {sellers.map(s => (
-                <MenuItem key={s} value={s}>{s}</MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-        )}
-
-        <FormControl size="small" sx={{ minWidth: 200 }}>
-          <InputLabel>Cliente (Carteira)</InputLabel>
-          <Select
-            value={selectedClient}
-            label="Cliente (Carteira)"
-            onChange={(e) => {
-              setSelectedClient(e.target.value);
-              setClientCodeInput('');
-            }}
-          >
-            <MenuItem value="todos">Todos os Clientes</MenuItem>
-            {clients.map(c => (
-              <MenuItem key={c.code} value={c.code}>{c.code} - {c.name}</MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-
-        <TextField
-          size="small"
-          label="Cód. Cliente (Digitar)"
-          variant="outlined"
-          value={clientCodeInput}
-          onChange={(e) => {
-            setClientCodeInput(e.target.value);
-            setSelectedClient('todos');
-          }}
-          sx={{ minWidth: 180 }}
-        />
 
         <TextField
           size="small"
@@ -502,3 +387,7 @@ export default function PerformanceDashboard() {
     </Box>
   );
 }
+
+PerformanceDashboard.getLayout = function getLayout(page: ReactElement) {
+  return <PerformanceLayout>{page}</PerformanceLayout>;
+};
