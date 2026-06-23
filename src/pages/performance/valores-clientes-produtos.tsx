@@ -86,7 +86,10 @@ export default function ValoresClientesProdutos() {
   }, [clientCodeInput, selectedClient, clients]);
 
   const tableData = useMemo(() => {
-    if (!currentClientCode) return { rows: [], totals: null };
+    if (!currentClientCode) return { 
+      rows: [], 
+      totals: { vol24: 0, vol25: 0, vol26: 0, metaVol26: 0, pMetaAtingV: null, pCrescV: null, fat23: 0, fat24: 0, fat25: 0, fat26: 0, metaFat26: 0, pMetaAtingF: null, pCrescF: null } 
+    };
 
     // Find distinct products (subgrupos) for the chosen seller (ignoring client filter to show all products)
     const productSet = new Set<string>();
