@@ -71,34 +71,38 @@ function LayoutInner({ children }: { children: ReactNode }) {
           </FormControl>
         )}
 
-        <FormControl size="small" sx={{ minWidth: 200 }}>
-          <InputLabel>Cliente (Carteira)</InputLabel>
-          <Select
-            value={selectedClient}
-            label="Cliente (Carteira)"
-            onChange={(e) => {
-              setSelectedClient(e.target.value);
-              setClientCodeInput('');
-            }}
-          >
-            <MenuItem value="todos">Todos os Clientes</MenuItem>
-            {clients.map(c => (
-              <MenuItem key={c.code} value={c.code}>{c.code} - {c.name}</MenuItem>
-            ))}
-          </Select>
-        </FormControl>
+        {currentTab !== 1 && (
+          <>
+            <FormControl size="small" sx={{ minWidth: 200 }}>
+              <InputLabel>Cliente (Carteira)</InputLabel>
+              <Select
+                value={selectedClient}
+                label="Cliente (Carteira)"
+                onChange={(e) => {
+                  setSelectedClient(e.target.value);
+                  setClientCodeInput('');
+                }}
+              >
+                <MenuItem value="todos">Todos os Clientes</MenuItem>
+                {clients.map(c => (
+                  <MenuItem key={c.code} value={c.code}>{c.code} - {c.name}</MenuItem>
+                ))}
+              </Select>
+            </FormControl>
 
-        <TextField
-          size="small"
-          label="Cód. Cliente (Digitar)"
-          variant="outlined"
-          value={clientCodeInput}
-          onChange={(e) => {
-            setClientCodeInput(e.target.value);
-            setSelectedClient('todos');
-          }}
-          sx={{ minWidth: 180 }}
-        />
+            <TextField
+              size="small"
+              label="Cód. Cliente (Digitar)"
+              variant="outlined"
+              value={clientCodeInput}
+              onChange={(e) => {
+                setClientCodeInput(e.target.value);
+                setSelectedClient('todos');
+              }}
+              sx={{ minWidth: 180 }}
+            />
+          </>
+        )}
       </Box>
 
       {/* Page Content */}
@@ -110,8 +114,6 @@ function LayoutInner({ children }: { children: ReactNode }) {
 // Wrapper to provide context
 export default function PerformanceLayout({ children }: { children: ReactNode }) {
   return (
-    <PerformanceProvider>
-      <LayoutInner>{children}</LayoutInner>
-    </PerformanceProvider>
+    <LayoutInner>{children}</LayoutInner>
   );
 }

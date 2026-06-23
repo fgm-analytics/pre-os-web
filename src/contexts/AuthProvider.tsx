@@ -62,11 +62,18 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     });
 
     // Listen for auth state changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       setUser(session?.user ?? null);
       if (session?.user) {
-        setLoading(true);
-        fetchProfile(session.user.id).finally(() => setLoading(false));
+        // Only set loading and fetch profile if we don't already have the profile loaded.
+        // This prevents the whole app from unmounting and refreshing when the token refreshes on window focus.
+        setProfile((prevProfile) => {
+          if (!prevProfile || prevProfile.id !== session.user.id) {
+            setLoading(true);
+            fetchProfile(session.user.id).finally(() => setLoading(false));
+          }
+          return prevProfile; // Keep the existing profile until the fetch completes
+        });
       } else {
         setProfile(null);
         setLoading(false);

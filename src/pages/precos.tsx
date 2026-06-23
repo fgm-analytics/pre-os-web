@@ -275,6 +275,8 @@ export default function Home() {
       return;
     }
 
+    itemsToCopy.unshift("Código\tQuantidade");
+
     const textToCopy = itemsToCopy.join("\r\n");
     navigator.clipboard.writeText(textToCopy)
       .then(() => {

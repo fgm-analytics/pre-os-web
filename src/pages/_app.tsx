@@ -4,6 +4,7 @@ import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import { useMemo } from "react";
 import { AuthProvider, useAuth } from "../contexts/AuthProvider";
+import { PerformanceProvider } from "../contexts/PerformanceContext";
 import { AppShell } from "../components/AppShell";
 
 function AppContent({ Component, pageProps, router }: AppProps) {
@@ -163,7 +164,9 @@ export default function App(props: AppProps) {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <AuthProvider>
-        <AppContent {...props} />
+        <PerformanceProvider>
+          <AppContent {...props} />
+        </PerformanceProvider>
       </AuthProvider>
     </ThemeProvider>
   );

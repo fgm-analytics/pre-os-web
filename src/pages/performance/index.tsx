@@ -12,6 +12,13 @@ import { useRouter } from 'next/router';
 import PerformanceLayout from '../../components/PerformanceLayout';
 import { ReactElement } from 'react';
 
+const parseDateString = (dateStr: string) => {
+  if (!dateStr) return new Date(NaN);
+  const [y, m, d] = dateStr.split('-').map(Number);
+  if (isNaN(y) || isNaN(m) || isNaN(d)) return new Date(NaN);
+  return new Date(y, m - 1, d);
+};
+
 const formatCurrency = (val: number) => {
   return new Intl.NumberFormat('pt-BR', {
     style: 'currency',
@@ -70,8 +77,8 @@ export default function PerformanceDashboard() {
 
   // Filtered data for general dashboard KPIs (respects startDate and endDate range)
   const filteredData = useMemo(() => {
-    const start = new Date(startDate);
-    const end = new Date(endDate);
+    const start = parseDateString(startDate);
+    const end = parseDateString(endDate);
     const startY = isNaN(start.getTime()) ? 2026 : start.getFullYear();
     const startM = isNaN(start.getTime()) ? 1 : start.getMonth() + 1;
     const endY = isNaN(end.getTime()) ? 2026 : end.getFullYear();
@@ -107,8 +114,8 @@ export default function PerformanceDashboard() {
   }, [filteredData]);
 
   const { prevStartDate, prevEndDate } = useMemo(() => {
-    const start = new Date(startDate);
-    const end = new Date(endDate);
+    const start = parseDateString(startDate);
+    const end = parseDateString(endDate);
     if (isNaN(start.getTime()) || isNaN(end.getTime())) {
       return { prevStartDate: new Date(), prevEndDate: new Date() };
     }
@@ -155,8 +162,8 @@ export default function PerformanceDashboard() {
 
   // Filtered data for the comparative chart (all years covered by month range)
   const chartFilteredData = useMemo(() => {
-    const start = new Date(startDate);
-    const end = new Date(endDate);
+    const start = parseDateString(startDate);
+    const end = parseDateString(endDate);
     const startM = isNaN(start.getTime()) ? 1 : start.getMonth() + 1;
     const endM = isNaN(end.getTime()) ? 12 : end.getMonth() + 1;
 
@@ -179,8 +186,8 @@ export default function PerformanceDashboard() {
 
   // Monthly breakdown for comparative overlaid chart & table
   const chartData = useMemo(() => {
-    const start = new Date(startDate);
-    const end = new Date(endDate);
+    const start = parseDateString(startDate);
+    const end = parseDateString(endDate);
     const startM = isNaN(start.getTime()) ? 1 : start.getMonth() + 1;
     const endM = isNaN(end.getTime()) ? 12 : end.getMonth() + 1;
 
@@ -210,8 +217,8 @@ export default function PerformanceDashboard() {
 
   // Chronological faturamento timeline over the selected date range (sequential chart data)
   const periodChartData = useMemo(() => {
-    const start = new Date(startDate);
-    const end = new Date(endDate);
+    const start = parseDateString(startDate);
+    const end = parseDateString(endDate);
     
     if (isNaN(start.getTime()) || isNaN(end.getTime())) {
       return [];
