@@ -137,29 +137,35 @@ export function usePerformanceData() {
         if (countErr) throw countErr;
         if (!count || count === 0) return [];
 
-        // 2. Generate parallel promises for all pages
+        // 2. Generate functions that return promises for all pages to avoid starting them all at once
         const pages = Math.ceil(count / PAGE_SIZE);
-        const pagePromises = Array.from({ length: pages }).map((_, i) => {
-          const from = i * PAGE_SIZE;
-          let pageQuery = supabase.from(table).select('*');
-          
-          if (visibleCodes.length === 1) {
-            pageQuery = pageQuery.eq('vendedor_code', visibleCodes[0]);
-          } else if (visibleCodes.length > 1) {
-            pageQuery = pageQuery.in('vendedor_code', visibleCodes);
-          } else {
-            pageQuery = pageQuery.eq('vendedor_code', -1);
-          }
-          
-          return pageQuery.range(from, from + PAGE_SIZE - 1);
+        const pageFns = Array.from({ length: pages }).map((_, i) => {
+          return () => {
+            const from = i * PAGE_SIZE;
+            let pageQuery = supabase.from(table).select('*');
+            
+            if (visibleCodes.length === 1) {
+              pageQuery = pageQuery.eq('vendedor_code', visibleCodes[0]);
+            } else if (visibleCodes.length > 1) {
+              pageQuery = pageQuery.in('vendedor_code', visibleCodes);
+            } else {
+              pageQuery = pageQuery.eq('vendedor_code', -1);
+            }
+            
+            return pageQuery.range(from, from + PAGE_SIZE - 1);
+          };
         });
 
-        // 3. Await all pages in parallel
-        const results = await Promise.all(pagePromises);
+        // 3. Await pages in chunks to avoid overwhelming Supabase/Browser
         let allRows: T[] = [];
-        for (const res of results) {
-          if (res.error) throw res.error;
-          allRows = allRows.concat((res.data || []) as T[]);
+        const CONCURRENT_REQUESTS = 5;
+        for (let i = 0; i < pageFns.length; i += CONCURRENT_REQUESTS) {
+          const chunk = pageFns.slice(i, i + CONCURRENT_REQUESTS);
+          const results = await Promise.all(chunk.map(fn => fn()));
+          for (const res of results) {
+            if (res.error) throw res.error;
+            allRows = allRows.concat((res.data || []) as T[]);
+          }
         }
 
         return allRows;
