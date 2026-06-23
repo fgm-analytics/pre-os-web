@@ -57,6 +57,17 @@ export default function PerformanceDashboard() {
   const [startDate, setStartDate] = useState<string>('2026-01-01');
   const [endDate, setEndDate] = useState<string>('2026-12-31');
 
+  // Available years
+  const years = useMemo(() => {
+    const list = new Set<number>();
+    billingData.forEach(r => {
+      if (r.ano) list.add(r.ano);
+    });
+    // Ensure 2026 is visible
+    list.add(2026);
+    return Array.from(list).sort((a, b) => b - a);
+  }, [billingData]);
+
   // Filtered data for general dashboard KPIs (respects startDate and endDate range)
   const filteredData = useMemo(() => {
     const start = new Date(startDate);
