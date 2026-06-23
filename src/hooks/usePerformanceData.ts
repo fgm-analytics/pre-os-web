@@ -120,53 +120,59 @@ export function usePerformanceData() {
         visibleCodes = Array.from(codes);
       }
 
-      // Paginated fetch helper with optional vendedor_code filter
+      // Paginated fetch helper with optional vendedor_code filter and PARALLEL fetching
       const fetchAllRows = async <T,>(table: string): Promise<T[]> => {
-        let allRows: T[] = [];
-        let from = 0;
-        let hasMore = true;
+        // 1. Get exact count first
+        let countQuery = supabase.from(table).select('*', { count: 'exact', head: true });
+        
+        if (visibleCodes.length === 1) {
+          countQuery = countQuery.eq('vendedor_code', visibleCodes[0]);
+        } else if (visibleCodes.length > 1) {
+          countQuery = countQuery.in('vendedor_code', visibleCodes);
+        } else {
+          countQuery = countQuery.eq('vendedor_code', -1);
+        }
 
-        while (hasMore) {
-          let query = supabase.from(table).select('*');
+        const { count, error: countErr } = await countQuery;
+        if (countErr) throw countErr;
+        if (!count || count === 0) return [];
 
-          // Push vendedor_code filter into the query
-          // Non-admin roles and Admin roles now both have visibleCodes populated.
-          // This ensures we ONLY fetch validated hierarchy sellers!
+        // 2. Generate parallel promises for all pages
+        const pages = Math.ceil(count / PAGE_SIZE);
+        const pagePromises = Array.from({ length: pages }).map((_, i) => {
+          const from = i * PAGE_SIZE;
+          let pageQuery = supabase.from(table).select('*');
+          
           if (visibleCodes.length === 1) {
-            query = query.eq('vendedor_code', visibleCodes[0]);
+            pageQuery = pageQuery.eq('vendedor_code', visibleCodes[0]);
           } else if (visibleCodes.length > 1) {
-            query = query.in('vendedor_code', visibleCodes);
+            pageQuery = pageQuery.in('vendedor_code', visibleCodes);
           } else {
-            // Safety fallback if no codes found (shouldn't happen, but just in case)
-            query = query.eq('vendedor_code', -1);
+            pageQuery = pageQuery.eq('vendedor_code', -1);
           }
+          
+          return pageQuery.range(from, from + PAGE_SIZE - 1);
+        });
 
-          const { data, error: fetchErr } = await query.range(from, from + PAGE_SIZE - 1);
-
-          if (fetchErr) throw fetchErr;
-
-          allRows = allRows.concat((data || []) as T[]);
-          hasMore = (data?.length ?? 0) === PAGE_SIZE;
-          from += PAGE_SIZE;
+        // 3. Await all pages in parallel
+        const results = await Promise.all(pagePromises);
+        let allRows: T[] = [];
+        for (const res of results) {
+          if (res.error) throw res.error;
+          allRows = allRows.concat((res.data || []) as T[]);
         }
 
         return allRows;
       };
 
-      // 1. Fetch ALL historical billing (paginated, filtered)
-      const billing = await fetchAllRows<BillingRecord>('historico_faturamento');
-
-      // 2. Fetch ALL 2026 performance data (paginated, filtered)
-      const performance = await fetchAllRows<PerformanceRecord>('performance_vendedor_2026');
-
-      // 3. Fetch Cliente x Produto historical data
-      const cpData = await fetchAllRows<ClienteProdutoRecord>('historico_cliente_produto');
-
-      // 4. Fetch Cliente x Produto metas
-      const metaCpData = await fetchAllRows<MetaClienteProdutoRecord>('meta_cliente_produto_2026');
-
-      // 5. Fetch Últimos Pedidos
-      const ultimosPedidos = await fetchAllRows<UltimosPedidosRecord>('v_ultimos_pedidos');
+      // Fetch ALL tables in parallel
+      const [billing, performance, cpData, metaCpData, ultimosPedidos] = await Promise.all([
+        fetchAllRows<BillingRecord>('historico_faturamento'),
+        fetchAllRows<PerformanceRecord>('performance_vendedor_2026'),
+        fetchAllRows<ClienteProdutoRecord>('historico_cliente_produto'),
+        fetchAllRows<MetaClienteProdutoRecord>('meta_cliente_produto_2026'),
+        fetchAllRows<UltimosPedidosRecord>('v_ultimos_pedidos')
+      ]);
 
       setBillingData(billing);
       setPerformanceData(performance);
