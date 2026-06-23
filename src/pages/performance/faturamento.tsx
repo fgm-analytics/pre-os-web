@@ -229,7 +229,7 @@ export default function FaturadoVendedorMes() {
           <Table size="small" stickyHeader>
           <TableHead>
             <TableRow>
-              <TableCell rowSpan={2} sx={{ fontWeight: 700, minWidth: 200, whiteSpace: 'nowrap', bgcolor: 'background.paper', borderBottom: '2px solid rgba(255,255,255,0.1)', position: 'sticky', left: 0, zIndex: 3 }}>
+              <TableCell rowSpan={2} sx={{ fontWeight: 700, minWidth: { xs: 120, md: 200 }, maxWidth: { xs: 150, md: 250 }, whiteSpace: 'normal', wordWrap: 'break-word', bgcolor: 'background.paper', borderBottom: '2px solid rgba(255,255,255,0.1)', position: 'sticky', left: 0, zIndex: 3 }}>
                 Grupo de Produto | Mês
               </TableCell>
               {['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'].map(m => (
@@ -268,7 +268,7 @@ export default function FaturadoVendedorMes() {
             {tableData.subgroups.map((sub, sIdx) => {
               return (
                 <TableRow key={sub.subgrupo} hover sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                  <TableCell sx={{ fontWeight: 500, whiteSpace: 'nowrap', position: 'sticky', left: 0, zIndex: 1, bgcolor: 'background.paper' }}>{sub.subgrupo}</TableCell>
+                  <TableCell sx={{ fontWeight: 500, whiteSpace: 'normal', wordWrap: 'break-word', minWidth: { xs: 120, md: 200 }, maxWidth: { xs: 150, md: 250 }, position: 'sticky', left: 0, zIndex: 1, bgcolor: 'background.paper' }}>{sub.subgrupo}</TableCell>
                   {sub.meses.map((m: any, idx: number) => {
                     const isMSuccess = m.meta > 0 && m.realizado >= m.meta;
                     const isMWarning = m.meta > 0 && m.realizado < m.meta;
@@ -295,7 +295,7 @@ export default function FaturadoVendedorMes() {
           <Table size="small" stickyHeader>
             <TableHead>
               <TableRow>
-                <TableCell sx={{ fontWeight: 700, minWidth: 200, bgcolor: 'background.paper', borderBottom: '2px solid rgba(255,255,255,0.1)', position: 'sticky', left: 0, zIndex: 3 }}>
+                <TableCell sx={{ fontWeight: 700, minWidth: { xs: 120, md: 200 }, maxWidth: { xs: 150, md: 250 }, whiteSpace: 'normal', wordWrap: 'break-word', bgcolor: 'background.paper', borderBottom: '2px solid rgba(255,255,255,0.1)', position: 'sticky', left: 0, zIndex: 3 }}>
                   Grupo de Produto
                 </TableCell>
                 <TableCell align="center" sx={{ fontWeight: 700, bgcolor: 'background.paper', borderBottom: '2px solid rgba(255,255,255,0.1)' }}>
@@ -350,7 +350,7 @@ export default function FaturadoVendedorMes() {
 
                 return (
                   <TableRow key={sub.subgrupo} hover sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                    <TableCell sx={{ fontWeight: 500, whiteSpace: 'nowrap', position: 'sticky', left: 0, zIndex: 1, bgcolor: 'background.paper' }}>{sub.subgrupo}</TableCell>
+                    <TableCell sx={{ fontWeight: 500, whiteSpace: 'normal', wordWrap: 'break-word', minWidth: { xs: 120, md: 200 }, maxWidth: { xs: 150, md: 250 }, position: 'sticky', left: 0, zIndex: 1, bgcolor: 'background.paper' }}>{sub.subgrupo}</TableCell>
                     <TableCell align="right" sx={{ fontWeight: 600, color: atingColor, whiteSpace: 'nowrap' }}>{sub.totalRealizado !== 0 ? formatValue(sub.totalRealizado) : ''}</TableCell>
                     <TableCell align="right" sx={{ fontWeight: 600, whiteSpace: 'nowrap' }}>{sub.totalMeta !== 0 ? formatValue(sub.totalMeta) : ''}</TableCell>
                     <TableCell align="right" sx={{ fontWeight: 600, color: atingColor, whiteSpace: 'nowrap' }}>{formatPercent(atingTotal)}</TableCell>

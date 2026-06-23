@@ -171,16 +171,16 @@ export default function ValoresClientesProdutos() {
             <Table size="small" stickyHeader sx={{ minWidth: 1400 }}>
               <TableHead>
                 <TableRow>
-                  <TableCell rowSpan={2} sx={{ fontWeight: 700, minWidth: 200, bgcolor: 'background.paper', borderBottom: '2px solid rgba(255,255,255,0.1)', position: 'sticky', left: 0, zIndex: 3 }}>Produto</TableCell>
-                  <TableCell rowSpan={2} align="center" sx={{ fontWeight: 700, minWidth: 150, bgcolor: 'background.paper', borderBottom: '2px solid rgba(255,255,255,0.1)' }}>Status do Cliente</TableCell>
+                  <TableCell rowSpan={2} sx={{ fontWeight: 700, minWidth: { xs: 120, md: 200 }, maxWidth: { xs: 150, md: 250 }, whiteSpace: 'normal', wordWrap: 'break-word', bgcolor: 'background.paper', borderBottom: '2px solid rgba(255,255,255,0.1)', position: 'sticky', left: 0, zIndex: 3 }}>Produto</TableCell>
+                  <TableCell rowSpan={2} align="center" sx={{ fontWeight: 700, minWidth: { xs: 100, md: 150 }, whiteSpace: 'normal', wordWrap: 'break-word', bgcolor: 'background.paper', borderBottom: '2px solid rgba(255,255,255,0.1)' }}>Status do Cliente</TableCell>
                   
                   {/* Volume Headers */}
-                  <TableCell colSpan={6} align="center" sx={{ fontWeight: 800, bgcolor: 'rgba(59, 130, 246, 0.1)', borderBottom: '1px solid rgba(255,255,255,0.1)', borderLeft: '2px solid rgba(255,255,255,0.1)' }}>
+                  <TableCell colSpan={6} align="center" sx={{ fontWeight: 800, py: { xs: 1, md: 2 }, bgcolor: 'rgba(59, 130, 246, 0.1)', borderBottom: '1px solid rgba(255,255,255,0.1)', borderLeft: '2px solid rgba(255,255,255,0.1)' }}>
                     Volume
                   </TableCell>
                   
                   {/* Valor Headers */}
-                  <TableCell colSpan={7} align="center" sx={{ fontWeight: 800, bgcolor: 'rgba(16, 185, 129, 0.1)', borderBottom: '1px solid rgba(255,255,255,0.1)', borderLeft: '2px solid rgba(255,255,255,0.1)' }}>
+                  <TableCell colSpan={7} align="center" sx={{ fontWeight: 800, py: { xs: 1, md: 2 }, bgcolor: 'rgba(16, 185, 129, 0.1)', borderBottom: '1px solid rgba(255,255,255,0.1)', borderLeft: '2px solid rgba(255,255,255,0.1)' }}>
                     Valor
                   </TableCell>
                 </TableRow>
@@ -238,7 +238,7 @@ export default function ValoresClientesProdutos() {
                 {/* Data Rows */}
                 {tableData.rows.map((row) => (
                   <TableRow key={row.produto} hover>
-                    <TableCell sx={{ fontWeight: 600, whiteSpace: 'nowrap', position: 'sticky', left: 0, zIndex: 1, bgcolor: 'background.paper' }}>{row.produto}</TableCell>
+                    <TableCell sx={{ fontWeight: 600, whiteSpace: 'normal', wordWrap: 'break-word', minWidth: { xs: 120, md: 200 }, maxWidth: { xs: 150, md: 250 }, position: 'sticky', left: 0, zIndex: 1, bgcolor: 'background.paper' }}>{row.produto}</TableCell>
                     <TableCell align="center" sx={{ p: 1 }}>
                       <Box sx={{ 
                         bgcolor: row.status.bg, 
