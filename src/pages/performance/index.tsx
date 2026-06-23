@@ -7,7 +7,7 @@ import {
   CircularProgress, Alert, Tabs, Tab
 } from '@mui/material';
 import { usePerformanceContext } from '../../contexts/PerformanceContext';
-import { ResponsiveContainer, AreaChart, Area, ComposedChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts';
+import { ResponsiveContainer, AreaChart, Area, ComposedChart, Bar, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
 import { useRouter } from 'next/router';
 import PerformanceLayout from '../../components/PerformanceLayout';
 import { ReactElement } from 'react';
@@ -57,12 +57,22 @@ const getTrendIndicator = (valCurrent: number, valPrev: number | undefined) => {
 
 export default function PerformanceDashboard() {
   const { 
-    billingData, loading, error, 
+    billingData, metaClienteProdutoData, loading, error, 
     selectedClient, clientCodeInput, matchesSelectedSeller 
   } = usePerformanceContext();
 
-  const [startDate, setStartDate] = useState<string>('2026-01-01');
-  const [endDate, setEndDate] = useState<string>('2026-12-31');
+  const [startDate, setStartDate] = useState<string>(() => {
+    const now = new Date();
+    // Default to the first day of the current month
+    const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
+    return firstDay.toISOString().split('T')[0];
+  });
+  const [endDate, setEndDate] = useState<string>(() => {
+    const now = new Date();
+    // Default to the last day of the current month
+    const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+    return lastDay.toISOString().split('T')[0];
+  });
 
   // Available years
   const years = useMemo(() => {
@@ -110,8 +120,35 @@ export default function PerformanceDashboard() {
       faturamento += Number(r.realizado_faturamento || 0);
       volume += Number(r.realizado_volume || 0);
     });
-    return { faturamento, volume };
-  }, [filteredData]);
+
+    let metaFaturamento = 0;
+    const start = parseDateString(startDate);
+    const end = parseDateString(endDate);
+    const startM = isNaN(start.getTime()) ? 1 : start.getMonth() + 1;
+    const endM = isNaN(end.getTime()) ? 12 : end.getMonth() + 1;
+    const startY = isNaN(start.getTime()) ? 2026 : start.getFullYear();
+    const endY = isNaN(end.getTime()) ? 2026 : end.getFullYear();
+
+    metaClienteProdutoData.forEach(r => {
+      const matchSeller = matchesSelectedSeller(r);
+      let matchClient = true;
+      if (clientCodeInput.trim() !== '') {
+        matchClient = r.cliente_code?.toLowerCase().includes(clientCodeInput.trim().toLowerCase());
+      } else if (selectedClient !== 'todos') {
+        matchClient = r.cliente_code === selectedClient;
+      }
+      
+      // Meta data is implicitly for 2026
+      const inYearRange = 2026 >= startY && 2026 <= endY;
+      const matchPeriod = inYearRange && r.mes >= startM && r.mes <= endM;
+
+      if (matchSeller && matchClient && matchPeriod) {
+        metaFaturamento += Number(r.meta_faturamento || 0);
+      }
+    });
+
+    return { faturamento, volume, metaFaturamento };
+  }, [filteredData, metaClienteProdutoData, matchesSelectedSeller, selectedClient, clientCodeInput, startDate, endDate]);
 
   const { prevStartDate, prevEndDate } = useMemo(() => {
     const start = parseDateString(startDate);
@@ -241,6 +278,7 @@ export default function PerformanceDashboard() {
 
       let faturamento = 0;
       let faturamentoPrev = 0;
+      let meta = 0;
 
       billingData.forEach(r => {
         const matchSeller = matchesSelectedSeller(r);
@@ -260,12 +298,27 @@ export default function PerformanceDashboard() {
           }
         }
       });
+
+      metaClienteProdutoData.forEach(r => {
+        const matchSeller = matchesSelectedSeller(r);
+        let matchClient = true;
+        if (clientCodeInput.trim() !== '') {
+          matchClient = r.cliente_code?.toLowerCase().includes(clientCodeInput.trim().toLowerCase());
+        } else if (selectedClient !== 'todos') {
+          matchClient = r.cliente_code === selectedClient;
+        }
+        
+        if (matchSeller && matchClient && y === 2026 && r.mes === m) {
+          meta += Number(r.meta_faturamento || 0);
+        }
+      });
       
       data.push({
         name: label,
         prevName: pLabel,
         faturamento,
         faturamentoAnterior: faturamentoPrev,
+        meta,
       });
       
       current.setMonth(current.getMonth() + 1);
@@ -273,7 +326,7 @@ export default function PerformanceDashboard() {
     }
     
     return data;
-  }, [billingData, matchesSelectedSeller, selectedClient, clientCodeInput, startDate, endDate, prevStartDate]);
+  }, [billingData, metaClienteProdutoData, matchesSelectedSeller, selectedClient, clientCodeInput, startDate, endDate, prevStartDate]);
 
   // Client ranking
   const clientRanking = useMemo(() => {
@@ -305,28 +358,42 @@ export default function PerformanceDashboard() {
         <title>Performance Comercial - Histórico</title>
       </Head>
 
-      {/* Filters Specific to this Tab */}
-      <Box sx={{ display: 'flex', gap: 2, mb: 4, flexWrap: 'wrap', alignItems: 'center' }}>
+      {/* Filters Specific to this Tab & Meta Summary */}
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4, flexWrap: 'wrap', gap: 2 }}>
+        <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap', alignItems: 'center' }}>
+          <TextField
+            size="small"
+            label="Data Inicial"
+            type="date"
+            slotProps={{ inputLabel: { shrink: true } }}
+            value={startDate}
+            onChange={(e) => setStartDate(e.target.value)}
+            sx={{ minWidth: 150 }}
+          />
 
-        <TextField
-          size="small"
-          label="Data Inicial"
-          type="date"
-          slotProps={{ inputLabel: { shrink: true } }}
-          value={startDate}
-          onChange={(e) => setStartDate(e.target.value)}
-          sx={{ minWidth: 150 }}
-        />
+          <TextField
+            size="small"
+            label="Data Final"
+            type="date"
+            slotProps={{ inputLabel: { shrink: true } }}
+            value={endDate}
+            onChange={(e) => setEndDate(e.target.value)}
+            sx={{ minWidth: 150 }}
+          />
+        </Box>
 
-        <TextField
-          size="small"
-          label="Data Final"
-          type="date"
-          slotProps={{ inputLabel: { shrink: true } }}
-          value={endDate}
-          onChange={(e) => setEndDate(e.target.value)}
-          sx={{ minWidth: 150 }}
-        />
+        {totals.metaFaturamento > 0 && (
+          <Box sx={{ display: 'flex', alignItems: 'center', bgcolor: 'rgba(255,255,255,0.05)', px: 2, py: 1, borderRadius: 1, border: '1px solid', borderColor: 'divider' }}>
+            <Typography variant="body2" sx={{ color: 'text.secondary', mr: 1, fontWeight: 500 }}>Meta do Período:</Typography>
+            <Typography variant="body2" sx={{ fontWeight: 700, mr: 1 }}>{formatCurrency(totals.metaFaturamento)}</Typography>
+            <Typography variant="body2" sx={{ 
+              fontWeight: 700, 
+              color: totals.faturamento >= totals.metaFaturamento ? 'success.main' : 'error.main' 
+            }}>
+              ({totals.faturamento >= totals.metaFaturamento ? '▲' : '▼'} {((totals.faturamento / totals.metaFaturamento) * 100).toFixed(1)}%)
+            </Typography>
+          </Box>
+        )}
       </Box>
 
       {/* KPIs */}
@@ -384,10 +451,12 @@ export default function PerformanceDashboard() {
                   formatter={(val: any, name: string, props: any) => {
                     if (name === 'Faturamento') return [formatCurrency(val), 'Atual (' + props.payload.name + ')'];
                     if (name === 'faturamentoAnterior') return [formatCurrency(val), 'Anterior (' + props.payload.prevName + ')'];
+                    if (name === 'Meta') return [formatCurrency(val), 'Meta'];
                     return [val, name];
                   }}
                 />
-                <Bar dataKey="faturamentoAnterior" fill="#4B5563" radius={[4, 4, 0, 0]} barSize={40} />
+                <Legend wrapperStyle={{ paddingTop: '10px' }} />
+                <Bar dataKey="faturamentoAnterior" name="Anterior" fill="#4B5563" radius={[4, 4, 0, 0]} barSize={40} />
                 <Area 
                   type="monotone" 
                   dataKey="faturamento" 
@@ -396,6 +465,15 @@ export default function PerformanceDashboard() {
                   strokeWidth={2} 
                   fillOpacity={1} 
                   fill="url(#colorPeriod)" 
+                />
+                <Line 
+                  type="monotone" 
+                  dataKey="meta" 
+                  name="Meta" 
+                  stroke="#10B981" 
+                  strokeWidth={2} 
+                  dot={false} 
+                  strokeDasharray="5 5" 
                 />
               </ComposedChart>
             </ResponsiveContainer>
