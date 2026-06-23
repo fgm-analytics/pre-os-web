@@ -2,6 +2,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import fs from "fs";
 import path from "path";
 import { fetchSFMCProducts } from "../../lib/sfmc";
+import redis, { getCachedData } from "../../lib/redis";
 
 const getFilePath = () => {
   return path.join(process.cwd(), "data", "tabela_precos.json");
@@ -12,30 +13,33 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   if (req.method === "GET") {
     try {
-      // Tentar buscar do SFMC
-      const sfmcItems = await fetchSFMCProducts();
+      const data = await getCachedData("tabela_precos", async () => {
+        // Tentar buscar do SFMC
+        const sfmcItems = await fetchSFMCProducts();
 
-      if (sfmcItems && sfmcItems.length > 0) {
-        const prices: Record<string, number> = {};
-        sfmcItems.forEach((item) => {
-          const keys = (item.keys || {}) as any;
-          const values = (item.values || {}) as any;
-          const codigo = keys.ProductCode || values.ProductCode || keys.productcode || values.productcode || "";
-          const rawUnitPrice = values.UnitPrice || values.unitprice || values.unitPrice || "0";
-          const unitPrice = parseFloat(rawUnitPrice);
-          if (codigo && !isNaN(unitPrice)) {
-            prices[codigo] = unitPrice;
-          }
-        });
-        return res.status(200).json(prices);
-      }
+        if (sfmcItems && sfmcItems.length > 0) {
+          const prices: Record<string, number> = {};
+          sfmcItems.forEach((item) => {
+            const keys = (item.keys || {}) as any;
+            const values = (item.values || {}) as any;
+            const codigo = keys.ProductCode || values.ProductCode || keys.productcode || values.productcode || "";
+            const rawUnitPrice = values.UnitPrice || values.unitprice || values.unitPrice || "0";
+            const unitPrice = parseFloat(rawUnitPrice);
+            if (codigo && !isNaN(unitPrice)) {
+              prices[codigo] = unitPrice;
+            }
+          });
+          return prices;
+        }
 
-      // Fallback local
-      if (!fs.existsSync(filePath)) {
-        return res.status(200).json({});
-      }
-      const fileContent = fs.readFileSync(filePath, "utf-8");
-      const data = JSON.parse(fileContent);
+        // Fallback local
+        if (!fs.existsSync(filePath)) {
+          return {};
+        }
+        const fileContent = fs.readFileSync(filePath, "utf-8");
+        return JSON.parse(fileContent);
+      }, 1800); // 30 minutos
+
       return res.status(200).json(data);
     } catch (error) {
       console.error("API precos GET Error:", error);
@@ -63,6 +67,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       }
 
       fs.writeFileSync(filePath, JSON.stringify(sanitized, null, 2), "utf-8");
+
+      // Invalidar cache
+      if (redis) {
+        await redis.del("tabela_precos");
+      }
+
       return res.status(200).json({ success: true, count: Object.keys(sanitized).length });
     } catch (error) {
       console.error("API precos POST Error:", error);
