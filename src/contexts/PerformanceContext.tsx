@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, useMemo, ReactNode } from 'react';
 import { useRouter } from 'next/router';
+import { supabase } from '../lib/supabase';
 import { usePerformanceData, BillingRecord, PerformanceRecord, ClienteProdutoRecord, MetaClienteProdutoRecord, UltimosPedidosRecord } from '../hooks/usePerformanceData';
 import { useAuth } from './AuthProvider';
 
@@ -35,21 +36,76 @@ export function PerformanceProvider({ children }: { children: ReactNode }) {
   const router = useRouter();
   const { profile } = useAuth();
   
-  // Call the hook ONCE here
-  const {
-    billingData,
-    performanceData,
-    clienteProdutoData,
-    metaClienteProdutoData,
-    ultimosPedidosData,
-    loading,
-    error,
-  } = usePerformanceData();
+  const [availableSellers, setAvailableSellers] = useState<{code: number, name: string}[]>([]);
+  const [loadingContext, setLoadingContext] = useState(true);
 
-  // Local state synced with URL. Default to empty string instead of 'todos'.
+  // Local state synced with URL. Default to empty string.
   const [selectedSeller, setLocalSeller] = useState<string>('');
   const [selectedClient, setLocalClient] = useState<string>('todos');
   const [clientCodeInput, setClientCodeInput] = useState<string>('');
+
+  // 1. Fetch available sellers based on hierarchy
+  useEffect(() => {
+    if (!profile) return;
+    
+    const loadSellers = async () => {
+      setLoadingContext(true);
+      let visibleCodes: number[] = [];
+      
+      if (profile.role === 'vendedor' && profile.vendedor_code) {
+        visibleCodes = [profile.vendedor_code];
+      } else if (profile.role === 'gerente') {
+        const codes = new Set<number>();
+        if (profile.vendedor_code) codes.add(profile.vendedor_code);
+        if (profile.salesforce_id) {
+          const { data: hierarchy } = await supabase.from('hierarquia_vendedores')
+            .select('subordinado_vendedor_code')
+            .eq('gerente_salesforce_id', profile.salesforce_id);
+          if (hierarchy) hierarchy.forEach(h => { if (h.subordinado_vendedor_code) codes.add(h.subordinado_vendedor_code); });
+        }
+        visibleCodes = Array.from(codes);
+      } else if (profile.role === 'admin') {
+        const codes = new Set<number>();
+        const { data: allHierarchy } = await supabase.from('hierarquia_vendedores')
+          .select('gerente_vendedor_code, subordinado_vendedor_code');
+        if (allHierarchy) {
+          allHierarchy.forEach(h => {
+            if (h.gerente_vendedor_code) codes.add(h.gerente_vendedor_code);
+            if (h.subordinado_vendedor_code) codes.add(h.subordinado_vendedor_code);
+          });
+        }
+        visibleCodes = Array.from(codes);
+      }
+
+      // Fetch names for these codes
+      if (visibleCodes.length > 0) {
+        const names = await Promise.all(visibleCodes.map(async (code) => {
+          // Try to get from historico_faturamento first
+          const { data } = await supabase.from('historico_faturamento')
+            .select('vendedor_nome')
+            .eq('vendedor_code', code)
+            .limit(1)
+            .single();
+          if (data) return { code, name: data.vendedor_nome };
+          
+          // Fallback to performance table
+          const { data: pData } = await supabase.from('performance_vendedor_2026')
+            .select('vendedor_nome')
+            .eq('vendedor_code', code)
+            .limit(1)
+            .single();
+          return { code, name: pData ? pData.vendedor_nome : `Vendedor ${code}` };
+        }));
+        
+        // Remove duplicates if any and sort
+        const uniqueNames = Array.from(new Map(names.map(item => [item.code, item])).values());
+        setAvailableSellers(uniqueNames.sort((a, b) => a.name.localeCompare(b.name)));
+      }
+      setLoadingContext(false);
+    };
+
+    loadSellers();
+  }, [profile]);
 
   // Sync state from URL on mount and route change
   useEffect(() => {
@@ -82,60 +138,64 @@ export function PerformanceProvider({ children }: { children: ReactNode }) {
     updateURL({ client });
   };
 
+  // Auto-select first seller if none is selected
+  useEffect(() => {
+    if (availableSellers.length > 0 && (!selectedSeller || selectedSeller === 'todos')) {
+      if (typeof router.query.seller === 'string') {
+        setLocalSeller(router.query.seller);
+      } else {
+        // Default to logged in user if they are in the list, else first seller
+        const defaultSeller = profile?.nome && availableSellers.some(s => s.name === profile.nome) 
+          ? profile.nome 
+          : availableSellers[0].name;
+        setLocalSeller(defaultSeller);
+        updateURL({ seller: defaultSeller });
+      }
+    }
+  }, [availableSellers, selectedSeller, router.query.seller, profile]);
+
+  // Find the selected seller code
+  const selectedSellerCode = useMemo(() => {
+    const found = availableSellers.find(s => s.name === selectedSeller);
+    return found ? found.code : null;
+  }, [availableSellers, selectedSeller]);
+
+  // 2. Call the hook with the specific selectedSellerCode
+  const {
+    billingData,
+    performanceData,
+    clienteProdutoData,
+    metaClienteProdutoData,
+    ultimosPedidosData,
+    loading: loadingData,
+    error,
+  } = usePerformanceData(selectedSellerCode);
+
   const isVendedor = profile?.role === 'vendedor';
   const profileVendedorCode = profile?.vendedor_code ?? null;
-
-  const getSellerName = (code: number) => {
-    const found = billingData.find(b => b.vendedor_code === code);
-    return found ? found.vendedor_nome : undefined;
-  };
 
   const matchesSelectedSeller = (r: { vendedor_code: number; vendedor_nome?: string }) => {
     if (isVendedor) {
       return profileVendedorCode !== null && Number(r.vendedor_code) === Number(profileVendedorCode);
     }
-    if (selectedSeller === 'todos') return true;
-    
-    // Usa o nome consistente do histórico de faturamento para evitar nomes sujos no CP
-    const name = getSellerName(r.vendedor_code) || r.vendedor_nome;
-    return name === selectedSeller;
+    // Now that we fetch strictly by selectedSellerCode, all rows in billingData 
+    // are guaranteed to belong to the selected seller anyway!
+    return true; 
   };
 
-  const sellers = useMemo(() => {
-    const list = new Set<string>();
-    billingData.forEach(r => {
-      if (r.vendedor_nome) list.add(r.vendedor_nome);
-    });
-    // Also check performanceData
-    performanceData.forEach(r => {
-      if (r.vendedor_nome) list.add(r.vendedor_nome);
-    });
-    return Array.from(list).sort();
-  }, [billingData, performanceData]);
-
-  // Auto-select first seller if none is selected (removes 'todos' behavior)
-  useEffect(() => {
-    if (sellers.length > 0 && (!selectedSeller || selectedSeller === 'todos')) {
-      if (!router.query.seller) {
-        // Default to logged in user if they are in the list, else first seller
-        const defaultSeller = profile?.nome && sellers.includes(profile.nome) ? profile.nome : sellers[0];
-        setLocalSeller(defaultSeller);
-      }
-    }
-  }, [sellers, selectedSeller, router.query.seller, profile]);
+  const sellers = availableSellers.map(s => s.name);
 
   const clients = useMemo(() => {
     const list = new Map<string, string>();
     billingData.forEach(r => {
-      const matchSeller = matchesSelectedSeller(r);
-      if (matchSeller && r.cliente_code) {
+      if (r.cliente_code) {
         list.set(r.cliente_code, r.cliente_nome || r.cliente_code);
       }
     });
     return Array.from(list.entries())
       .map(([code, name]) => ({ code, name }))
       .sort((a, b) => a.name.localeCompare(b.name));
-  }, [billingData, isVendedor, profileVendedorCode, selectedSeller]);
+  }, [billingData]);
 
   return (
     <PerformanceContext.Provider value={{
@@ -144,7 +204,7 @@ export function PerformanceProvider({ children }: { children: ReactNode }) {
       clienteProdutoData,
       metaClienteProdutoData,
       ultimosPedidosData,
-      loading,
+      loading: loadingContext || loadingData,
       error,
       selectedSeller,
       setSelectedSeller,

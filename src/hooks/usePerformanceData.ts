@@ -56,7 +56,7 @@ export interface UltimosPedidosRecord {
   oportunidade_recompra: string;
 }
 
-export function usePerformanceData() {
+export function usePerformanceData(selectedSellerCode: number | null) {
   const { user, profile } = useAuth();
   const [billingData, setBillingData] = useState<BillingRecord[]>([]);
   const [performanceData, setPerformanceData] = useState<PerformanceRecord[]>([]);
@@ -67,71 +67,27 @@ export function usePerformanceData() {
   const [error, setError] = useState<string | null>(null);
 
   const fetchData = async () => {
-    if (!user || !profile) {
+    if (!user || !profile || !selectedSellerCode) {
+      setBillingData([]);
+      setPerformanceData([]);
+      setClienteProdutoData([]);
+      setMetaClienteProdutoData([]);
+      setUltimosPedidosData([]);
       setLoading(false);
       return;
     }
+    
     setLoading(true);
-
     setError(null);
 
     const PAGE_SIZE = 1000;
 
-    // Determine which vendedor_codes this user can see
-    let visibleCodes: number[] = [];
-
     try {
-      if (profile.role === 'vendedor') {
-        // Vendedor sees only their own code
-        if (profile.vendedor_code) {
-          visibleCodes = [profile.vendedor_code];
-        }
-      } else if (profile.role === 'gerente') {
-        // Gerente sees self + subordinates from hierarquia_vendedores
-        const codes = new Set<number>();
-        if (profile.vendedor_code) codes.add(profile.vendedor_code);
-
-        if (profile.salesforce_id) {
-          const { data: hierarchy } = await supabase
-            .from('hierarquia_vendedores')
-            .select('subordinado_vendedor_code')
-            .eq('gerente_salesforce_id', profile.salesforce_id);
-
-          if (hierarchy) {
-            hierarchy.forEach(h => {
-              if (h.subordinado_vendedor_code) codes.add(h.subordinado_vendedor_code);
-            });
-          }
-        }
-        visibleCodes = Array.from(codes);
-      } else if (profile.role === 'admin') {
-        // Admin sees all VALIDATED sellers (from hierarquia_vendedores)
-        const codes = new Set<number>();
-        const { data: allHierarchy } = await supabase
-          .from('hierarquia_vendedores')
-          .select('gerente_vendedor_code, subordinado_vendedor_code');
-        
-        if (allHierarchy) {
-          allHierarchy.forEach(h => {
-            if (h.gerente_vendedor_code) codes.add(h.gerente_vendedor_code);
-            if (h.subordinado_vendedor_code) codes.add(h.subordinado_vendedor_code);
-          });
-        }
-        visibleCodes = Array.from(codes);
-      }
-
-      // Paginated fetch helper with optional vendedor_code filter and PARALLEL fetching
+      // Paginated fetch helper with PARALLEL chunking
       const fetchAllRows = async <T,>(table: string): Promise<T[]> => {
         // 1. Get exact count first
         let countQuery = supabase.from(table).select('*', { count: 'exact', head: true });
-        
-        if (visibleCodes.length === 1) {
-          countQuery = countQuery.eq('vendedor_code', visibleCodes[0]);
-        } else if (visibleCodes.length > 1) {
-          countQuery = countQuery.in('vendedor_code', visibleCodes);
-        } else {
-          countQuery = countQuery.eq('vendedor_code', -1);
-        }
+        countQuery = countQuery.eq('vendedor_code', selectedSellerCode);
 
         const { count, error: countErr } = await countQuery;
         if (countErr) throw countErr;
@@ -143,15 +99,7 @@ export function usePerformanceData() {
           return () => {
             const from = i * PAGE_SIZE;
             let pageQuery = supabase.from(table).select('*');
-            
-            if (visibleCodes.length === 1) {
-              pageQuery = pageQuery.eq('vendedor_code', visibleCodes[0]);
-            } else if (visibleCodes.length > 1) {
-              pageQuery = pageQuery.in('vendedor_code', visibleCodes);
-            } else {
-              pageQuery = pageQuery.eq('vendedor_code', -1);
-            }
-            
+            pageQuery = pageQuery.eq('vendedor_code', selectedSellerCode);
             return pageQuery.range(from, from + PAGE_SIZE - 1);
           };
         });
@@ -195,7 +143,7 @@ export function usePerformanceData() {
 
   useEffect(() => {
     fetchData();
-  }, [user, profile]);
+  }, [user, profile, selectedSellerCode]);
 
   return {
     billingData,
