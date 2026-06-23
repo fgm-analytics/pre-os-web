@@ -340,11 +340,13 @@ export default function PerformanceDashboard() {
         value={0} 
         onChange={(_, val) => {
           if (val === 1) router.push('/performance/faturamento');
+          if (val === 2) router.push('/performance/valores-clientes-produtos');
         }}
         sx={{ mb: 4, borderBottom: 1, borderColor: 'divider' }}
       >
         <Tab label="Menu Histórico" sx={{ fontWeight: 700 }} />
         <Tab label="Faturado Vendedor Mês" sx={{ fontWeight: 700 }} />
+        <Tab label="Valores Clientes Produtos" sx={{ fontWeight: 700 }} />
       </Tabs>
 
       {/* Filters */}

@@ -24,10 +24,35 @@ export interface PerformanceRecord {
   realizado_volume: number;
 }
 
+export interface ClienteProdutoRecord {
+  vendedor_code: number;
+  vendedor_nome: string;
+  cliente_code: string;
+  cliente_nome: string;
+  subgrupo: string;
+  ano: number;
+  mes: number;
+  realizado_faturamento: number;
+  realizado_volume: number;
+}
+
+export interface MetaClienteProdutoRecord {
+  vendedor_code: number;
+  vendedor_nome: string;
+  cliente_code: string;
+  cliente_nome: string;
+  subgrupo: string;
+  mes: number;
+  meta_faturamento: number;
+  meta_volume: number;
+}
+
 export function usePerformanceData() {
   const { user, profile } = useAuth();
   const [billingData, setBillingData] = useState<BillingRecord[]>([]);
   const [performanceData, setPerformanceData] = useState<PerformanceRecord[]>([]);
+  const [clienteProdutoData, setClienteProdutoData] = useState<ClienteProdutoRecord[]>([]);
+  const [metaClienteProdutoData, setMetaClienteProdutoData] = useState<MetaClienteProdutoRecord[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -107,8 +132,16 @@ export function usePerformanceData() {
       // 2. Fetch ALL 2026 performance data (paginated, filtered)
       const performance = await fetchAllRows<PerformanceRecord>('performance_vendedor_2026');
 
+      // 3. Fetch Cliente x Produto historical data
+      const cpData = await fetchAllRows<ClienteProdutoRecord>('historico_cliente_produto');
+
+      // 4. Fetch Cliente x Produto metas
+      const metaCpData = await fetchAllRows<MetaClienteProdutoRecord>('meta_cliente_produto_2026');
+
       setBillingData(billing);
       setPerformanceData(performance);
+      setClienteProdutoData(cpData);
+      setMetaClienteProdutoData(metaCpData);
     } catch (err: any) {
       console.error('Error fetching performance data:', err);
       setError(err.message || 'Erro ao carregar dados de performance.');
@@ -124,6 +157,8 @@ export function usePerformanceData() {
   return {
     billingData,
     performanceData,
+    clienteProdutoData,
+    metaClienteProdutoData,
     loading,
     error,
     refetch: fetchData

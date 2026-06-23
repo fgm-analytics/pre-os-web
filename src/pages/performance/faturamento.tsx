@@ -143,11 +143,13 @@ export default function FaturadoVendedorMes() {
         value={1} 
         onChange={(_, val) => {
           if (val === 0) router.push('/performance');
+          if (val === 2) router.push('/performance/valores-clientes-produtos');
         }}
         sx={{ mb: 4, borderBottom: 1, borderColor: 'divider' }}
       >
         <Tab label="Menu Histórico" sx={{ fontWeight: 700 }} />
         <Tab label="Faturado Vendedor Mês" sx={{ fontWeight: 700 }} />
+        <Tab label="Valores Clientes Produtos" sx={{ fontWeight: 700 }} />
       </Tabs>
 
       {/* Top Summary Table & Toggle */}
