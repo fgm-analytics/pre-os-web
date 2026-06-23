@@ -3,8 +3,37 @@ import type { AppProps } from "next/app";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import { useMemo } from "react";
+import { AuthProvider, useAuth } from "../contexts/AuthProvider";
+import { AppShell } from "../components/AppShell";
 
-export default function App({ Component, pageProps }: AppProps) {
+function AppContent({ Component, pageProps, router }: AppProps) {
+  const { user, loading } = useAuth();
+
+  // Pages that do not need authentication (e.g. login)
+  const isPublicPage = router.pathname === "/";
+
+  if (loading) {
+    return (
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', backgroundColor: '#111827' }}>
+        {/* Simple loader */}
+        <div style={{ color: '#007FFF', fontFamily: 'sans-serif', fontWeight: 600 }}>Carregando plataforma...</div>
+      </div>
+    );
+  }
+
+  if (isPublicPage) {
+    return <Component {...pageProps} />;
+  }
+
+  // Wrap private pages in AppShell
+  return (
+    <AppShell>
+      <Component {...pageProps} />
+    </AppShell>
+  );
+}
+
+export default function App(props: AppProps) {
   const theme = useMemo(
     () =>
       createTheme({
@@ -131,7 +160,9 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <Component {...pageProps} />
+      <AuthProvider>
+        <AppContent {...props} />
+      </AuthProvider>
     </ThemeProvider>
   );
 }
