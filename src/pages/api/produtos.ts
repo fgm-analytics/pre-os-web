@@ -31,23 +31,23 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return { Dentscare: [], Home_Care: [], Whiteness: [] };
       }
 
-      // 2. d_material: categoria e nome, filtrando os liberados
+      // 2. d_material: categoria e nome
       const { data: dMaterial } = await supabase
         .from("d_material")
-        .select("material, grupo_principal, descricao, status_material")
-        .eq("status_material", "Liberado");
+        .select("material, grupo_principal, descricao, status_material");
 
-      const materialMap = new Map<string, { categoria: string; nome: string }>();
+      const materialMap = new Map<string, { categoria: string; nome: string; status: string }>();
       if (dMaterial && dMaterial.length > 0) {
         dMaterial.forEach((row: any) => {
           const code = String(row.material || "").trim();
           const grupo = String(row.grupo_principal || "").trim();
           const nome = String(row.descricao || "").trim();
-          if (code) materialMap.set(code, { categoria: grupo, nome });
+          const status = String(row.status_material || "").trim();
+          if (code) materialMap.set(code, { categoria: grupo, nome, status });
         });
-        console.log(`[API produtos] d_material carregado: ${materialMap.size} produtos liberados`);
+        console.log(`[API produtos] d_material carregado: ${materialMap.size} produtos`);
       } else {
-        console.log("[API produtos] d_material vazio ou sem produtos liberados");
+        console.log("[API produtos] d_material vazio");
       }
 
       // 3. Montar lista: base = config_produto, enriquecida com d_material
@@ -65,14 +65,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         const materialData = materialMap.get(code);
         
-        // Se a instrução for rígida para deixar SÓ os liberados, e não achamos no map, podemos pular
-        // (Se d_material estiver vazia, a tela não exibirá nada. Ajuste conforme necessidade do negócio)
-        if (!materialData) {
+        // Se temos o status do material explicitamente diferente de "Liberado", nós ignoramos
+        if (materialData && materialData.status && materialData.status !== "Liberado") {
           continue; 
         }
 
-        const categoria = materialData.categoria || "Geral";
-        const nomeProduto = materialData.nome || `[${code}]`;
+        const categoria = materialData?.categoria || "Geral";
+        const nomeProduto = materialData?.nome || `[${code}]`;
 
         result[bu].push({
           codigo: code,
