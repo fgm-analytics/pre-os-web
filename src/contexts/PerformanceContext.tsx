@@ -110,6 +110,21 @@ export function PerformanceProvider({ children }: { children: ReactNode }) {
             }
           }));
         }
+
+        // Caso ainda falte algum (ex: recém adicionado sem histórico ou metas), busca na tabela de usuários
+        const stillMissing = visibleCodes.filter(code => !namesMap.has(code));
+        if (stillMissing.length > 0) {
+          await Promise.all(stillMissing.map(async (code) => {
+            const { data: uData } = await supabase.from('usuarios')
+              .select('nome')
+              .eq('vendedor_code', code)
+              .limit(1)
+              .single();
+            if (uData && uData.nome) {
+              namesMap.set(code, uData.nome);
+            }
+          }));
+        }
         
         const finalNames = visibleCodes.map(code => ({
           code,
