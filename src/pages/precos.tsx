@@ -88,19 +88,10 @@ interface CartItem {
 }
 
 import { useAuth } from "../contexts/AuthProvider";
-import { useRouter } from "next/router";
 
 export default function Home() {
   const { user, profile } = useAuth();
-  const router = useRouter();
   
-  // Auto redirect to login if not authenticated
-  useEffect(() => {
-    if (!user) {
-      router.push("/");
-    }
-  }, [user, router]);
-
   const [globalSegmentacao, setGlobalSegmentacao] = useState<number | "">("");
   const [overriddenSegmentacao, setOverriddenSegmentacao] = useState<Record<string, string>>({});
   

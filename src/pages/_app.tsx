@@ -2,10 +2,21 @@ import "@/styles/globals.css";
 import type { AppProps } from "next/app";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
-import { useMemo } from "react";
+import { useMemo, useEffect } from "react";
 import { AuthProvider, useAuth } from "../contexts/AuthProvider";
 import { PerformanceProvider } from "../contexts/PerformanceContext";
 import { AppShell } from "../components/AppShell";
+
+function AuthRedirect({ router }: { router: any }) {
+  useEffect(() => {
+    router.replace("/");
+  }, [router]);
+  return (
+    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', backgroundColor: '#111827' }}>
+      <div style={{ color: '#007FFF', fontFamily: 'sans-serif', fontWeight: 600 }}>Redirecionando para login...</div>
+    </div>
+  );
+}
 
 function AppContent({ Component, pageProps, router }: AppProps) {
   const { user, loading } = useAuth();
@@ -24,6 +35,10 @@ function AppContent({ Component, pageProps, router }: AppProps) {
 
   if (isPublicPage) {
     return <Component {...pageProps} />;
+  }
+
+  if (!user) {
+    return <AuthRedirect router={router} />;
   }
 
   const getLayout = (Component as any).getLayout || ((page: React.ReactNode) => page);
