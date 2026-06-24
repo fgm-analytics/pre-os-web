@@ -155,8 +155,15 @@ export default function Home() {
       const { data: { session } } = await supabase.auth.getSession();
       const headers = session?.access_token ? { Authorization: `Bearer ${session.access_token}` } : undefined;
 
-      const prodRes = await fetch("/api/produtos", { headers });
-      const prodData = await prodRes.json();
+      const [prodRes, priceRes] = await Promise.all([
+        fetch("/api/produtos", { headers }),
+        fetch("/api/precos", { headers })
+      ]);
+
+      const [prodData, priceData] = await Promise.all([
+        prodRes.json(),
+        priceRes.json()
+      ]);
 
       // Mapear businessUnit para os itens para fácil rastreabilidade
       const mappedBU: Record<string, Product[]> = {};
@@ -165,8 +172,6 @@ export default function Home() {
       });
       setProductsByBU(mappedBU);
 
-      const priceRes = await fetch("/api/precos", { headers });
-      const priceData = await priceRes.json();
       setPrices(priceData);
       setTempPrices(priceData);
     } catch (err) {

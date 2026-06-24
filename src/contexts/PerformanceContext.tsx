@@ -79,27 +79,45 @@ export function PerformanceProvider({ children }: { children: ReactNode }) {
 
       // Fetch names for these codes
       if (visibleCodes.length > 0) {
-        const names = await Promise.all(visibleCodes.map(async (code) => {
-          // Try to get from historico_faturamento first
-          const { data } = await supabase.from('historico_faturamento')
-            .select('vendedor_nome')
-            .eq('vendedor_code', code)
-            .limit(1)
-            .single();
-          if (data) return { code, name: data.vendedor_nome };
+        const namesMap = new Map<number, string>();
+        
+        // Bulk fetch from historico_faturamento
+        const { data: histData } = await supabase.from('historico_faturamento')
+          .select('vendedor_code, vendedor_nome')
+          .in('vendedor_code', visibleCodes);
           
-          // Fallback to performance table
-          const { data: pData } = await supabase.from('performance_vendedor_2026')
-            .select('vendedor_nome')
-            .eq('vendedor_code', code)
-            .limit(1)
-            .single();
-          return { code, name: pData ? pData.vendedor_nome : `Vendedor ${code}` };
+        if (histData) {
+          histData.forEach(row => {
+            if (!namesMap.has(row.vendedor_code) && row.vendedor_nome) {
+              namesMap.set(row.vendedor_code, row.vendedor_nome);
+            }
+          });
+        }
+        
+        // Find missing codes
+        const missingCodes = visibleCodes.filter(code => !namesMap.has(code));
+        
+        if (missingCodes.length > 0) {
+          // Bulk fetch fallbacks from performance table
+          const { data: perfData } = await supabase.from('performance_vendedor_2026')
+            .select('vendedor_code, vendedor_nome')
+            .in('vendedor_code', missingCodes);
+            
+          if (perfData) {
+            perfData.forEach(row => {
+              if (!namesMap.has(row.vendedor_code) && row.vendedor_nome) {
+                namesMap.set(row.vendedor_code, row.vendedor_nome);
+              }
+            });
+          }
+        }
+        
+        const finalNames = visibleCodes.map(code => ({
+          code,
+          name: namesMap.get(code) || `Vendedor ${code}`
         }));
         
-        // Remove duplicates if any and sort
-        const uniqueNames = Array.from(new Map(names.map(item => [item.code, item])).values());
-        setAvailableSellers(uniqueNames.sort((a, b) => a.name.localeCompare(b.name)));
+        setAvailableSellers(finalNames.sort((a, b) => a.name.localeCompare(b.name)));
       }
       setLoadingContext(false);
     };
