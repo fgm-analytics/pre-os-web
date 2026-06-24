@@ -143,16 +143,16 @@ export default function AdminCatalogo() {
     setProducts(products.map(p => p.codigo === codigo ? { ...p, [field]: value } : p));
   };
 
-  if (loading) return <Box p={4}><CircularProgress /></Box>;
+  if (loading) return <Box sx={{ p: 4 }}><CircularProgress /></Box>;
 
   const currentProducts = products.filter(p => p.businessUnit === currentTab);
 
   return (
-    <Box p={4} sx={{ backgroundColor: "#111", minHeight: "100vh", color: "#fff" }}>
+    <Box sx={{ p: 4, backgroundColor: "#111", minHeight: "100vh", color: "#fff" }}>
       <Head><title>Editor de Catálogo - Admin</title></Head>
       
-      <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
-        <Typography variant="h4" fontWeight="bold">Gestão de Catálogo (Admin)</Typography>
+      <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 3 }}>
+        <Typography variant="h4" sx={{ fontWeight: "bold" }}>Gestão de Catálogo (Admin)</Typography>
         <Button 
           variant="contained" 
           color="success" 
@@ -182,14 +182,14 @@ export default function AdminCatalogo() {
         </Tabs>
 
         {currentProducts.length === 0 ? (
-          <Typography p={2} color="gray">Nenhum produto nesta aba.</Typography>
+          <Typography sx={{ p: 2, color: "gray" }}>Nenhum produto nesta aba.</Typography>
         ) : (
-          <Box display="flex" flexDirection="column" gap={1}>
+          <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
             {currentProducts.map((p, index) => (
               <Paper key={p.codigo} sx={{ display: "flex", alignItems: "center", p: 1, backgroundColor: "#333", color: "#fff" }}>
                 
                 {/* SETAS */}
-                <Box display="flex" flexDirection="column" mr={2}>
+                <Box sx={{ display: "flex", flexDirection: "column", mr: 2 }}>
                   <IconButton 
                     size="small" 
                     onClick={() => moveProduct(p.codigo, "up")} 
@@ -208,8 +208,8 @@ export default function AdminCatalogo() {
                   </IconButton>
                 </Box>
 
-                <Box flex={1}>
-                  <Typography variant="body1" fontWeight="bold">{p.material}</Typography>
+                <Box sx={{ flex: 1 }}>
+                  <Typography variant="body1" sx={{ fontWeight: "bold" }}>{p.material}</Typography>
                   <Typography variant="body2" color="gray">Código: {p.codigo} | Cat: {p.categoria} (do ERP)</Typography>
                 </Box>
 
