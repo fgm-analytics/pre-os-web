@@ -129,11 +129,14 @@ export default function PerformanceDashboard() {
     const startY = isNaN(start.getTime()) ? 2026 : start.getFullYear();
     const endY = isNaN(end.getTime()) ? 2026 : end.getFullYear();
 
+    const excludedGroups = ['Dentscare', 'Whiteness', 'Outros', 'Home Care', 'Dentscare\\', 'Whiteness\\'];
+
     const isGlobalMeta = selectedClient === 'todos' && clientCodeInput.trim() === '';
 
     if (isGlobalMeta) {
       performanceData.forEach(r => {
         if (!matchesSelectedSeller(r)) return;
+        if (excludedGroups.includes(r.subgrupo)) return;
         const inYearRange = 2026 >= startY && 2026 <= endY;
         const matchPeriod = inYearRange && r.mes >= startM && r.mes <= endM;
         if (matchPeriod) {
@@ -163,7 +166,7 @@ export default function PerformanceDashboard() {
     let metaMesAtual = 0;
     const currentMonth = new Date().getMonth() + 1;
     performanceData.forEach(r => {
-      if (matchesSelectedSeller(r) && r.mes === currentMonth) {
+      if (matchesSelectedSeller(r) && r.mes === currentMonth && !excludedGroups.includes(r.subgrupo)) {
         metaMesAtual += Number(r.meta_faturamento || 0);
       }
     });
@@ -178,11 +181,9 @@ export default function PerformanceDashboard() {
       return { prevStartDate: new Date(), prevEndDate: new Date() };
     }
     
-    // Duration in months
-    const durationMonths = (end.getFullYear() - start.getFullYear()) * 12 + (end.getMonth() - start.getMonth()) + 1;
-    
-    const pEnd = new Date(start.getFullYear(), start.getMonth(), 0); // last day of previous month
-    const pStart = new Date(pEnd.getFullYear(), pEnd.getMonth() - durationMonths + 1, 1);
+    // Compare with exactly 1 year ago
+    const pStart = new Date(start.getFullYear() - 1, start.getMonth(), start.getDate());
+    const pEnd = new Date(end.getFullYear() - 1, end.getMonth(), end.getDate());
     
     return { prevStartDate: pStart, prevEndDate: pEnd };
   }, [startDate, endDate]);
@@ -320,11 +321,12 @@ export default function PerformanceDashboard() {
         }
       });
 
+      const excludedGroups = ['Dentscare', 'Whiteness', 'Outros', 'Home Care', 'Dentscare\\', 'Whiteness\\'];
       const isGlobalMeta = selectedClient === 'todos' && clientCodeInput.trim() === '';
 
       if (isGlobalMeta) {
         performanceData.forEach(r => {
-          if (matchesSelectedSeller(r) && y === 2026 && r.mes === m) {
+          if (matchesSelectedSeller(r) && y === 2026 && r.mes === m && !excludedGroups.includes(r.subgrupo)) {
             meta += Number(r.meta_faturamento || 0);
           }
         });
