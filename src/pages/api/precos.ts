@@ -3,6 +3,7 @@ import fs from "fs";
 import path from "path";
 import { fetchSFMCProducts } from "../../lib/sfmc";
 import redis, { getCachedData } from "../../lib/redis";
+import { supabase } from "../../lib/supabase";
 
 const getFilePath = () => {
   return path.join(process.cwd(), "data", "tabela_precos.json");
@@ -10,6 +11,16 @@ const getFilePath = () => {
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const filePath = getFilePath();
+
+  const authHeader = req.headers.authorization;
+  if (!authHeader) {
+    return res.status(401).json({ error: "Token de autenticação ausente" });
+  }
+  const token = authHeader.split(" ")[1];
+  const { data: { user }, error: authError } = await supabase.auth.getUser(token);
+  if (authError || !user) {
+    return res.status(401).json({ error: "Acesso não autorizado" });
+  }
 
   if (req.method === "GET") {
     try {

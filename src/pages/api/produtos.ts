@@ -3,6 +3,7 @@ import fs from "fs";
 import path from "path";
 import { fetchSFMCProducts } from "../../lib/sfmc";
 import { getCachedData } from "../../lib/redis";
+import { supabase } from "../../lib/supabase";
 
 const classifyProduct = (description: string) => {
   const desc = description.toUpperCase();
@@ -70,6 +71,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   if (req.method !== "GET") {
     res.setHeader("Allow", ["GET"]);
     return res.status(405).json({ error: `Método ${req.method} não permitido.` });
+  }
+
+  const authHeader = req.headers.authorization;
+  if (!authHeader) {
+    return res.status(401).json({ error: "Token de autenticação ausente" });
+  }
+  const token = authHeader.split(" ")[1];
+  const { data: { user }, error: authError } = await supabase.auth.getUser(token);
+  if (authError || !user) {
+    return res.status(401).json({ error: "Acesso não autorizado" });
   }
 
   try {

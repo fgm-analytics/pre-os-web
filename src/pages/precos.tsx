@@ -88,6 +88,7 @@ interface CartItem {
 }
 
 import { useAuth } from "../contexts/AuthProvider";
+import { supabase } from "../lib/supabase";
 
 export default function Home() {
   const { user, profile } = useAuth();
@@ -151,7 +152,10 @@ export default function Home() {
   // Carregar produtos e preços
   const loadData = async () => {
     try {
-      const prodRes = await fetch("/api/produtos");
+      const { data: { session } } = await supabase.auth.getSession();
+      const headers = session?.access_token ? { Authorization: `Bearer ${session.access_token}` } : undefined;
+
+      const prodRes = await fetch("/api/produtos", { headers });
       const prodData = await prodRes.json();
 
       // Mapear businessUnit para os itens para fácil rastreabilidade
@@ -161,7 +165,7 @@ export default function Home() {
       });
       setProductsByBU(mappedBU);
 
-      const priceRes = await fetch("/api/precos");
+      const priceRes = await fetch("/api/precos", { headers });
       const priceData = await priceRes.json();
       setPrices(priceData);
       setTempPrices(priceData);
@@ -547,9 +551,15 @@ export default function Home() {
   // Administrador: Salvar tabela de preços para o backend
   const handleSavePrices = async () => {
     try {
+      const { data: { session } } = await supabase.auth.getSession();
+      const headers = { 
+        "Content-Type": "application/json",
+        ...(session?.access_token ? { Authorization: `Bearer ${session.access_token}` } : {})
+      };
+
       const res = await fetch("/api/precos", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers,
         body: JSON.stringify(tempPrices),
       });
       const data = await res.json();
