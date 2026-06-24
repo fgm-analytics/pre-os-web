@@ -66,8 +66,8 @@ export async function getSFMCToken(): Promise<SFMCTokenResponse | null> {
 }
 
 /**
- * Busca produtos e preços da Data Extension PricebookEntry_Salesforce no SFMC.
- * Filtra pelo Pricebook2Id = 01sV20000016SsKIAU (tabela de preços oficial FGM).
+ * Busca produtos e preços da Data Extension DE_PricebookZ3 no SFMC.
+ * Esta DE já contém os preços da tabela oficial.
  * 
  * Campos mapeados:
  *   - keys.ProductCode → código do produto
@@ -86,8 +86,7 @@ export async function fetchSFMCPriceEntries(): Promise<SFMCPriceEntry[] | null> 
   if (!tokenData) return null;
 
   const restUrl = process.env.SFMC_REST_URI || tokenData.rest_instance_url;
-  const deKey = "PricebookEntry_Salesforce";
-  const PRICEBOOK_ID = "01sV20000016SsKIAU";
+  const deKey = "DE_PricebookZ3";
 
   try {
     const res = await fetch(
@@ -127,18 +126,7 @@ export async function fetchSFMCPriceEntries(): Promise<SFMCPriceEntry[] | null> 
       return "";
     };
 
-    // Filtrar pelo Pricebook2Id correto — se nenhum passar, usar todos
-    // (a DE pode já estar pré-filtrada para esse pricebook)
-    const filteredByPricebook = items.filter((item: any) => {
-      const vals = item.values || {};
-      const pricebookId = getField(vals, "Pricebook2Id", "pricebook2id");
-      return pricebookId === PRICEBOOK_ID;
-    });
-
-    const workingItems = filteredByPricebook.length > 0 ? filteredByPricebook : items;
-    console.log(`[SFMC] Total items: ${items.length}, after Pricebook filter: ${filteredByPricebook.length}, working with: ${workingItems.length}`);
-
-    const entries: SFMCPriceEntry[] = workingItems
+    const entries: SFMCPriceEntry[] = items
       .map((item: any) => {
         const keys = item.keys || {};
         const vals = item.values || {};
