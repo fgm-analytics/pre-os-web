@@ -83,11 +83,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       const processItem = (item: any) => {
         const code = String(item.codigo).trim();
         const sfmcData = sfmcMap.get(code);
-        const targetBU = buMap.get(code) || item.originalBU; // Usa banco, fallback pro JSON
+        const targetBU = buMap.get(code) || item.originalBU || "Outros"; // Usa banco, fallback pro JSON
         
         const baseItem = {
-          codigo: item.codigo,
-          material: sfmcData ? (sfmcData.material || item.material) : item.material,
+          codigo: code,
+          material: sfmcData ? (sfmcData.material || item.material) : (item.material || "Produto sem descrição"),
           categoria: item.categoria || "Geral",
           cor: item.cor || "dark_gray",
           businessUnit: targetBU,
@@ -99,6 +99,31 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         
         return baseItem;
       };
+
+      // Garantir que produtos que estão no SFMC ou Banco, mas não nos JSONs locais, sejam incluídos
+      const existingCodes = new Set(allRawItems.map(i => String(i.codigo).trim()));
+      
+      sfmcMap.forEach((data, code) => {
+        if (!existingCodes.has(code)) {
+          allRawItems.push({
+            codigo: code,
+            material: data.material,
+            // Categoria, cor, etc. vão cair no default
+          });
+          existingCodes.add(code);
+        }
+      });
+
+      buMap.forEach((bu, code) => {
+        if (!existingCodes.has(code)) {
+          allRawItems.push({
+            codigo: code,
+            material: "Produto " + code,
+            originalBU: bu
+          });
+          existingCodes.add(code);
+        }
+      });
 
       const processedItems = allRawItems.map(processItem);
 
