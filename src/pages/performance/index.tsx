@@ -57,14 +57,14 @@ const getTrendIndicator = (valCurrent: number, valPrev: number | undefined) => {
 
 export default function PerformanceDashboard() {
   const { 
-    billingData, metaClienteProdutoData, loading, error, 
+    billingData, metaClienteProdutoData, performanceData, loading, error, 
     selectedClient, clientCodeInput, matchesSelectedSeller 
   } = usePerformanceContext();
 
   const [startDate, setStartDate] = useState<string>(() => {
     const now = new Date();
-    // Default to the first day of the current month
-    const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
+    // Default to the first day of 3 months ago
+    const firstDay = new Date(now.getFullYear(), now.getMonth() - 2, 1);
     return firstDay.toISOString().split('T')[0];
   });
   const [endDate, setEndDate] = useState<string>(() => {
@@ -129,25 +129,46 @@ export default function PerformanceDashboard() {
     const startY = isNaN(start.getTime()) ? 2026 : start.getFullYear();
     const endY = isNaN(end.getTime()) ? 2026 : end.getFullYear();
 
-    metaClienteProdutoData.forEach(r => {
-      const matchSeller = matchesSelectedSeller(r);
-      let matchClient = true;
-      if (clientCodeInput.trim() !== '') {
-        matchClient = r.cliente_code?.toLowerCase().includes(clientCodeInput.trim().toLowerCase());
-      } else if (selectedClient !== 'todos') {
-        matchClient = r.cliente_code === selectedClient;
-      }
-      
-      // Meta data is implicitly for 2026
-      const inYearRange = 2026 >= startY && 2026 <= endY;
-      const matchPeriod = inYearRange && r.mes >= startM && r.mes <= endM;
+    const isGlobalMeta = selectedClient === 'todos' && clientCodeInput.trim() === '';
 
-      if (matchSeller && matchClient && matchPeriod) {
-        metaFaturamento += Number(r.meta_faturamento || 0);
+    if (isGlobalMeta) {
+      performanceData.forEach(r => {
+        if (!matchesSelectedSeller(r)) return;
+        const inYearRange = 2026 >= startY && 2026 <= endY;
+        const matchPeriod = inYearRange && r.mes >= startM && r.mes <= endM;
+        if (matchPeriod) {
+          metaFaturamento += Number(r.meta_faturamento || 0);
+        }
+      });
+    } else {
+      metaClienteProdutoData.forEach(r => {
+        if (!matchesSelectedSeller(r)) return;
+        let matchClient = true;
+        if (clientCodeInput.trim() !== '') {
+          matchClient = r.cliente_code?.toLowerCase().includes(clientCodeInput.trim().toLowerCase());
+        } else if (selectedClient !== 'todos') {
+          matchClient = r.cliente_code === selectedClient;
+        }
+        
+        const inYearRange = 2026 >= startY && 2026 <= endY;
+        const matchPeriod = inYearRange && r.mes >= startM && r.mes <= endM;
+
+        if (matchClient && matchPeriod) {
+          metaFaturamento += Number(r.meta_faturamento || 0);
+        }
+      });
+    }
+
+    // Calcular Meta do Mês Atual baseada em todos os produtos do vendedor
+    let metaMesAtual = 0;
+    const currentMonth = new Date().getMonth() + 1;
+    performanceData.forEach(r => {
+      if (matchesSelectedSeller(r) && r.mes === currentMonth) {
+        metaMesAtual += Number(r.meta_faturamento || 0);
       }
     });
 
-    return { faturamento, volume, metaFaturamento };
+    return { faturamento, volume, metaFaturamento, metaMesAtual };
   }, [filteredData, metaClienteProdutoData, matchesSelectedSeller, selectedClient, clientCodeInput, startDate, endDate]);
 
   const { prevStartDate, prevEndDate } = useMemo(() => {
@@ -299,19 +320,29 @@ export default function PerformanceDashboard() {
         }
       });
 
-      metaClienteProdutoData.forEach(r => {
-        const matchSeller = matchesSelectedSeller(r);
-        let matchClient = true;
-        if (clientCodeInput.trim() !== '') {
-          matchClient = r.cliente_code?.toLowerCase().includes(clientCodeInput.trim().toLowerCase());
-        } else if (selectedClient !== 'todos') {
-          matchClient = r.cliente_code === selectedClient;
-        }
-        
-        if (matchSeller && matchClient && y === 2026 && r.mes === m) {
-          meta += Number(r.meta_faturamento || 0);
-        }
-      });
+      const isGlobalMeta = selectedClient === 'todos' && clientCodeInput.trim() === '';
+
+      if (isGlobalMeta) {
+        performanceData.forEach(r => {
+          if (matchesSelectedSeller(r) && y === 2026 && r.mes === m) {
+            meta += Number(r.meta_faturamento || 0);
+          }
+        });
+      } else {
+        metaClienteProdutoData.forEach(r => {
+          if (!matchesSelectedSeller(r)) return;
+          let matchClient = true;
+          if (clientCodeInput.trim() !== '') {
+            matchClient = r.cliente_code?.toLowerCase().includes(clientCodeInput.trim().toLowerCase());
+          } else if (selectedClient !== 'todos') {
+            matchClient = r.cliente_code === selectedClient;
+          }
+          
+          if (matchClient && y === 2026 && r.mes === m) {
+            meta += Number(r.meta_faturamento || 0);
+          }
+        });
+      }
       
       data.push({
         name: label,
@@ -382,18 +413,27 @@ export default function PerformanceDashboard() {
           />
         </Box>
 
-        {totals.metaFaturamento > 0 && (
-          <Box sx={{ display: 'flex', alignItems: 'center', bgcolor: 'rgba(255,255,255,0.05)', px: 2, py: 1, borderRadius: 1, border: '1px solid', borderColor: 'divider' }}>
-            <Typography variant="body2" sx={{ color: 'text.secondary', mr: 1, fontWeight: 500 }}>Meta do Período:</Typography>
-            <Typography variant="body2" sx={{ fontWeight: 700, mr: 1 }}>{formatCurrency(totals.metaFaturamento)}</Typography>
-            <Typography variant="body2" sx={{ 
-              fontWeight: 700, 
-              color: totals.faturamento >= totals.metaFaturamento ? 'success.main' : 'error.main' 
-            }}>
-              ({totals.faturamento >= totals.metaFaturamento ? '▲' : '▼'} {((totals.faturamento / totals.metaFaturamento) * 100).toFixed(1)}%)
-            </Typography>
-          </Box>
-        )}
+        <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap', alignItems: 'center' }}>
+          {totals.metaMesAtual > 0 && (
+            <Box sx={{ display: 'flex', alignItems: 'center', bgcolor: 'rgba(255,255,255,0.05)', px: 2, py: 1, borderRadius: 1, border: '1px solid', borderColor: 'divider' }}>
+              <Typography variant="body2" sx={{ color: 'text.secondary', mr: 1, fontWeight: 500 }}>Meta Mês Atual:</Typography>
+              <Typography variant="body2" sx={{ fontWeight: 700, color: 'primary.main' }}>{formatCurrency(totals.metaMesAtual)}</Typography>
+            </Box>
+          )}
+
+          {totals.metaFaturamento > 0 && (
+            <Box sx={{ display: 'flex', alignItems: 'center', bgcolor: 'rgba(255,255,255,0.05)', px: 2, py: 1, borderRadius: 1, border: '1px solid', borderColor: 'divider' }}>
+              <Typography variant="body2" sx={{ color: 'text.secondary', mr: 1, fontWeight: 500 }}>Meta do Período:</Typography>
+              <Typography variant="body2" sx={{ fontWeight: 700, mr: 1 }}>{formatCurrency(totals.metaFaturamento)}</Typography>
+              <Typography variant="body2" sx={{ 
+                fontWeight: 700, 
+                color: totals.faturamento >= totals.metaFaturamento ? 'success.main' : 'error.main' 
+              }}>
+                ({totals.faturamento >= totals.metaFaturamento ? '▲' : '▼'} {((totals.faturamento / totals.metaFaturamento) * 100).toFixed(1)}%)
+              </Typography>
+            </Box>
+          )}
+        </Box>
       </Box>
 
       {/* KPIs */}
