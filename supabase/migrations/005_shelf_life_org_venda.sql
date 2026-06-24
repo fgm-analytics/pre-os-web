@@ -6,11 +6,12 @@ CREATE TABLE IF NOT EXISTS public.d_org_venda (
     descricao TEXT NOT NULL
 );
 
--- Populating d_org_venda based on user mappings
+-- Populating d_org_venda based on user mappings (exemplos de prefixo)
 INSERT INTO public.d_org_venda (centro, descricao) VALUES 
-('1100', 'Dentscare'),
-('1101', 'Home_Care'),
-('4400', 'Whiteness')
+('1100', 'Dentscare Matriz'),
+('1101', 'Dentscare Filial'),
+('2200', 'Whiteness Matriz'),
+('4400', 'Home Care Matriz')
 ON CONFLICT (centro) DO UPDATE SET descricao = EXCLUDED.descricao;
 
 -- 2. Table for f_shelf_life (Produto -> Centro)
@@ -28,7 +29,12 @@ CREATE INDEX IF NOT EXISTS idx_f_shelf_life_produto ON public.f_shelf_life(produ
 CREATE OR REPLACE VIEW public.vw_produto_bu AS
 SELECT 
     f.produto_codigo,
-    d.descricao as business_unit
+    CASE 
+        WHEN f.centro LIKE '11%' THEN 'Dentscare'
+        WHEN f.centro LIKE '22%' THEN 'Whiteness'
+        WHEN f.centro LIKE '44%' THEN 'Home_Care'
+        ELSE 'Outros'
+    END as business_unit
 FROM public.f_shelf_life f
 JOIN public.d_org_venda d ON f.centro = d.centro;
 
