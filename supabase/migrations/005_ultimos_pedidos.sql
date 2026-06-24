@@ -38,10 +38,10 @@ ALTER TABLE public.cliente_ultimo_pedido ENABLE ROW LEVEL SECURITY;
 CREATE POLICY select_cliente_ultimo_pedido ON public.cliente_ultimo_pedido
     FOR SELECT
     USING (
-        public.is_admin()
-        OR vendedor_code = ANY(public.get_visible_seller_codes())
+        private.is_admin()
+        OR vendedor_code = ANY(private.get_visible_seller_codes())
     );
 
 CREATE POLICY all_cliente_ultimo_pedido ON public.cliente_ultimo_pedido
     FOR ALL
-    USING (public.is_admin());
+    USING (private.is_admin());

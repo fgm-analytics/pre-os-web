@@ -21,7 +21,10 @@ ALTER TABLE public.performance_vendedor_2026 ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.hierarquia_vendedores ENABLE ROW LEVEL SECURITY;
 
 -- 2. Helper function to check if the current user is an Admin
-CREATE OR REPLACE FUNCTION public.is_admin()
+CREATE SCHEMA IF NOT EXISTS private;
+
+DROP FUNCTION IF EXISTS public.is_admin();
+CREATE OR REPLACE FUNCTION private.is_admin()
 RETURNS BOOLEAN SECURITY DEFINER AS $$
 BEGIN
     RETURN EXISTS (
@@ -32,7 +35,8 @@ END;
 $$ LANGUAGE plpgsql;
 
 -- 3. Helper function to get all seller codes visible to the logged-in user
-CREATE OR REPLACE FUNCTION public.get_visible_seller_codes()
+DROP FUNCTION IF EXISTS public.get_visible_seller_codes();
+CREATE OR REPLACE FUNCTION private.get_visible_seller_codes()
 RETURNS INTEGER[] SECURITY DEFINER AS $$
 DECLARE
     user_role TEXT;
@@ -74,7 +78,7 @@ CREATE POLICY select_usuarios ON public.usuarios
     FOR SELECT
     USING (
         auth.uid() = id 
-        OR public.is_admin()
+        OR private.is_admin()
         -- Gerente can see subordinate profiles if needed
         OR (
             SELECT role FROM public.usuarios WHERE id = auth.uid()
@@ -83,40 +87,40 @@ CREATE POLICY select_usuarios ON public.usuarios
 
 CREATE POLICY insert_update_usuarios ON public.usuarios
     FOR ALL
-    USING (public.is_admin() OR auth.uid() = id);
+    USING (private.is_admin() OR auth.uid() = id);
 
 -- Historico Faturamento Policy
 CREATE POLICY select_historico_faturamento ON public.historico_faturamento
     FOR SELECT
     USING (
-        public.is_admin()
-        OR vendedor_code = ANY(public.get_visible_seller_codes())
+        private.is_admin()
+        OR vendedor_code = ANY(private.get_visible_seller_codes())
     );
 
 CREATE POLICY all_historico_faturamento ON public.historico_faturamento
     FOR ALL
-    USING (public.is_admin());
+    USING (private.is_admin());
 
 -- Performance Vendedor 2026 Policy
 CREATE POLICY select_performance_vendedor ON public.performance_vendedor_2026
     FOR SELECT
     USING (
-        public.is_admin()
-        OR vendedor_code = ANY(public.get_visible_seller_codes())
+        private.is_admin()
+        OR vendedor_code = ANY(private.get_visible_seller_codes())
     );
 
 CREATE POLICY all_performance_vendedor ON public.performance_vendedor_2026
     FOR ALL
-    USING (public.is_admin());
+    USING (private.is_admin());
 
 -- Hierarquia Vendedores Policy
 CREATE POLICY select_hierarquia ON public.hierarquia_vendedores
     FOR SELECT
     USING (
-        public.is_admin()
+        private.is_admin()
         OR gerente_salesforce_id = (SELECT salesforce_id FROM public.usuarios WHERE id = auth.uid())
     );
 
 CREATE POLICY all_hierarquia ON public.hierarquia_vendedores
     FOR ALL
-    USING (public.is_admin());
+    USING (private.is_admin());

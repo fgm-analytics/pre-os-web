@@ -45,13 +45,13 @@ ALTER TABLE public.meta_cliente_produto_2026 ENABLE ROW LEVEL SECURITY;
 CREATE POLICY select_historico_cp ON public.historico_cliente_produto
     FOR SELECT
     USING (
-        public.is_admin()
-        OR vendedor_code = ANY(public.get_visible_seller_codes())
+        private.is_admin()
+        OR vendedor_code = ANY(private.get_visible_seller_codes())
     );
 
 CREATE POLICY all_historico_cp ON public.historico_cliente_produto
     FOR ALL
-    USING (public.is_admin());
+    USING (private.is_admin());
 
 CREATE POLICY "Gerente ver subordinados historico_cp"
 ON public.historico_cliente_produto
@@ -62,13 +62,13 @@ USING (
         SELECT h.subordinado_vendedor_code
         FROM public.hierarquia_vendedores h
         JOIN public.usuarios u ON h.gerente_salesforce_id = u.salesforce_id
-        WHERE u.email = auth.jwt() ->> 'email' AND u.role = 'gerente'
+        WHERE u.id = auth.uid() AND u.role = 'gerente'
     )
     OR
     vendedor_code IN (
         SELECT u.vendedor_code 
         FROM public.usuarios u 
-        WHERE u.email = auth.jwt() ->> 'email' AND u.role = 'gerente'
+        WHERE u.id = auth.uid() AND u.role = 'gerente'
     )
 );
 
@@ -76,13 +76,13 @@ USING (
 CREATE POLICY select_meta_cp ON public.meta_cliente_produto_2026
     FOR SELECT
     USING (
-        public.is_admin()
-        OR vendedor_code = ANY(public.get_visible_seller_codes())
+        private.is_admin()
+        OR vendedor_code = ANY(private.get_visible_seller_codes())
     );
 
 CREATE POLICY all_meta_cp ON public.meta_cliente_produto_2026
     FOR ALL
-    USING (public.is_admin());
+    USING (private.is_admin());
 
 CREATE POLICY "Gerente ver subordinados meta_cp"
 ON public.meta_cliente_produto_2026
@@ -93,12 +93,12 @@ USING (
         SELECT h.subordinado_vendedor_code
         FROM public.hierarquia_vendedores h
         JOIN public.usuarios u ON h.gerente_salesforce_id = u.salesforce_id
-        WHERE u.email = auth.jwt() ->> 'email' AND u.role = 'gerente'
+        WHERE u.id = auth.uid() AND u.role = 'gerente'
     )
     OR
     vendedor_code IN (
         SELECT u.vendedor_code 
         FROM public.usuarios u 
-        WHERE u.email = auth.jwt() ->> 'email' AND u.role = 'gerente'
+        WHERE u.id = auth.uid() AND u.role = 'gerente'
     )
 );
