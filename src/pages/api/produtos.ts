@@ -20,8 +20,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   try {
-    const data = await getCachedData("lista_produtos_v2", async () => {
-      // 1. Buscar configuração de layout (ordem, cor, BU) — fonte da verdade para o catálogo
+    const data = await getCachedData("lista_produtos_v3", async () => {
+      // 1. config_produto: sequência, cor, BU definidos pelo admin
       const { data: configProducts, error: configError } = await supabase
         .from("config_produto")
         .select("produto_codigo, business_unit, cor, segmentacao, ipi, ordem_exibicao")
@@ -32,15 +32,28 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return { Dentscare: [], Home_Care: [], Whiteness: [] };
       }
 
-      // 2. Buscar dados de produto do SFMC (PricebookEntry_Salesforce)
-      // Fonte: nome, preço de tabela, categoria (Grupo Principal), status ativo
+      // 2. d_material: categoria (Grupo Principal) — coluna "Material" é o código do produto
+      // Pode estar vazia enquanto integração ERP não rodou — tratamos graciosamente
+      const { data: dMaterial } = await supabase
+        .from("d_material")
+        .select('"Material", "Grupo Principal"');
+
+      const categoriaMap = new Map<string, string>();
+      if (dMaterial && dMaterial.length > 0) {
+        dMaterial.forEach((row: any) => {
+          const code = String(row["Material"] || "").trim();
+          const grupo = String(row["Grupo Principal"] || "").trim();
+          if (code && grupo) categoriaMap.set(code, grupo);
+        });
+        console.log(`[API produtos] d_material carregado: ${categoriaMap.size} registros`);
+      } else {
+        console.log("[API produtos] d_material vazia — categorias virão como 'Geral'");
+      }
+
+      // 3. SFMC PricebookEntry_Salesforce: nome (Name) e preço (UnitPrice)
+      // Pricebook2Id = 01sV20000016SsKIAU
       const sfmcEntries = await fetchSFMCPriceEntries();
-      const sfmcMap = new Map<string, {
-        name: string;
-        unitPrice: number;
-        isActive: boolean;
-        grupoPrincipal: string;
-      }>();
+      const sfmcMap = new Map<string, { name: string; unitPrice: number; isActive: boolean }>();
 
       if (sfmcEntries && sfmcEntries.length > 0) {
         sfmcEntries.forEach((e) => {
@@ -48,13 +61,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             name: e.ProductName,
             unitPrice: e.UnitPrice,
             isActive: e.IsActive,
-            grupoPrincipal: e.GrupoPrincipal || "Geral",
           });
         });
+        console.log(`[API produtos] SFMC carregado: ${sfmcMap.size} produtos`);
+      } else {
+        console.log("[API produtos] SFMC sem dados — nomes e preços indisponíveis");
       }
 
-      // 3. Montar lista final: apenas produtos configurados no admin (config_produto)
-      // O SFMC enriquece com nome, preço e categoria — mas não controla quais aparecem
+      // 4. Montar lista: base = config_produto, enriquecida com SFMC + d_material
       const result: Record<string, any[]> = {
         Dentscare: [],
         Home_Care: [],
@@ -63,32 +77,30 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
       for (const cfg of configProducts) {
         const code = String(cfg.produto_codigo).trim();
-        const sfmc = sfmcMap.get(code);
         const bu = cfg.business_unit as string;
 
-        // Ignorar BUs não reconhecidas (ex: Inbox legado)
         if (!result[bu]) continue;
 
-        const item = {
+        const sfmc = sfmcMap.get(code);
+        const categoria = categoriaMap.get(code) || "Geral";
+
+        result[bu].push({
           codigo: code,
-          material: sfmc?.name || `Produto ${code}`,
-          categoria: sfmc?.grupoPrincipal || "Geral",
+          // Nome: vem do SFMC (campo Name). Se SFMC offline, mostra código temporariamente.
+          material: sfmc?.name && sfmc.name !== "" ? sfmc.name : `[${code}]`,
+          categoria,
           cor: cfg.cor || "dark_gray",
           businessUnit: bu,
-          // Produto ativo = está no SFMC e tem IsActive = true
-          // Se SFMC não retornou dados, exibe mas marcado como sem promoção ativa
           promotionIsActive: sfmc ? sfmc.isActive : false,
-          promotionName: sfmc?.isActive ? "Ativo" : "",
+          promotionName: "",
           segmentacao: cfg.segmentacao !== null ? cfg.segmentacao : 40,
           ipi: cfg.ipi !== null ? cfg.ipi : 0,
           ordem_exibicao: cfg.ordem_exibicao,
-        };
-
-        result[bu].push(item);
+        });
       }
 
       return result;
-    }, 1800); // cache 30 min
+    }, 1800); // 30 min cache
 
     return res.status(200).json(data);
   } catch (error) {

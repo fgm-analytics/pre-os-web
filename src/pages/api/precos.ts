@@ -1,4 +1,5 @@
-// API de Preços — leitura exclusiva do SFMC (PricebookEntry_Salesforce)
+// API de Preços — leitura do SFMC (PricebookEntry_Salesforce, campo UnitPrice)
+// Pricebook2Id = 01sV20000016SsKIAU
 // Preços são definidos pela integração, não pelo admin.
 import type { NextApiRequest, NextApiResponse } from "next";
 import { fetchSFMCPriceEntries } from "../../lib/sfmc";
@@ -22,20 +23,24 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   try {
-    const prices = await getCachedData("tabela_precos_sfmc", async () => {
+    const prices = await getCachedData("tabela_precos_sfmc_v2", async () => {
       const entries = await fetchSFMCPriceEntries();
       const priceMap: Record<string, number> = {};
 
       if (entries && entries.length > 0) {
         entries.forEach((e) => {
+          // ProductCode = código do produto (PK), UnitPrice = preço de tabela
           if (e.ProductCode && e.UnitPrice > 0) {
             priceMap[e.ProductCode] = e.UnitPrice;
           }
         });
+        console.log(`[API precos] ${Object.keys(priceMap).length} preços carregados do SFMC`);
+      } else {
+        console.log("[API precos] SFMC sem dados de preços");
       }
 
       return priceMap;
-    }, 1800); // 30 minutos de cache
+    }, 1800);
 
     return res.status(200).json(prices);
   } catch (error) {
