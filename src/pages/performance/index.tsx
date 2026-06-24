@@ -162,16 +162,24 @@ export default function PerformanceDashboard() {
       });
     }
 
-    // Calcular Meta do Mês Atual baseada em todos os produtos do vendedor
+    // Calcular Meta e Faturamento do Mês Atual baseada em todos os produtos do vendedor
     let metaMesAtual = 0;
+    let faturamentoMesAtualGlobal = 0;
     const currentMonth = new Date().getMonth() + 1;
+    
     performanceData.forEach(r => {
       if (matchesSelectedSeller(r) && r.mes === currentMonth && !excludedGroups.includes(r.subgrupo)) {
         metaMesAtual += Number(r.meta_faturamento || 0);
       }
     });
 
-    return { faturamento, volume, metaFaturamento, metaMesAtual };
+    billingData.forEach(r => {
+      if (matchesSelectedSeller(r) && r.ano === 2026 && r.mes === currentMonth) {
+        faturamentoMesAtualGlobal += Number(r.realizado_faturamento || 0);
+      }
+    });
+
+    return { faturamento, volume, metaFaturamento, metaMesAtual, faturamentoMesAtualGlobal };
   }, [filteredData, metaClienteProdutoData, matchesSelectedSeller, selectedClient, clientCodeInput, startDate, endDate]);
 
   const { prevStartDate, prevEndDate } = useMemo(() => {
@@ -419,7 +427,13 @@ export default function PerformanceDashboard() {
           {totals.metaMesAtual > 0 && (
             <Box sx={{ display: 'flex', alignItems: 'center', bgcolor: 'rgba(255,255,255,0.05)', px: 2, py: 1, borderRadius: 1, border: '1px solid', borderColor: 'divider' }}>
               <Typography variant="body2" sx={{ color: 'text.secondary', mr: 1, fontWeight: 500 }}>Meta Mês Atual:</Typography>
-              <Typography variant="body2" sx={{ fontWeight: 700, color: 'primary.main' }}>{formatCurrency(totals.metaMesAtual)}</Typography>
+              <Typography variant="body2" sx={{ fontWeight: 700, color: 'primary.main', mr: 1 }}>{formatCurrency(totals.metaMesAtual)}</Typography>
+              <Typography variant="body2" sx={{ 
+                fontWeight: 700, 
+                color: totals.faturamentoMesAtualGlobal >= totals.metaMesAtual ? 'success.main' : 'error.main' 
+              }}>
+                ({totals.faturamentoMesAtualGlobal >= totals.metaMesAtual ? '▲' : '▼'} {((totals.faturamentoMesAtualGlobal / totals.metaMesAtual) * 100).toFixed(1)}%)
+              </Typography>
             </Box>
           )}
 
@@ -492,7 +506,7 @@ export default function PerformanceDashboard() {
                   contentStyle={{ backgroundColor: '#1F2937', borderColor: '#374151', borderRadius: '8px' }}
                   formatter={(val: any, name: string, props: any) => {
                     if (name === 'Faturamento') return [formatCurrency(val), 'Atual (' + props.payload.name + ')'];
-                    if (name === 'faturamentoAnterior') return [formatCurrency(val), 'Anterior (' + props.payload.prevName + ')'];
+                    if (name === 'Anterior' || name === 'faturamentoAnterior') return [formatCurrency(val), 'Anterior (' + props.payload.prevName + ')'];
                     if (name === 'Meta') return [formatCurrency(val), 'Meta'];
                     return [val, name];
                   }}
