@@ -1,8 +1,4 @@
-// API de Preços — leitura do SFMC (PricebookEntry_Salesforce, campo UnitPrice)
-// Pricebook2Id = 01sV20000016SsKIAU
-// Preços são definidos pela integração, não pelo admin.
 import type { NextApiRequest, NextApiResponse } from "next";
-import { fetchSFMCPriceEntries } from "../../lib/sfmc";
 import { getCachedData } from "../../lib/redis";
 import { supabase } from "../../lib/supabase";
 
@@ -23,28 +19,40 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   try {
-    const prices = await getCachedData("tabela_precos_sfmc_v2", async () => {
-      const entries = await fetchSFMCPriceEntries();
+    const prices = await getCachedData("tabela_precos_dwh_v1", async () => {
+      // Usamos a view vw_precos_dwh que faz o JOIN correto das tabelas do DWH
+      // f_ordem_faturamento -> f_preco_condicao (filtrado por 'Z3')
+      const { data: precosData, error } = await supabase
+        .from("vw_precos_dwh")
+        .select("produto_codigo, preco_tabela");
+
+      if (error) {
+        console.error("Erro ao buscar preços na view vw_precos_dwh:", error);
+        return {};
+      }
+
       const priceMap: Record<string, number> = {};
 
-      if (entries && entries.length > 0) {
-        entries.forEach((e) => {
-          // ProductCode = código do produto (PK), UnitPrice = preço de tabela
-          if (e.ProductCode && e.UnitPrice > 0) {
-            priceMap[e.ProductCode] = e.UnitPrice;
+      if (precosData && precosData.length > 0) {
+        precosData.forEach((row: any) => {
+          const code = String(row.produto_codigo || "").trim();
+          const price = Number(row.preco_tabela) || 0;
+          
+          if (code && price > 0) {
+            priceMap[code] = price;
           }
         });
-        console.log(`[API precos] ${Object.keys(priceMap).length} preços carregados do SFMC`);
+        console.log(`[API precos] ${Object.keys(priceMap).length} preços carregados do DWH`);
       } else {
-        console.log("[API precos] SFMC sem dados de preços");
+        console.log("[API precos] Nenhuma informação de preço encontrada no DWH");
       }
 
       return priceMap;
-    }, 1800);
+    }, 1800); // 30 min cache
 
     return res.status(200).json(prices);
   } catch (error) {
     console.error("API /api/precos Error:", error);
-    return res.status(500).json({ error: "Erro ao carregar preços do SFMC." });
+    return res.status(500).json({ error: "Erro ao carregar preços do DWH." });
   }
 }

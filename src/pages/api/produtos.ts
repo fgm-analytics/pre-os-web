@@ -1,5 +1,4 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { fetchSFMCPriceEntries } from "../../lib/sfmc";
 import { getCachedData } from "../../lib/redis";
 import { supabase } from "../../lib/supabase";
 
@@ -20,7 +19,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   try {
-    const data = await getCachedData("lista_produtos_v3", async () => {
+    const data = await getCachedData("lista_produtos_v4", async () => {
       // 1. config_produto: sequência, cor, BU definidos pelo admin
       const { data: configProducts, error: configError } = await supabase
         .from("config_produto")
@@ -32,43 +31,26 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return { Dentscare: [], Home_Care: [], Whiteness: [] };
       }
 
-      // 2. d_material: categoria (Grupo Principal) — coluna "Material" é o código do produto
-      // Pode estar vazia enquanto integração ERP não rodou — tratamos graciosamente
+      // 2. d_material: categoria e nome, filtrando os liberados
       const { data: dMaterial } = await supabase
         .from("d_material")
-        .select('"Material", "Grupo Principal"');
+        .select("material, grupo_principal, descricao, status_material")
+        .eq("status_material", "Liberado");
 
-      const categoriaMap = new Map<string, string>();
+      const materialMap = new Map<string, { categoria: string; nome: string }>();
       if (dMaterial && dMaterial.length > 0) {
         dMaterial.forEach((row: any) => {
-          const code = String(row["Material"] || "").trim();
-          const grupo = String(row["Grupo Principal"] || "").trim();
-          if (code && grupo) categoriaMap.set(code, grupo);
+          const code = String(row.material || "").trim();
+          const grupo = String(row.grupo_principal || "").trim();
+          const nome = String(row.descricao || "").trim();
+          if (code) materialMap.set(code, { categoria: grupo, nome });
         });
-        console.log(`[API produtos] d_material carregado: ${categoriaMap.size} registros`);
+        console.log(`[API produtos] d_material carregado: ${materialMap.size} produtos liberados`);
       } else {
-        console.log("[API produtos] d_material vazia — categorias virão como 'Geral'");
+        console.log("[API produtos] d_material vazio ou sem produtos liberados");
       }
 
-      // 3. SFMC PricebookEntry_Salesforce: nome (Name) e preço (UnitPrice)
-      // Pricebook2Id = 01sV20000016SsKIAU
-      const sfmcEntries = await fetchSFMCPriceEntries();
-      const sfmcMap = new Map<string, { name: string; unitPrice: number; isActive: boolean }>();
-
-      if (sfmcEntries && sfmcEntries.length > 0) {
-        sfmcEntries.forEach((e) => {
-          sfmcMap.set(e.ProductCode, {
-            name: e.ProductName,
-            unitPrice: e.UnitPrice,
-            isActive: e.IsActive,
-          });
-        });
-        console.log(`[API produtos] SFMC carregado: ${sfmcMap.size} produtos`);
-      } else {
-        console.log("[API produtos] SFMC sem dados — nomes e preços indisponíveis");
-      }
-
-      // 4. Montar lista: base = config_produto, enriquecida com SFMC + d_material
+      // 3. Montar lista: base = config_produto, enriquecida com d_material
       const result: Record<string, any[]> = {
         Dentscare: [],
         Home_Care: [],
@@ -81,17 +63,24 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         if (!result[bu]) continue;
 
-        const sfmc = sfmcMap.get(code);
-        const categoria = categoriaMap.get(code) || "Geral";
+        const materialData = materialMap.get(code);
+        
+        // Se a instrução for rígida para deixar SÓ os liberados, e não achamos no map, podemos pular
+        // (Se d_material estiver vazia, a tela não exibirá nada. Ajuste conforme necessidade do negócio)
+        if (!materialData) {
+          continue; 
+        }
+
+        const categoria = materialData.categoria || "Geral";
+        const nomeProduto = materialData.nome || `[${code}]`;
 
         result[bu].push({
           codigo: code,
-          // Nome: vem do SFMC (campo Name). Se SFMC offline, mostra código temporariamente.
-          material: sfmc?.name && sfmc.name !== "" ? sfmc.name : `[${code}]`,
+          material: nomeProduto,
           categoria,
           cor: cfg.cor || "dark_gray",
           businessUnit: bu,
-          promotionIsActive: sfmc ? sfmc.isActive : false,
+          promotionIsActive: false, // Removido SFMC, sem promoções ativas da integração antiga
           promotionName: "",
           segmentacao: cfg.segmentacao !== null ? cfg.segmentacao : 40,
           ipi: cfg.ipi !== null ? cfg.ipi : 0,
