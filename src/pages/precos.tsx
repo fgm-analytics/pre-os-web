@@ -38,12 +38,11 @@ import SearchIcon from "@mui/icons-material/Search";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import FileUploadIcon from "@mui/icons-material/FileUpload";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
-import SaveIcon from "@mui/icons-material/Save";
 import RefreshIcon from "@mui/icons-material/Refresh";
-import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import WarningIcon from "@mui/icons-material/Warning";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import SettingsIcon from "@mui/icons-material/Settings";
 import ExcelJS from "exceljs";
 
 // Cores mapeadas para o design escuro premium
@@ -114,8 +113,6 @@ export default function Home() {
 
   // Tabela de Preços (Código -> Preço)
   const [prices, setPrices] = useState<Record<string, number>>({});
-  // Edições temporárias de preços no perfil administrador
-  const [tempPrices, setTempPrices] = useState<Record<string, number>>({});
 
   // Itens de Pedido (Aba -> Código -> Dados)
   const [cart, setCart] = useState<Record<string, Record<string, CartItem>>>({
@@ -145,8 +142,7 @@ export default function Home() {
     list: [],
   });
 
-  // Referências para input de arquivo
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  // Referência para input de arquivo de pedido
   const fileInputRefOrder = useRef<HTMLInputElement>(null);
 
   // Carregar produtos e preços
@@ -173,7 +169,6 @@ export default function Home() {
       setProductsByBU(mappedBU);
 
       setPrices(priceData);
-      setTempPrices(priceData);
     } catch (err) {
       showMsg("Erro ao carregar dados do servidor.", "error");
     }
@@ -544,170 +539,6 @@ export default function Home() {
     e.target.value = ""; // resetar input
   };
 
-  // Administrador: Manipulação de preço inline
-  const handleTempPriceChange = (code: string, val: string) => {
-    const num = parseFloat(val.replace(",", "."));
-    setTempPrices((prev) => ({
-      ...prev,
-      [code]: isNaN(num) ? 0 : num,
-    }));
-  };
-
-  // Administrador: Salvar tabela de preços para o backend
-  const handleSavePrices = async () => {
-    try {
-      const { data: { session } } = await supabase.auth.getSession();
-      const headers = { 
-        "Content-Type": "application/json",
-        ...(session?.access_token ? { Authorization: `Bearer ${session.access_token}` } : {})
-      };
-
-      const res = await fetch("/api/precos", {
-        method: "POST",
-        headers,
-        body: JSON.stringify(tempPrices),
-      });
-      const data = await res.json();
-      if (data.success) {
-        setPrices(tempPrices);
-        showMsg("Tabela de preços salva e disponibilizada com sucesso!");
-      } else {
-        showMsg("Erro ao salvar preços no servidor.", "error");
-      }
-    } catch (err) {
-      showMsg("Erro de conexão ao salvar preços.", "error");
-    }
-  };
-
-  // Administrador: Exportar Preços
-  const handleExportPrices = async () => {
-    const rows = allProducts.map((p) => {
-      const currentPrice = prices[p.codigo] || 0;
-      return {
-        codigo: p.codigo,
-        produto: p.material,
-        categoria: p.categoria,
-        preco_tabela: currentPrice,
-        quantidade: "",
-        desconto: "",
-        bonificados: "",
-      };
-    });
-
-    const workbook = new ExcelJS.Workbook();
-    const worksheet = workbook.addWorksheet("Tabela de Preços");
-
-    worksheet.columns = [
-      { header: "codigo", key: "codigo", width: 15 },
-      { header: "produto", key: "produto", width: 40 },
-      { header: "categoria", key: "categoria", width: 20 },
-      { header: "preco_tabela", key: "preco_tabela", width: 15 },
-      { header: "quantidade", key: "quantidade", width: 12 },
-      { header: "desconto", key: "desconto", width: 12 },
-      { header: "bonificados", key: "bonificados", width: 12 },
-    ];
-
-    rows.forEach((r) => worksheet.addRow(r));
-
-    worksheet.getRow(1).font = { bold: true };
-    worksheet.getRow(1).fill = {
-      type: "pattern",
-      pattern: "solid",
-      fgColor: { argb: "FF0F76E5" },
-    };
-    worksheet.getRow(1).font = { color: { argb: "FFFFFFFF" }, bold: true };
-
-    const buffer = await workbook.xlsx.writeBuffer();
-    const blob = new Blob([buffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `Tabela_Precos_${new Date().toISOString().slice(0, 10)}.xlsx`;
-    a.click();
-    URL.revokeObjectURL(url);
-    showMsg("Tabela de preços exportada com sucesso!");
-  };
-
-  // Administrador: Importar Preços via Excel
-  const handleImportPrices = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    const reader = new FileReader();
-    reader.onload = async (event) => {
-      try {
-        const buffer = event.target?.result as ArrayBuffer;
-        const workbook = new ExcelJS.Workbook();
-        await workbook.xlsx.load(buffer);
-        const worksheet = workbook.worksheets[0];
-
-        const inconsistencies: string[] = [];
-        const allCodesSet = new Set(allProducts.map((p) => p.codigo));
-
-        let colIndexCodigo = -1;
-        let colIndexPreco = -1;
-
-        const firstRow = worksheet.getRow(1);
-        firstRow.eachCell((cell, colNum) => {
-          const val = cell.value?.toString().toLowerCase().trim();
-          if (val === "codigo") colIndexCodigo = colNum;
-          if (val === "preco_tabela") colIndexPreco = colNum;
-        });
-
-        if (colIndexCodigo === -1 || colIndexPreco === -1) {
-          showMsg("Layout inválido. Colunas 'codigo' e 'preco_tabela' são obrigatórias.", "error");
-          return;
-        }
-
-        const newPrices: Record<string, number> = { ...tempPrices };
-
-        worksheet.eachRow((row, rowNum) => {
-          if (rowNum === 1) return;
-
-          const codeVal = row.getCell(colIndexCodigo).value;
-          const code = codeVal ? codeVal.toString().trim() : "";
-          if (!code) return;
-
-          const rawPreco = row.getCell(colIndexPreco).value;
-          let preco = Number(rawPreco);
-
-          // Lidar com formatação em string de vírgula
-          if (typeof rawPreco === "string") {
-            preco = Number(rawPreco.replace(",", "."));
-          }
-
-          if (!allCodesSet.has(code)) {
-            inconsistencies.push(`Linha ${rowNum}: Código '${code}' inexistente no portfólio da FGM.`);
-            return;
-          }
-
-          if (isNaN(preco) || preco < 0) {
-            inconsistencies.push(`Linha ${rowNum}: Preço inválido para código ${code}.`);
-            return;
-          }
-
-          newPrices[code] = preco;
-        });
-
-        setTempPrices(newPrices);
-
-        if (inconsistencies.length > 0) {
-          setInconsistencyDialog({
-            open: true,
-            title: "Inconsistências encontradas nos Preços",
-            list: inconsistencies,
-          });
-          showMsg("Importação concluída com inconsistências.", "warning");
-        } else {
-          showMsg("Preços importados com sucesso! Não esqueça de salvar as alterações.");
-        }
-      } catch (err) {
-        showMsg("Erro ao importar planilha de preços.", "error");
-      }
-    };
-    reader.readAsArrayBuffer(file);
-    e.target.value = "";
-  };
 
   // Resumos do Carrinho da Aba ativa
   const cartSummary = useMemo(() => {
@@ -1123,54 +954,40 @@ export default function Home() {
             </Box>
           </Box>
         ) : (
-          // FLUXO DO ADMINISTRADOR
+          // FLUXO DO ADMINISTRADOR — visualização somente-leitura
+          // Preços vêm do SFMC (PricebookEntry_Salesforce) via integração
           <Box sx={{ display: "flex", flexDirection: "column", flexGrow: 1, gap: 3 }}>
             <Paper sx={{ p: 3, display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 2 }}>
               <Box>
                 <Typography variant="h6" sx={{ fontWeight: 700 }}>
-                  Gestão Central de Preços
+                  Tabela de Preços
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
-                  Atualize os preços de tabela e disponibilize para toda a força de vendas.
+                  Preços carregados automaticamente via integração SFMC (PricebookEntry_Salesforce). Somente leitura.
                 </Typography>
               </Box>
-
               <Box sx={{ display: "flex", gap: 1.5 }}>
-                <input
-                  type="file"
-                  accept=".xlsx, .xls"
-                  style={{ display: "none" }}
-                  ref={fileInputRef}
-                  onChange={handleImportPrices}
-                />
                 <Button
                   variant="outlined"
-                  color="secondary"
-                  startIcon={<FileUploadIcon />}
-                  onClick={() => fileInputRef.current?.click()}
-                >
-                  Importar Preços Excel
-                </Button>
-                <Button
-                  variant="outlined"
-                  color="secondary"
-                  startIcon={<FileDownloadIcon />}
-                  onClick={handleExportPrices}
-                >
-                  Exportar Preços Excel
-                </Button>
-                <Button
-                  variant="contained"
                   color="primary"
-                  startIcon={<SaveIcon />}
-                  onClick={handleSavePrices}
+                  startIcon={<SettingsIcon />}
+                  href="/admin/catalogo"
                 >
-                  Salvar Tabela de Preços
+                  Configurar Catálogo
+                </Button>
+                <Button
+                  variant="outlined"
+                  size="small"
+                  startIcon={<RefreshIcon />}
+                  onClick={loadData}
+                  sx={{ border: "1px solid rgba(255, 255, 255, 0.08)" }}
+                >
+                  Atualizar
                 </Button>
               </Box>
             </Paper>
 
-            {/* Tabela de Preços de Portfólio */}
+            {/* Tabela de Preços de Portfólio — somente leitura */}
             <TableContainer component={Paper} sx={{ maxHeight: 600, overflowY: "auto" }}>
               <Table stickyHeader size="small">
                 <TableHead>
@@ -1193,7 +1010,7 @@ export default function Home() {
                     </TableRow>
                   ) : (
                     filteredProducts.map((p) => {
-                      const tempPrice = tempPrices[p.codigo] !== undefined ? tempPrices[p.codigo] : (prices[p.codigo] || 0);
+                      const price = prices[p.codigo] || 0;
                       const displayColor = p.cor && colorMap[p.cor] ? colorMap[p.cor] : "#f3f4f6";
 
                       return (
@@ -1206,16 +1023,8 @@ export default function Home() {
                           </TableCell>
                           <TableCell sx={{ color: "text.secondary" }}>{p.categoria}</TableCell>
                           <TableCell sx={{ fontWeight: 500 }}>{p.businessUnit?.replace("_", " ")}</TableCell>
-                          <TableCell align="right">
-                            <TextField
-                              type="text"
-                              size="small"
-                              variant="outlined"
-                              slotProps={{ htmlInput: { style: { textAlign: "right", padding: "6px" } } }}
-                              value={tempPrice.toString().replace(".", ",")}
-                              onChange={(e) => handleTempPriceChange(p.codigo, e.target.value)}
-                              sx={{ width: 110 }}
-                            />
+                          <TableCell align="right" sx={{ fontWeight: 600 }}>
+                            {price > 0 ? `R$ ${formatCurrency(price)}` : "Sob consulta"}
                           </TableCell>
                         </TableRow>
                       );
