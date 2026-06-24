@@ -6,7 +6,7 @@ import {
 } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { 
-  Menu as MenuIcon, PriceCheck, BarChart, Logout, AccountCircle 
+  Menu as MenuIcon, PriceCheck, BarChart, Logout, AccountCircle, Settings 
 } from '@mui/icons-material';
 import { useAuth } from '../contexts/AuthProvider';
 import { useRouter } from 'next/router';
@@ -46,6 +46,10 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
     { text: 'Tabela de Preços', icon: <PriceCheck />, path: '/precos' },
     { text: 'Performance Comercial', icon: <BarChart />, path: '/performance' }
   ];
+
+  if (profile?.role === 'admin') {
+    menuItems.push({ text: 'Configuração de Catálogo', icon: <Settings />, path: '/admin/catalogo' });
+  }
 
   return (
     <Box sx={{ display: 'flex', minHeight: '100vh', bgcolor: 'background.default' }}>
