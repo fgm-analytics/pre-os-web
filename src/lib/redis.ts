@@ -58,4 +58,13 @@ export async function getCachedData<T>(
   return data;
 }
 
+export async function clearCachedData(key: string): Promise<void> {
+  if (!redis) return;
+  try {
+    await redis.del(key);
+  } catch (error) {
+    console.error(`Erro ao limpar cache para a chave ${key}:`, error);
+  }
+}
+
 export default redis;

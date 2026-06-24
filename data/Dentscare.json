@@ -136,30 +136,6 @@
     "ipi": 0
   },
   {
-    "codigo": "4000005387",
-    "material": "JOGO DE PLACA QUADRADA 1MM 5UN ",
-    "categoria": "Acessórios",
-    "cor": "blue",
-    "segmentacao": 40,
-    "ipi": 0
-  },
-  {
-    "codigo": "4000005389",
-    "material": "JOGO DE PLACA QUADRADA 2MM 2UN ",
-    "categoria": "Acessórios",
-    "cor": "blue",
-    "segmentacao": 40,
-    "ipi": 0
-  },
-  {
-    "codigo": "4000005392",
-    "material": "JOGO DE PLACA QUADRADA 3MM 2UN ",
-    "categoria": "Acessórios",
-    "cor": "blue",
-    "segmentacao": 40,
-    "ipi": 0
-  },
-  {
     "codigo": "4000002769",
     "material": "ARCFLEX M",
     "categoria": "Acessórios",
@@ -212,6 +188,70 @@
     "material": "KIT PONT PRIMMA ART CARTUCHO 75G 20UN CE/FDA",
     "categoria": "Acessórios",
     "cor": "blue",
+    "segmentacao": 40,
+    "ipi": 0
+  },
+  {
+    "codigo": "5500000153",
+    "material": "PRO-RETRACT 000 ULTRAFINO",
+    "categoria": "Acessórios",
+    "cor": "black",
+    "segmentacao": 40,
+    "ipi": 0
+  },
+  {
+    "codigo": "5500000154",
+    "material": "PRO-RETRACT 00 EXTRAFINO",
+    "categoria": "Acessórios",
+    "cor": "black",
+    "segmentacao": 40,
+    "ipi": 0
+  },
+  {
+    "codigo": "5500000155",
+    "material": "PRO-RETRACT 0 FINO",
+    "categoria": "Acessórios",
+    "cor": "black",
+    "segmentacao": 40,
+    "ipi": 0
+  },
+  {
+    "codigo": "5500000156",
+    "material": "PRO-RETRACT 1 MEDIO",
+    "categoria": "Acessórios",
+    "cor": "black",
+    "segmentacao": 40,
+    "ipi": 0
+  },
+  {
+    "codigo": "5500000157",
+    "material": "PRO-RETRACT 2 GROSSO",
+    "categoria": "Acessórios",
+    "cor": "black",
+    "segmentacao": 40,
+    "ipi": 0
+  },
+  {
+    "codigo": "4000019357",
+    "material": "AMBAR 6ML CE EXP",
+    "categoria": "Adesivos",
+    "cor": "orange",
+    "segmentacao": 40,
+    "ipi": 0
+  },
+  {
+    "codigo": "4000019358",
+    "material": "AMBAR APS 6ML CE EXP",
+    "categoria": "Adesivos",
+    "cor": "orange",
+    "segmentacao": 40,
+    "ipi": 0
+  },
+  {
+    "codigo": "4000055931",
+    "material": "AMBAR UNIV APS PLUS 3ML CE",
+    "categoria": "Adesivos",
+    "cor": "orange",
     "segmentacao": 40,
     "ipi": 0
   },
@@ -416,6 +456,38 @@
     "ipi": 0
   },
   {
+    "codigo": "4000056576",
+    "material": "NANOSYNT 200 a 500 | 2x 0,27cc (BR)",
+    "categoria": "Enxerto/Membrana",
+    "cor": "light_blue",
+    "segmentacao": 40,
+    "ipi": 0
+  },
+  {
+    "codigo": "4000056578",
+    "material": "NANOSYNT 500 a 1000 | 2x 0,27cc (BR)",
+    "categoria": "Enxerto/Membrana",
+    "cor": "light_blue",
+    "segmentacao": 40,
+    "ipi": 0
+  },
+  {
+    "codigo": "4000056577",
+    "material": "NANOSYNT 200 a 500 | 4x 0,27cc (BR)",
+    "categoria": "Enxerto/Membrana",
+    "cor": "light_blue",
+    "segmentacao": 40,
+    "ipi": 0
+  },
+  {
+    "codigo": "4000056579",
+    "material": "NANOSYNT 500 a 1000 | 4x 0,27cc (BR)",
+    "categoria": "Enxerto/Membrana",
+    "cor": "light_blue",
+    "segmentacao": 40,
+    "ipi": 0
+  },
+  {
     "codigo": "4000020927",
     "material": "NANOSYNT 200 a 500 | 2x 0,27cc",
     "categoria": "Enxerto/Membrana",
@@ -488,6 +560,38 @@
     "ipi": 0
   },
   {
+    "codigo": "5500000118",
+    "material": "MICRO APLIC CAVIBRUSH XP REGULAR",
+    "categoria": "Haste flexível",
+    "cor": "orange",
+    "segmentacao": 40,
+    "ipi": 0
+  },
+  {
+    "codigo": "5500000119",
+    "material": "MICRO APLIC CAVIBRUSH XP FINO",
+    "categoria": "Haste flexível",
+    "cor": "orange",
+    "segmentacao": 40,
+    "ipi": 0
+  },
+  {
+    "codigo": "5500000120",
+    "material": "MICRO APLIC CAVIBRUSH XP EXTRA FINO",
+    "categoria": "Haste flexível",
+    "cor": "orange",
+    "segmentacao": 40,
+    "ipi": 0
+  },
+  {
+    "codigo": "4000056689",
+    "material": "VOXELPRINT SPLINT TOUGH 500 G CE",
+    "categoria": "Impressão 3D",
+    "cor": "orange",
+    "segmentacao": 40,
+    "ipi": 0
+  },
+  {
     "codigo": "4000056732",
     "material": "VOXELPRINT CERAMIC A1-LT 250 G BR",
     "categoria": "Impressão 3D",
@@ -514,6 +618,14 @@
   {
     "codigo": "4000056735",
     "material": "VOXELPRINT CERAMIC A3-LT 250 G BR",
+    "categoria": "Impressão 3D",
+    "cor": "orange",
+    "segmentacao": 40,
+    "ipi": 0
+  },
+  {
+    "codigo": "4000056730",
+    "material": "VOXELPRINT CERAMIC A3-MT 250 G BR",
     "categoria": "Impressão 3D",
     "cor": "orange",
     "segmentacao": 40,
