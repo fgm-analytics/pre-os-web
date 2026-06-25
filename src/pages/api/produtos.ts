@@ -44,17 +44,26 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
       console.log(`[API produtos] JSONs carregados: Dentscare=${dentscareRaw.length}, Home_Care=${homeCareRaw.length}, Whiteness=${whitenessRaw.length}`);
 
-      // Tentar buscar dados de promoção/preço do SFMC para enriquecer
-      const sfmcEntries = await fetchSFMCPriceEntries();
+      // Tentar buscar dados de promoção do SFMC para enriquecer
+      const { fetchSFMCProducts } = require("../../lib/sfmc");
+      const sfmcItems = await fetchSFMCProducts();
 
-      const sfmcMap = new Map<string, { name: string; isActive: boolean; used: boolean }>();
-      if (sfmcEntries && sfmcEntries.length > 0) {
-        sfmcEntries.forEach((entry) => {
-          if (entry.ProductCode) {
-            sfmcMap.set(entry.ProductCode, {
-              name: entry.ProductName || "",
-              isActive: entry.IsActive,
+      const sfmcMap = new Map<string, { name: string; isActive: boolean; used: boolean; promotionName: string }>();
+      if (sfmcItems && sfmcItems.length > 0) {
+        sfmcItems.forEach((item: any) => {
+          const keys = (item.keys || {}) as any;
+          const values = (item.values || {}) as any;
+          const codigo = String(keys.ProductCode || values.ProductCode || keys.productcode || values.productcode || "").trim();
+          const material = values.Description || values.description || "";
+          const promotionName = values.promotionname || values.promotionName || "";
+          const promotionIsActive = values.promotionisactive !== "false" && values.promotionIsActive !== "false" && values.promotionisactive !== false && values.promotionIsActive !== false;
+
+          if (codigo) {
+            sfmcMap.set(codigo, {
+              name: material,
+              isActive: promotionIsActive,
               used: false,
+              promotionName: promotionName,
             });
           }
         });
@@ -72,11 +81,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
           return {
             codigo: item.codigo,
-            material: item.material,
+            material: sfmcData ? (sfmcData.name || item.material) : item.material,
             categoria: item.categoria || "Geral",
             cor: item.cor || "dark_gray",
             businessUnit: targetBU,
-            promotionName: "",
+            promotionName: sfmcData ? sfmcData.promotionName : "",
             promotionIsActive: sfmcData ? sfmcData.isActive : true, // Se SFMC disponível, usa status; senão mostra todos
             segmentacao: item.segmentacao !== undefined ? item.segmentacao : 40,
             ipi: item.ipi !== undefined ? item.ipi : 0,

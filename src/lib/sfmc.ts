@@ -167,9 +167,64 @@ export async function fetchSFMCPriceEntries(): Promise<SFMCPriceEntry[] | null> 
   }
 }
 
-// Retrocompatibilidade
-export async function fetchSFMCProducts() {
-  return fetchSFMCPriceEntries();
+interface SFMCProductRow {
+  keys: {
+    ProductCode?: string;
+    productcode?: string;
+  };
+  values: {
+    ProductCode?: string;
+    productcode?: string;
+    Description?: string;
+    description?: string;
+    promotionname?: string;
+    promotionName?: string;
+    promotionisactive?: string;
+    promotionIsActive?: string;
+  };
+}
+
+interface SFMCRowsetResponse {
+  items: SFMCProductRow[];
+}
+
+let productsCache: CacheEntry<SFMCProductRow[]> | null = null;
+
+export async function fetchSFMCProducts(): Promise<SFMCProductRow[] | null> {
+  const now = Date.now();
+  if (productsCache && productsCache.expiresAt > now) {
+    return productsCache.data;
+  }
+
+  const tokenData = await getSFMCToken();
+  if (!tokenData) return null;
+
+  const restUrl = process.env.SFMC_REST_URI || tokenData.rest_instance_url;
+  const deKey = "DE_CATALOGO_PRODUTO_PROMOCAO";
+
+  try {
+    const res = await fetch(`${restUrl.replace(/\/$/, "")}/data/v1/customobjectdata/key/${deKey}/rowset`, {
+      headers: {
+        Authorization: `Bearer ${tokenData.access_token}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!res.ok) {
+      throw new Error(`Data fetch failed with status ${res.status}`);
+    }
+
+    const data = (await res.json()) as SFMCRowsetResponse;
+    const items = data.items || [];
+    productsCache = {
+      data: items,
+      expiresAt: now + CACHE_TTL,
+    };
+    return items;
+  } catch (error) {
+    console.error("SFMC Fetch Error:", error);
+    return null;
+  }
 }
 
 /**

@@ -25,27 +25,29 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   if (req.method === "GET") {
     try {
       const data = await getCachedData("tabela_precos_v2", async () => {
+        // Ler fallback: arquivo local tabela_precos.json
+        let localPrices: Record<string, number> = {};
+        if (fs.existsSync(filePath)) {
+          const fileContent = fs.readFileSync(filePath, "utf-8");
+          localPrices = JSON.parse(fileContent);
+        }
+
         // Tentar buscar preços do SFMC (DE_PricebookZ3)
         const sfmcEntries = await fetchSFMCPriceEntries();
 
         if (sfmcEntries && sfmcEntries.length > 0) {
-          const prices: Record<string, number> = {};
+          const prices: Record<string, number> = { ...localPrices }; // Merge fallback with SFMC overriding
           sfmcEntries.forEach((entry) => {
             if (entry.ProductCode && entry.UnitPrice > 0) {
               prices[entry.ProductCode] = entry.UnitPrice;
             }
           });
-          console.log(`[API precos] ${Object.keys(prices).length} preços carregados do SFMC`);
+          console.log(`[API precos] ${Object.keys(prices).length} preços mesclados (SFMC + local)`);
           return prices;
         }
 
-        // Fallback: arquivo local tabela_precos.json
-        console.log("[API precos] SFMC indisponível, usando fallback local");
-        if (!fs.existsSync(filePath)) {
-          return {};
-        }
-        const fileContent = fs.readFileSync(filePath, "utf-8");
-        return JSON.parse(fileContent);
+        console.log("[API precos] SFMC indisponível, usando fallback local exclusivamente");
+        return localPrices;
       }, 1800); // 30 minutos
 
       return res.status(200).json(data);
