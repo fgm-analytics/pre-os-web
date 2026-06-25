@@ -1,4 +1,7 @@
 // SFMC Integration — Fonte: PricebookEntry_Salesforce
+if (process.env.NODE_ENV === 'development') {
+  process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+}
 // Pricebook2Id = 01sV20000016SsKIAU (lista de preços oficial FGM)
 // Campos esperados no Data Extension:
 //   keys.ProductCode  → código do produto (= Material no SAP/ERP)
@@ -37,9 +40,10 @@ export async function getSFMCToken(): Promise<SFMCTokenResponse | null> {
 
   const clientId = process.env.SFMC_CLIENT_ID;
   const clientSecret = process.env.SFMC_CLIENT_SECRET;
-  const authUrl = process.env.SFMC_AUTH_URI;
+  const authUrl = process.env.SFMC_AUTH_URI || process.env.SFMC_AUTH_BASE_URL;
 
   if (!clientId || !clientSecret || !authUrl) {
+    console.error("SFMC Auth variables missing:", { clientId: !!clientId, clientSecret: !!clientSecret, authUrl: !!authUrl });
     return null;
   }
 
@@ -166,4 +170,64 @@ export async function fetchSFMCPriceEntries(): Promise<SFMCPriceEntry[] | null> 
 // Retrocompatibilidade
 export async function fetchSFMCProducts() {
   return fetchSFMCPriceEntries();
+}
+
+/**
+ * Busca todos os registros de uma Data Extension paginando de 2500 em 2500
+ */
+export async function fetchSFMCDataExtensionPaginated(deKey: string): Promise<any[] | null> {
+  const tokenData = await getSFMCToken();
+  if (!tokenData) return null;
+
+  const restUrl = process.env.SFMC_REST_URI || tokenData.rest_instance_url;
+  let allItems: any[] = [];
+  let page = 1;
+  const pageSize = 2500;
+  let hasMore = true;
+
+  try {
+    while (hasMore) {
+      const res = await fetch(
+        `${restUrl.replace(/\/$/, "")}/data/v1/customobjectdata/key/${deKey}/rowset?$pageSize=${pageSize}&$page=${page}`,
+        {
+          headers: {
+            Authorization: `Bearer ${tokenData.access_token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (!res.ok) {
+        if (res.status === 404 || res.status === 400) {
+          console.warn(`[SFMC] DE ${deKey} não encontrada ou erro na página ${page} (${res.status}). Retornando o que tem.`);
+          break;
+        }
+        throw new Error(`Data fetch failed: ${res.status}`);
+      }
+
+      const data = await res.json();
+      const items: any[] = data.items || [];
+      
+      if (items.length > 0) {
+        // SFMC API returns { keys: {...}, values: {...} }. Merge them for easier parsing
+        const mergedItems = items.map((item: any) => ({
+          ...item.keys,
+          ...item.values,
+        }));
+        allItems = allItems.concat(mergedItems);
+      }
+
+      if (items.length < pageSize) {
+        hasMore = false;
+      } else {
+        page++;
+      }
+    }
+
+    console.log(`[SFMC] Fetched ${allItems.length} total rows from ${deKey}`);
+    return allItems;
+  } catch (error) {
+    console.error(`SFMC DE ${deKey} Fetch Error:`, error);
+    return null;
+  }
 }

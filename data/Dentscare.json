@@ -1,11 +1,19 @@
 [
   {
+    "codigo": "4000056831",
+    "material": "EDIÇÃO LIMITADA 30 ANOS COMBO WHITENESS HP BLUE WHITENESS HP BLUE KIT + WHITENESS PERFECT KIT",
+    "categoria": "Promoção",
+    "cor": "white",
+    "segmentacao": 40,
+    "ipi": 0.0
+  },
+  {
     "codigo": "5500000041",
     "material": "QUAZAR ROCKET GRAY - SILVER",
     "categoria": "Fotopolimerizadores",
     "cor": "white",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.052
   },
   {
     "codigo": "5500000044",
@@ -13,7 +21,7 @@
     "categoria": "Fotopolimerizadores",
     "cor": "white",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.052
   },
   {
     "codigo": "5500000057",
@@ -21,7 +29,7 @@
     "categoria": "Fotopolimerizadores",
     "cor": "white",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.052
   },
   {
     "codigo": "5500000049",
@@ -29,7 +37,7 @@
     "categoria": "Fotopolimerizadores",
     "cor": "white",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.052
   },
   {
     "codigo": "5500000055",
@@ -37,7 +45,7 @@
     "categoria": "Fotopolimerizadores",
     "cor": "white",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.052
   },
   {
     "codigo": "4000000266",
@@ -45,15 +53,15 @@
     "categoria": "Acabamento",
     "cor": "red",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000002090",
-    "material": "DIAMOND ACI  ACII - 2 seringas 4G cada",
+    "material": "DIAMOND ACI ACII - 2 seringas 4G cada",
     "categoria": "Acabamento",
     "cor": "red",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.065
   },
   {
     "codigo": "4000002091",
@@ -61,7 +69,7 @@
     "categoria": "Acabamento",
     "cor": "red",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.065
   },
   {
     "codigo": "4000055820",
@@ -69,7 +77,7 @@
     "categoria": "Acabamento",
     "cor": "red",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.065
   },
   {
     "codigo": "4000002092",
@@ -77,7 +85,7 @@
     "categoria": "Acabamento",
     "cor": "red",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.065
   },
   {
     "codigo": "4000002096",
@@ -85,7 +93,7 @@
     "categoria": "Acabamento",
     "cor": "red",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000002099",
@@ -93,7 +101,7 @@
     "categoria": "Acabamento",
     "cor": "red",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000002102",
@@ -101,7 +109,7 @@
     "categoria": "Acabamento",
     "cor": "red",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000002103",
@@ -109,7 +117,7 @@
     "categoria": "Acabamento",
     "cor": "red",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000002106",
@@ -117,7 +125,7 @@
     "categoria": "Acabamento",
     "cor": "red",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000001609",
@@ -125,7 +133,7 @@
     "categoria": "Acessórios",
     "cor": "blue",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000001611",
@@ -133,7 +141,7 @@
     "categoria": "Acessórios",
     "cor": "blue",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000002769",
@@ -141,7 +149,7 @@
     "categoria": "Acessórios",
     "cor": "blue",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.052
   },
   {
     "codigo": "4000002770",
@@ -149,7 +157,7 @@
     "categoria": "Acessórios",
     "cor": "blue",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.052
   },
   {
     "codigo": "4000002772",
@@ -157,7 +165,7 @@
     "categoria": "Acessórios",
     "cor": "blue",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.052
   },
   {
     "codigo": "4000056651",
@@ -165,7 +173,7 @@
     "categoria": "Acessórios",
     "cor": "blue",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000056650",
@@ -173,7 +181,7 @@
     "categoria": "Acessórios",
     "cor": "blue",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000056649",
@@ -181,7 +189,7 @@
     "categoria": "Acessórios",
     "cor": "blue",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000056648",
@@ -189,47 +197,47 @@
     "categoria": "Acessórios",
     "cor": "blue",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "5500000153",
     "material": "PRO-RETRACT 000 ULTRAFINO",
     "categoria": "Acessórios",
-    "cor": "black",
+    "cor": "blue",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "5500000154",
     "material": "PRO-RETRACT 00 EXTRAFINO",
     "categoria": "Acessórios",
-    "cor": "black",
+    "cor": "blue",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "5500000155",
     "material": "PRO-RETRACT 0 FINO",
     "categoria": "Acessórios",
-    "cor": "black",
+    "cor": "blue",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "5500000156",
     "material": "PRO-RETRACT 1 MEDIO",
     "categoria": "Acessórios",
-    "cor": "black",
+    "cor": "blue",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "5500000157",
     "material": "PRO-RETRACT 2 GROSSO",
     "categoria": "Acessórios",
-    "cor": "black",
+    "cor": "blue",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000019357",
@@ -237,7 +245,7 @@
     "categoria": "Adesivos",
     "cor": "orange",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000019358",
@@ -245,7 +253,7 @@
     "categoria": "Adesivos",
     "cor": "orange",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000055931",
@@ -253,7 +261,7 @@
     "categoria": "Adesivos",
     "cor": "orange",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000056016",
@@ -261,7 +269,7 @@
     "categoria": "Adesivos",
     "cor": "orange",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000056017",
@@ -269,7 +277,7 @@
     "categoria": "Adesivos",
     "cor": "orange",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000056018",
@@ -277,15 +285,15 @@
     "categoria": "Adesivos",
     "cor": "orange",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000055963",
-    "material": "AMBAR APS ORTHO 6ML ",
+    "material": "AMBAR APS ORTHO 6ML",
     "categoria": "Adesivos",
     "cor": "orange",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000056019",
@@ -293,7 +301,7 @@
     "categoria": "Adesivos",
     "cor": "orange",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000056743",
@@ -301,7 +309,7 @@
     "categoria": "Adesivos",
     "cor": "orange",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000002172",
@@ -309,7 +317,7 @@
     "categoria": "Barreira Gengival",
     "cor": "olive",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000002174",
@@ -317,7 +325,7 @@
     "categoria": "Barreira Gengival",
     "cor": "olive",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000002625",
@@ -325,7 +333,7 @@
     "categoria": "Cimento Resinoso",
     "cor": "brown",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000002626",
@@ -333,7 +341,7 @@
     "categoria": "Cimento Resinoso",
     "cor": "brown",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000002402",
@@ -341,7 +349,7 @@
     "categoria": "Cimento Resinoso",
     "cor": "brown",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000002403",
@@ -349,7 +357,7 @@
     "categoria": "Cimento Resinoso",
     "cor": "brown",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000019276",
@@ -357,7 +365,7 @@
     "categoria": "Cimento Resinoso",
     "cor": "brown",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000019277",
@@ -365,7 +373,7 @@
     "categoria": "Cimento Resinoso",
     "cor": "brown",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000019278",
@@ -373,7 +381,7 @@
     "categoria": "Cimento Resinoso",
     "cor": "brown",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000019279",
@@ -381,31 +389,31 @@
     "categoria": "Cimento Resinoso",
     "cor": "brown",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
-    "codigo": "4000019280",
-    "material": "ALLCEM CORE A1 6G CE",
+    "codigo": "4000005700",
+    "material": "ALLCEM CORE A1 6G BR",
     "categoria": "Cimento Resinoso",
     "cor": "brown",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
-    "codigo": "4000019281",
-    "material": "ALLCEM CORE A2 6G CE",
+    "codigo": "4000005701",
+    "material": "ALLCEM CORE A2 6G BR",
     "categoria": "Cimento Resinoso",
     "cor": "brown",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
-    "codigo": "4000019282",
-    "material": "ALLCEM CORE A3 6G CE",
+    "codigo": "4000005702",
+    "material": "ALLCEM CORE A3 6G BR",
     "categoria": "Cimento Resinoso",
     "cor": "brown",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000019283",
@@ -413,7 +421,7 @@
     "categoria": "Cimento Resinoso",
     "cor": "brown",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000002730",
@@ -421,7 +429,7 @@
     "categoria": "Cimento Resinoso",
     "cor": "brown",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000007094",
@@ -429,7 +437,7 @@
     "categoria": "Cimento Resinoso",
     "cor": "brown",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000056009",
@@ -437,23 +445,23 @@
     "categoria": "Condicionador Ácido",
     "cor": "salmon",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000055788",
-    "material": "CONDAC PORC 10% (BR)  -  seringa 2,5G",
+    "material": "CONDAC PORC 10% (BR) - seringa 2,5G",
     "categoria": "Condicionador Ácido",
     "cor": "salmon",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000055789",
-    "material": "CONDAC PORC 5% (BR)  -  seringa 2,5G",
+    "material": "CONDAC PORC 5% (BR) - seringa 2,5G",
     "categoria": "Condicionador Ácido",
     "cor": "salmon",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000056576",
@@ -461,7 +469,7 @@
     "categoria": "Enxerto/Membrana",
     "cor": "light_blue",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000056578",
@@ -469,7 +477,7 @@
     "categoria": "Enxerto/Membrana",
     "cor": "light_blue",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000056577",
@@ -477,7 +485,7 @@
     "categoria": "Enxerto/Membrana",
     "cor": "light_blue",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000056579",
@@ -485,55 +493,15 @@
     "categoria": "Enxerto/Membrana",
     "cor": "light_blue",
     "segmentacao": 40,
-    "ipi": 0
-  },
-  {
-    "codigo": "4000020927",
-    "material": "NANOSYNT 200 a 500 | 2x 0,27cc",
-    "categoria": "Enxerto/Membrana",
-    "cor": "light_blue",
-    "segmentacao": 40,
-    "ipi": 0
-  },
-  {
-    "codigo": "4000020934",
-    "material": "NANOSYNT 500 a 1000 | 2x 0,27cc ",
-    "categoria": "Enxerto/Membrana",
-    "cor": "light_blue",
-    "segmentacao": 40,
-    "ipi": 0
-  },
-  {
-    "codigo": "4000020938",
-    "material": "NANOSYNT 200 a 500 | 4x 0,27cc",
-    "categoria": "Enxerto/Membrana",
-    "cor": "light_blue",
-    "segmentacao": 40,
-    "ipi": 0
-  },
-  {
-    "codigo": "4000020943",
-    "material": "NANOSYNT 500 a 1000 | 4x 0,27cc",
-    "categoria": "Enxerto/Membrana",
-    "cor": "light_blue",
-    "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000023798",
-    "material": "NANOSYNT 1000 a 2000 |2X0,53cc",
+    "material": "NANOSYNT 1000 a 2000 |2x 0,53cc",
     "categoria": "Enxerto/Membrana",
     "cor": "light_blue",
     "segmentacao": 40,
-    "ipi": 0
-  },
-  {
-    "codigo": "4000019984",
-    "material": "DUOSYNT 300UM 20X20MM ",
-    "categoria": "Enxerto/Membrana",
-    "cor": "light_blue",
-    "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000002112",
@@ -541,7 +509,7 @@
     "categoria": "Haste flexível",
     "cor": "orange",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.08
   },
   {
     "codigo": "4000002114",
@@ -549,15 +517,15 @@
     "categoria": "Haste flexível",
     "cor": "orange",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.08
   },
   {
     "codigo": "4000002117",
-    "material": "CAVIBRUSH REGULAR (VERDE) - 100 un ",
+    "material": "CAVIBRUSH REGULAR (VERDE) - 100 un",
     "categoria": "Haste flexível",
     "cor": "orange",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.08
   },
   {
     "codigo": "5500000118",
@@ -565,7 +533,7 @@
     "categoria": "Haste flexível",
     "cor": "orange",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.052
   },
   {
     "codigo": "5500000119",
@@ -573,7 +541,7 @@
     "categoria": "Haste flexível",
     "cor": "orange",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.052
   },
   {
     "codigo": "5500000120",
@@ -581,7 +549,7 @@
     "categoria": "Haste flexível",
     "cor": "orange",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.052
   },
   {
     "codigo": "4000056689",
@@ -589,7 +557,7 @@
     "categoria": "Impressão 3D",
     "cor": "orange",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000056732",
@@ -597,15 +565,15 @@
     "categoria": "Impressão 3D",
     "cor": "orange",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
-    "codigo": "4000056733",
-    "material": "VOXELPRINT CERAMIC A2-LT 250 G BR",
+    "codigo": "4000056052",
+    "material": "VOXELPRINT CERAMIC A2-LT 250 G CE",
     "categoria": "Impressão 3D",
     "cor": "orange",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000056734",
@@ -613,7 +581,7 @@
     "categoria": "Impressão 3D",
     "cor": "orange",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000056735",
@@ -621,15 +589,15 @@
     "categoria": "Impressão 3D",
     "cor": "orange",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
-    "codigo": "4000056730",
+    "codigo": "4000056930",
     "material": "VOXELPRINT CERAMIC A3-MT 250 G BR",
     "categoria": "Impressão 3D",
     "cor": "orange",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000056736",
@@ -637,7 +605,7 @@
     "categoria": "Impressão 3D",
     "cor": "orange",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000056737",
@@ -645,7 +613,7 @@
     "categoria": "Impressão 3D",
     "cor": "orange",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000056738",
@@ -653,7 +621,7 @@
     "categoria": "Impressão 3D",
     "cor": "orange",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000056739",
@@ -661,7 +629,7 @@
     "categoria": "Impressão 3D",
     "cor": "orange",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000056740",
@@ -669,7 +637,7 @@
     "categoria": "Impressão 3D",
     "cor": "orange",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000056741",
@@ -677,7 +645,7 @@
     "categoria": "Impressão 3D",
     "cor": "orange",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000056742",
@@ -685,7 +653,71 @@
     "categoria": "Impressão 3D",
     "cor": "orange",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
+  },
+  {
+    "codigo": "4000056794",
+    "material": "VOXELPRINT TEMP BL 250 G",
+    "categoria": "Impressão 3D",
+    "cor": "orange",
+    "segmentacao": 40,
+    "ipi": 0.0
+  },
+  {
+    "codigo": "4000056795",
+    "material": "VOXELPRINT TEMP BL 500G",
+    "categoria": "Impressão 3D",
+    "cor": "orange",
+    "segmentacao": 40,
+    "ipi": 0.0
+  },
+  {
+    "codigo": "4000056796",
+    "material": "VOXELPRINT TEMP A1 500G",
+    "categoria": "Impressão 3D",
+    "cor": "orange",
+    "segmentacao": 40,
+    "ipi": 0.0
+  },
+  {
+    "codigo": "4000056797",
+    "material": "VOXELPRINT TEMP A2 500G",
+    "categoria": "Impressão 3D",
+    "cor": "orange",
+    "segmentacao": 40,
+    "ipi": 0.0
+  },
+  {
+    "codigo": "4000056798",
+    "material": "VOXELPRINT TEMP A3 500G",
+    "categoria": "Impressão 3D",
+    "cor": "orange",
+    "segmentacao": 40,
+    "ipi": 0.0
+  },
+  {
+    "codigo": "4000056799",
+    "material": "VOXELPRINT TEMP A1 250G",
+    "categoria": "Impressão 3D",
+    "cor": "orange",
+    "segmentacao": 40,
+    "ipi": 0.0
+  },
+  {
+    "codigo": "4000056800",
+    "material": "VOXELPRINT TEMP A2 250G",
+    "categoria": "Impressão 3D",
+    "cor": "orange",
+    "segmentacao": 40,
+    "ipi": 0.0
+  },
+  {
+    "codigo": "4000056801",
+    "material": "VOXELPRINT TEMP A3 250G",
+    "categoria": "Impressão 3D",
+    "cor": "orange",
+    "segmentacao": 40,
+    "ipi": 0.0
   },
   {
     "codigo": "4000000855",
@@ -693,7 +725,7 @@
     "categoria": "Ionômero de vidro",
     "cor": "green",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000000856",
@@ -701,31 +733,47 @@
     "categoria": "Ionômero de vidro",
     "cor": "green",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000000857",
-    "material": "MAXXION R  LIQ – 8G",
+    "material": "MAXXION R LIQ – 8G",
     "categoria": "Ionômero de vidro",
     "cor": "green",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
-    "codigo": "4000055253",
-    "material": "ORTHOCEM RASTREADOR + CONDAC 37%",
-    "categoria": "Ortodontia",
-    "cor": "red",
+    "codigo": "4000002129",
+    "material": "MAXXION R KIT A2 (Frasco Maxxion R Liq 10 ml + Frasco Maxxion R Po A2 10g)",
+    "categoria": "Ionômero de vidro",
+    "cor": "green",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
-    "codigo": "4000019364",
-    "material": "ORTHOCEM UV TRACE CE",
-    "categoria": "Ortodontia",
-    "cor": "red",
+    "codigo": "4000002130",
+    "material": "MAXXION R KIT A3 (Frasco Maxxion R Liq 10 ml + Frasco Maxxion R Po A3 10g)",
+    "categoria": "Ionômero de vidro",
+    "cor": "green",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
+  },
+  {
+    "codigo": "4000001157",
+    "material": "MAXXION R RADIOPACO A3 KIT (Frasco Liq Radiopaco 10ml + Frasco Maxxion R Po Radiopaco A3 10g)",
+    "categoria": "Ionômero de vidro",
+    "cor": "green",
+    "segmentacao": 40,
+    "ipi": 0.0
+  },
+  {
+    "codigo": "4000003085",
+    "material": "MAXXION C KIT (15G + 10G) (Frasco Maxxion C Liq 10g + Frasco Maxxion C Po 15g)",
+    "categoria": "Ionômero de vidro",
+    "cor": "green",
+    "segmentacao": 40,
+    "ipi": 0.0
   },
   {
     "codigo": "4000019365",
@@ -733,15 +781,39 @@
     "categoria": "Ortodontia",
     "cor": "red",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
-    "codigo": "4000004393",
-    "material": "TOP COMFORT - seringa 2G (Protetor para bráquetes e acessórios) ",
+    "codigo": "4000055253",
+    "material": "ORTHOCEM RASTREADOR + CONDAC 37%",
     "categoria": "Ortodontia",
     "cor": "red",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
+  },
+  {
+    "codigo": "4000019364",
+    "material": "ORTHOCEM UV TRACE CE",
+    "categoria": "Ortodontia",
+    "cor": "red",
+    "segmentacao": 40,
+    "ipi": 0.0
+  },
+  {
+    "codigo": "4000004393",
+    "material": "TOP COMFORT - seringa 2G (Protetor para bráquetes e acessórios)",
+    "categoria": "Ortodontia",
+    "cor": "red",
+    "segmentacao": 40,
+    "ipi": 0.0
+  },
+  {
+    "codigo": "4000055317",
+    "material": "WHITEPOST SYSTEM DC KIT 25UN (BR) Pinos: 5x DC 0,5 + 5x DC 1 + 5x DC2 + 5x DC3 + 5x DC-E 2 + Brocas: 1x DC 0,5 + 1x DC 1 + 1x DC2 + 1x DC3 + 1x DC-E 2 + Regua Whitepost System + Estojo Preto",
+    "categoria": "Pino de Fibra",
+    "cor": "green",
+    "segmentacao": 40,
+    "ipi": 0.0
   },
   {
     "codigo": "4000055283",
@@ -749,7 +821,7 @@
     "categoria": "Pino de Fibra",
     "cor": "green",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000055281",
@@ -757,7 +829,7 @@
     "categoria": "Pino de Fibra",
     "cor": "green",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000055278",
@@ -765,7 +837,7 @@
     "categoria": "Pino de Fibra",
     "cor": "green",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000055273",
@@ -773,7 +845,7 @@
     "categoria": "Pino de Fibra",
     "cor": "green",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000055340",
@@ -781,7 +853,7 @@
     "categoria": "Pino de Fibra",
     "cor": "green",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000055395",
@@ -789,7 +861,7 @@
     "categoria": "Pino de Fibra",
     "cor": "green",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000055279",
@@ -797,7 +869,7 @@
     "categoria": "Pino de Fibra",
     "cor": "green",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000055275",
@@ -805,7 +877,7 @@
     "categoria": "Pino de Fibra",
     "cor": "green",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000055929",
@@ -813,7 +885,7 @@
     "categoria": "Pino de Fibra",
     "cor": "green",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000055270",
@@ -821,7 +893,7 @@
     "categoria": "Pino de Fibra",
     "cor": "green",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000055268",
@@ -829,7 +901,7 @@
     "categoria": "Pino de Fibra",
     "cor": "green",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000055282",
@@ -837,7 +909,7 @@
     "categoria": "Pino de Fibra",
     "cor": "green",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000055272",
@@ -845,7 +917,7 @@
     "categoria": "Pino de Fibra",
     "cor": "green",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000055271",
@@ -853,7 +925,31 @@
     "categoria": "Pino de Fibra",
     "cor": "green",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
+  },
+  {
+    "codigo": "4000055269",
+    "material": "WHITEPOST SYSTEM DC E 0,5 REFIL",
+    "categoria": "Pino de Fibra",
+    "cor": "green",
+    "segmentacao": 40,
+    "ipi": 0.0
+  },
+  {
+    "codigo": "4000055280",
+    "material": "WHITEPOST SYSTEM DC E 1 REFIL",
+    "categoria": "Pino de Fibra",
+    "cor": "green",
+    "segmentacao": 40,
+    "ipi": 0.0
+  },
+  {
+    "codigo": "4000055276",
+    "material": "WHITEPOST SYSTEM DC E 2 REFIL",
+    "categoria": "Pino de Fibra",
+    "cor": "green",
+    "segmentacao": 40,
+    "ipi": 0.0
   },
   {
     "codigo": "4000005026",
@@ -861,7 +957,7 @@
     "categoria": "Selante",
     "cor": "blue",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000005027",
@@ -869,7 +965,7 @@
     "categoria": "Selante",
     "cor": "blue",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000000070",
@@ -877,103 +973,119 @@
     "categoria": "Silano",
     "cor": "blue",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
-    "codigo": "4000056236",
-    "material": "ELORA APS A1 4G",
+    "codigo": "4000056590",
+    "material": "ELORA APS - EDICAO DE LANÇAMENTO 1 ELORA APS BL + 1 ELORA APS A2 + 1 AMBAR UNIVERSAL APS PLUS 3ML",
     "categoria": "Resinas",
     "cor": "navy",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
-    "codigo": "4000056237",
-    "material": "ELORA APS A2 4G",
+    "codigo": "4000056710",
+    "material": "ELORA APS A1 4G BR",
     "categoria": "Resinas",
     "cor": "navy",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
-    "codigo": "4000056240",
-    "material": "ELORA APS A3 4G",
+    "codigo": "4000056712",
+    "material": "ELORA APS A2 4G BR",
     "categoria": "Resinas",
     "cor": "navy",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
-    "codigo": "4000056241",
-    "material": "ELORA APS A3.5 4G",
+    "codigo": "4000056713",
+    "material": "ELORA APS A3 4G BR",
     "categoria": "Resinas",
     "cor": "navy",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
-    "codigo": "4000056242",
-    "material": "ELORA APS B1 4G",
+    "codigo": "4000056714",
+    "material": "ELORA APS A3.5 4G BR",
     "categoria": "Resinas",
     "cor": "navy",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
-    "codigo": "4000056243",
-    "material": "ELORA APS BL 4G",
+    "codigo": "4000056715",
+    "material": "ELORA APS B1 4G BR",
     "categoria": "Resinas",
     "cor": "navy",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
-    "codigo": "4000056244",
-    "material": "ELORA APS XBL 4G",
+    "codigo": "4000056716",
+    "material": "ELORA APS BL 4G BR",
     "categoria": "Resinas",
     "cor": "navy",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
-    "codigo": "4000056246",
-    "material": "ELORA APS DA1 4G",
+    "codigo": "4000056722",
+    "material": "ELORA APS XBL 4G BR",
     "categoria": "Resinas",
     "cor": "navy",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
-    "codigo": "4000056247",
-    "material": "ELORA APS DA3 4G",
+    "codigo": "4000056717",
+    "material": "ELORA APS DA1 4G BR",
     "categoria": "Resinas",
     "cor": "navy",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
-    "codigo": "4000056600",
-    "material": "ELORA APS DB1 4G",
+    "codigo": "4000056718",
+    "material": "ELORA APS DA3 4G BR",
     "categoria": "Resinas",
     "cor": "navy",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
-    "codigo": "4000056601",
-    "material": "ELORA APS WE 2G",
+    "codigo": "4000056719",
+    "material": "ELORA APS DB1 4G BR",
     "categoria": "Resinas",
     "cor": "navy",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
-    "codigo": "4000056245",
-    "material": "ELORA APS TRANS 2G",
+    "codigo": "4000056721",
+    "material": "ELORA APS WE 2G BR",
     "categoria": "Resinas",
     "cor": "navy",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
+  },
+  {
+    "codigo": "4000056720",
+    "material": "ELORA APS TRANS 2G BR",
+    "categoria": "Resinas",
+    "cor": "navy",
+    "segmentacao": 40,
+    "ipi": 0.0
+  },
+  {
+    "codigo": "4000056593",
+    "material": "ELORA APS KIT ELEGANCE (A1 + A2 + A3 + A3.5 + B1 + 2x BL + XBL + TRANS + DA1 + DA3 + DB1 + WE)",
+    "categoria": "Resinas",
+    "cor": "navy",
+    "segmentacao": 40,
+    "ipi": 0.0
   },
   {
     "codigo": "4000019371",
@@ -981,7 +1093,7 @@
     "categoria": "Resinas",
     "cor": "navy",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000019372",
@@ -989,7 +1101,7 @@
     "categoria": "Resinas",
     "cor": "navy",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000019373",
@@ -997,7 +1109,7 @@
     "categoria": "Resinas",
     "cor": "navy",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000019368",
@@ -1005,7 +1117,7 @@
     "categoria": "Resinas",
     "cor": "navy",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000019369",
@@ -1013,7 +1125,7 @@
     "categoria": "Resinas",
     "cor": "navy",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000019370",
@@ -1021,7 +1133,39 @@
     "categoria": "Resinas",
     "cor": "navy",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
+  },
+  {
+    "codigo": "4000019423",
+    "material": "OPALLIS KIT BASICO CE DA2 4G + DA3 4G + EA2 4G + EA3 4G + EA3,5 4G + T NEUTRAL 2G",
+    "categoria": "Resinas",
+    "cor": "navy",
+    "segmentacao": 40,
+    "ipi": 0.0
+  },
+  {
+    "codigo": "4000003809",
+    "material": "OPALLIS KIT BASICO II CE DA2 4G + EA1 4G + EA2 4G + EA3 4G + CONDAC 37% + AMBAR 4ML",
+    "categoria": "Resinas",
+    "cor": "navy",
+    "segmentacao": 40,
+    "ipi": 0.0
+  },
+  {
+    "codigo": "4000019427",
+    "material": "OPALLIS KIT CLINICAL CE DA1 4G + DA2 4G + DA3 4G + DB2 4G + D BLEACH 2G EA1 4G + EA2 4G + EA3 4G + EB2 4G + E BLEACH H 2G OP PEARL 2G + T BLUE 2G + T NEUTRAL 2G + AMBAR 4ML",
+    "categoria": "Resinas",
+    "cor": "navy",
+    "segmentacao": 40,
+    "ipi": 0.0
+  },
+  {
+    "codigo": "4000055450",
+    "material": "OPALLIS KIT EVERYDAY OPALLIS EA2 E DA2 4G + AMBAR APS",
+    "categoria": "Resinas",
+    "cor": "navy",
+    "segmentacao": 40,
+    "ipi": 0.0
   },
   {
     "codigo": "4000019428",
@@ -1029,7 +1173,7 @@
     "categoria": "Resinas",
     "cor": "navy",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000019429",
@@ -1037,7 +1181,7 @@
     "categoria": "Resinas",
     "cor": "navy",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000019430",
@@ -1045,7 +1189,7 @@
     "categoria": "Resinas",
     "cor": "navy",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000019439",
@@ -1053,7 +1197,7 @@
     "categoria": "Resinas",
     "cor": "navy",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000019440",
@@ -1061,7 +1205,7 @@
     "categoria": "Resinas",
     "cor": "navy",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000019441",
@@ -1069,7 +1213,7 @@
     "categoria": "Resinas",
     "cor": "navy",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000019431",
@@ -1077,7 +1221,7 @@
     "categoria": "Resinas",
     "cor": "navy",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000019432",
@@ -1085,7 +1229,7 @@
     "categoria": "Resinas",
     "cor": "navy",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000019433",
@@ -1093,7 +1237,7 @@
     "categoria": "Resinas",
     "cor": "navy",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000019434",
@@ -1101,7 +1245,7 @@
     "categoria": "Resinas",
     "cor": "navy",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000019436",
@@ -1109,7 +1253,7 @@
     "categoria": "Resinas",
     "cor": "navy",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000019438",
@@ -1117,7 +1261,7 @@
     "categoria": "Resinas",
     "cor": "navy",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000019442",
@@ -1125,7 +1269,7 @@
     "categoria": "Resinas",
     "cor": "navy",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000019443",
@@ -1133,7 +1277,7 @@
     "categoria": "Resinas",
     "cor": "navy",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000019444",
@@ -1141,7 +1285,7 @@
     "categoria": "Resinas",
     "cor": "navy",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000019445",
@@ -1149,7 +1293,7 @@
     "categoria": "Resinas",
     "cor": "navy",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000019446",
@@ -1157,7 +1301,7 @@
     "categoria": "Resinas",
     "cor": "navy",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000019447",
@@ -1165,7 +1309,7 @@
     "categoria": "Resinas",
     "cor": "navy",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000019448",
@@ -1173,7 +1317,7 @@
     "categoria": "Resinas",
     "cor": "navy",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000019450",
@@ -1181,7 +1325,7 @@
     "categoria": "Resinas",
     "cor": "navy",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000019451",
@@ -1189,7 +1333,7 @@
     "categoria": "Resinas",
     "cor": "navy",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000019449",
@@ -1197,7 +1341,7 @@
     "categoria": "Resinas",
     "cor": "navy",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000019452",
@@ -1205,7 +1349,7 @@
     "categoria": "Resinas",
     "cor": "navy",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000019455",
@@ -1213,7 +1357,7 @@
     "categoria": "Resinas",
     "cor": "navy",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000019456",
@@ -1221,7 +1365,7 @@
     "categoria": "Resinas",
     "cor": "navy",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000019457",
@@ -1229,7 +1373,7 @@
     "categoria": "Resinas",
     "cor": "navy",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000019613",
@@ -1237,7 +1381,7 @@
     "categoria": "Resinas",
     "cor": "navy",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000019614",
@@ -1245,7 +1389,7 @@
     "categoria": "Resinas",
     "cor": "navy",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000055979",
@@ -1253,7 +1397,7 @@
     "categoria": "Resinas",
     "cor": "navy",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000055980",
@@ -1261,7 +1405,7 @@
     "categoria": "Resinas",
     "cor": "navy",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000055981",
@@ -1269,7 +1413,7 @@
     "categoria": "Resinas",
     "cor": "navy",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000055975",
@@ -1277,7 +1421,7 @@
     "categoria": "Resinas",
     "cor": "navy",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000055977",
@@ -1285,7 +1429,7 @@
     "categoria": "Resinas",
     "cor": "navy",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000055978",
@@ -1293,7 +1437,7 @@
     "categoria": "Resinas",
     "cor": "navy",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000019377",
@@ -1301,7 +1445,7 @@
     "categoria": "Resinas",
     "cor": "navy",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000019378",
@@ -1309,7 +1453,7 @@
     "categoria": "Resinas",
     "cor": "navy",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000019379",
@@ -1317,7 +1461,7 @@
     "categoria": "Resinas",
     "cor": "navy",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000019381",
@@ -1325,7 +1469,7 @@
     "categoria": "Resinas",
     "cor": "navy",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000019380",
@@ -1333,7 +1477,7 @@
     "categoria": "Resinas",
     "cor": "navy",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000019374",
@@ -1341,7 +1485,7 @@
     "categoria": "Resinas",
     "cor": "navy",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000019375",
@@ -1349,7 +1493,7 @@
     "categoria": "Resinas",
     "cor": "navy",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000019376",
@@ -1357,7 +1501,7 @@
     "categoria": "Resinas",
     "cor": "navy",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000019407",
@@ -1365,7 +1509,7 @@
     "categoria": "Resinas",
     "cor": "navy",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000019408",
@@ -1373,7 +1517,7 @@
     "categoria": "Resinas",
     "cor": "navy",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000019409",
@@ -1381,7 +1525,7 @@
     "categoria": "Resinas",
     "cor": "navy",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000019410",
@@ -1389,7 +1533,7 @@
     "categoria": "Resinas",
     "cor": "navy",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000019412",
@@ -1397,7 +1541,7 @@
     "categoria": "Resinas",
     "cor": "navy",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000019413",
@@ -1405,7 +1549,7 @@
     "categoria": "Resinas",
     "cor": "navy",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000019414",
@@ -1413,7 +1557,7 @@
     "categoria": "Resinas",
     "cor": "navy",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000019415",
@@ -1421,7 +1565,7 @@
     "categoria": "Resinas",
     "cor": "navy",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000019416",
@@ -1429,7 +1573,7 @@
     "categoria": "Resinas",
     "cor": "navy",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000019417",
@@ -1437,7 +1581,7 @@
     "categoria": "Resinas",
     "cor": "navy",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000019418",
@@ -1445,7 +1589,7 @@
     "categoria": "Resinas",
     "cor": "navy",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000019419",
@@ -1453,7 +1597,7 @@
     "categoria": "Resinas",
     "cor": "navy",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000019411",
@@ -1461,7 +1605,7 @@
     "categoria": "Resinas",
     "cor": "navy",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000019420",
@@ -1469,7 +1613,7 @@
     "categoria": "Resinas",
     "cor": "navy",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000019421",
@@ -1477,7 +1621,7 @@
     "categoria": "Resinas",
     "cor": "navy",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000019422",
@@ -1485,7 +1629,15 @@
     "categoria": "Resinas",
     "cor": "navy",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
+  },
+  {
+    "codigo": "4000019400",
+    "material": "LLIS KIT PRACTICAL CE EA2 + EA3 + EA3,5 + EB2 + DA3 + Ambar 4 ml",
+    "categoria": "Resinas",
+    "cor": "navy",
+    "segmentacao": 40,
+    "ipi": 0.0
   },
   {
     "codigo": "4000019385",
@@ -1493,7 +1645,7 @@
     "categoria": "Resinas",
     "cor": "navy",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000019386",
@@ -1501,7 +1653,7 @@
     "categoria": "Resinas",
     "cor": "navy",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000019387",
@@ -1509,7 +1661,7 @@
     "categoria": "Resinas",
     "cor": "navy",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000019388",
@@ -1517,7 +1669,7 @@
     "categoria": "Resinas",
     "cor": "navy",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000019392",
@@ -1525,7 +1677,7 @@
     "categoria": "Resinas",
     "cor": "navy",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000019393",
@@ -1533,7 +1685,7 @@
     "categoria": "Resinas",
     "cor": "navy",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000019394",
@@ -1541,7 +1693,7 @@
     "categoria": "Resinas",
     "cor": "navy",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000055607",
@@ -1549,7 +1701,7 @@
     "categoria": "Resinas",
     "cor": "navy",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000019398",
@@ -1557,7 +1709,7 @@
     "categoria": "Resinas",
     "cor": "navy",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000055611",
@@ -1565,7 +1717,7 @@
     "categoria": "Resinas",
     "cor": "navy",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000019395",
@@ -1573,7 +1725,7 @@
     "categoria": "Resinas",
     "cor": "navy",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000055609",
@@ -1581,7 +1733,7 @@
     "categoria": "Resinas",
     "cor": "navy",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000055610",
@@ -1589,7 +1741,7 @@
     "categoria": "Resinas",
     "cor": "navy",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000055727",
@@ -1597,7 +1749,7 @@
     "categoria": "Resinas",
     "cor": "navy",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000055599",
@@ -1605,7 +1757,7 @@
     "categoria": "Resinas",
     "cor": "navy",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000055600",
@@ -1613,7 +1765,7 @@
     "categoria": "Resinas",
     "cor": "navy",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000055726",
@@ -1621,7 +1773,7 @@
     "categoria": "Resinas",
     "cor": "navy",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000055160",
@@ -1629,7 +1781,7 @@
     "categoria": "Resinas",
     "cor": "navy",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000055624",
@@ -1637,55 +1789,23 @@
     "categoria": "Resinas",
     "cor": "navy",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
-    "codigo": "4000056729",
-    "material": "VITTRA APS FLOW OA2 CE",
+    "codigo": "4000055441",
+    "material": "VITTRA KIT TECHNOLOGY VITTRA EA2 E DA2 4G + AMBAR UNIV. APS",
     "categoria": "Resinas",
     "cor": "navy",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
-    "codigo": "4000056562",
-    "material": "VITTRA APS FLOW XBL CE",
+    "codigo": "4000055498",
+    "material": "VITTRA KIT UNIVERSAL VITTRA UNIQUE 4G + AMBAR UNIV APS",
     "categoria": "Resinas",
     "cor": "navy",
     "segmentacao": 40,
-    "ipi": 0
-  },
-  {
-    "codigo": "4000056728",
-    "material": "VITTRA APS FLOW BL BR",
-    "categoria": "Resinas",
-    "cor": "navy",
-    "segmentacao": 40,
-    "ipi": 0
-  },
-  {
-    "codigo": "4000056727",
-    "material": "VITTRA APS FLOW B1 BR",
-    "categoria": "Resinas",
-    "cor": "navy",
-    "segmentacao": 40,
-    "ipi": 0
-  },
-  {
-    "codigo": "4000056565",
-    "material": "VITTRA APS FLOW A3 CE",
-    "categoria": "Resinas",
-    "cor": "navy",
-    "segmentacao": 40,
-    "ipi": 0
-  },
-  {
-    "codigo": "4000056566",
-    "material": "VITTRA APS FLOW A2 CE",
-    "categoria": "Resinas",
-    "cor": "navy",
-    "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000056567",
@@ -1693,7 +1813,63 @@
     "categoria": "Resinas",
     "cor": "navy",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
+  },
+  {
+    "codigo": "4000056566",
+    "material": "VITTRA APS FLOW A2 CE",
+    "categoria": "Resinas",
+    "cor": "navy",
+    "segmentacao": 40,
+    "ipi": 0.0
+  },
+  {
+    "codigo": "4000056565",
+    "material": "VITTRA APS FLOW A3 CE",
+    "categoria": "Resinas",
+    "cor": "navy",
+    "segmentacao": 40,
+    "ipi": 0.0
+  },
+  {
+    "codigo": "4000056563",
+    "material": "VITTRA APS FLOW BL BR",
+    "categoria": "Resinas",
+    "cor": "navy",
+    "segmentacao": 40,
+    "ipi": 0.0
+  },
+  {
+    "codigo": "4000056562",
+    "material": "VITTRA APS FLOW XBL CE",
+    "categoria": "Resinas",
+    "cor": "navy",
+    "segmentacao": 40,
+    "ipi": 0.0
+  },
+  {
+    "codigo": "4000056560",
+    "material": "VITTRA APS FLOW TRANS 2G CE",
+    "categoria": "Resinas",
+    "cor": "navy",
+    "segmentacao": 40,
+    "ipi": 0.0
+  },
+  {
+    "codigo": "4000056561",
+    "material": "VITTRA APS FLOW OA2 CE",
+    "categoria": "Resinas",
+    "cor": "navy",
+    "segmentacao": 40,
+    "ipi": 0.0
+  },
+  {
+    "codigo": "4000056564",
+    "material": "VITTRA APS FLOW B1 CE",
+    "categoria": "Resinas",
+    "cor": "navy",
+    "segmentacao": 40,
+    "ipi": 0.0
   },
   {
     "codigo": "4000055965",
@@ -1701,7 +1877,7 @@
     "categoria": "Resinas",
     "cor": "navy",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000055973",
@@ -1709,7 +1885,7 @@
     "categoria": "Resinas",
     "cor": "navy",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000055972",
@@ -1717,7 +1893,7 @@
     "categoria": "Resinas",
     "cor": "navy",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000055971",
@@ -1725,7 +1901,7 @@
     "categoria": "Resinas",
     "cor": "navy",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000055213",
@@ -1733,7 +1909,7 @@
     "categoria": "Resinas",
     "cor": "navy",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000055219",
@@ -1741,7 +1917,7 @@
     "categoria": "Resinas",
     "cor": "navy",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000055218",
@@ -1749,7 +1925,7 @@
     "categoria": "Resinas",
     "cor": "navy",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000055227",
@@ -1757,7 +1933,7 @@
     "categoria": "Resinas",
     "cor": "navy",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000055223",
@@ -1765,7 +1941,7 @@
     "categoria": "Resinas",
     "cor": "navy",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000055217",
@@ -1773,7 +1949,7 @@
     "categoria": "Resinas",
     "cor": "navy",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000055216",
@@ -1781,7 +1957,7 @@
     "categoria": "Resinas",
     "cor": "navy",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000055211",
@@ -1789,7 +1965,7 @@
     "categoria": "Resinas",
     "cor": "navy",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000055228",
@@ -1797,7 +1973,7 @@
     "categoria": "Resinas",
     "cor": "navy",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000055224",
@@ -1805,7 +1981,71 @@
     "categoria": "Resinas",
     "cor": "navy",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
+  },
+  {
+    "codigo": "4000055918",
+    "material": "SILIC•ONE LIGHT BODY I CE",
+    "categoria": "Resinas",
+    "cor": "navy",
+    "segmentacao": 40,
+    "ipi": 0.0
+  },
+  {
+    "codigo": "4000055919",
+    "material": "SILIC•ONE LIGHT BODY II CE",
+    "categoria": "Resinas",
+    "cor": "navy",
+    "segmentacao": 40,
+    "ipi": 0.0
+  },
+  {
+    "codigo": "4000055924",
+    "material": "SILIC•ONE CLEAR BODY I CE",
+    "categoria": "Resinas",
+    "cor": "navy",
+    "segmentacao": 40,
+    "ipi": 0.0
+  },
+  {
+    "codigo": "4000055923",
+    "material": "SILIC•ONE BITE REGISTRATION I CE",
+    "categoria": "Resinas",
+    "cor": "navy",
+    "segmentacao": 40,
+    "ipi": 0.0
+  },
+  {
+    "codigo": "4000055922",
+    "material": "SILIC•ONE HEAVY BODY I CE",
+    "categoria": "Resinas",
+    "cor": "navy",
+    "segmentacao": 40,
+    "ipi": 0.0
+  },
+  {
+    "codigo": "4000055921",
+    "material": "KIT SILIC ONE PUTTY + LIGHT CE",
+    "categoria": "Resinas",
+    "cor": "navy",
+    "segmentacao": 40,
+    "ipi": 0.0
+  },
+  {
+    "codigo": "4000055925",
+    "material": "M KIT SILIC ONE PUTTY + LIGHT CE",
+    "categoria": "Resinas",
+    "cor": "navy",
+    "segmentacao": 40,
+    "ipi": 0.0
+  },
+  {
+    "codigo": "4000055920",
+    "material": "SILIC ONE PUTTY SOFT CE",
+    "categoria": "Resinas",
+    "cor": "navy",
+    "segmentacao": 40,
+    "ipi": 0.0
   },
   {
     "codigo": "4000019284",
@@ -1813,7 +2053,7 @@
     "categoria": "Veneer",
     "cor": "olive",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000019285",
@@ -1821,7 +2061,7 @@
     "categoria": "Veneer",
     "cor": "olive",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000019286",
@@ -1829,7 +2069,7 @@
     "categoria": "Veneer",
     "cor": "olive",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000019287",
@@ -1837,7 +2077,7 @@
     "categoria": "Veneer",
     "cor": "olive",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000019288",
@@ -1845,7 +2085,7 @@
     "categoria": "Veneer",
     "cor": "olive",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000019289",
@@ -1853,7 +2093,7 @@
     "categoria": "Veneer",
     "cor": "olive",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000056583",
@@ -1861,7 +2101,15 @@
     "categoria": "Veneer",
     "cor": "olive",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
+  },
+  {
+    "codigo": "4000019297",
+    "material": "ALLCEM VENEER APS M KIT CE A1 2,5g + OW 2,5g + Trans 2,5g + Ambar APS 2ml",
+    "categoria": "Veneer",
+    "cor": "olive",
+    "segmentacao": 40,
+    "ipi": 0.0
   },
   {
     "codigo": "4000055052",
@@ -1869,7 +2117,7 @@
     "categoria": "Veneer",
     "cor": "olive",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000055065",
@@ -1877,7 +2125,7 @@
     "categoria": "Veneer",
     "cor": "olive",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000055051",
@@ -1885,7 +2133,7 @@
     "categoria": "Veneer",
     "cor": "olive",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000055057",
@@ -1893,7 +2141,7 @@
     "categoria": "Veneer",
     "cor": "olive",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000055059",
@@ -1901,7 +2149,7 @@
     "categoria": "Veneer",
     "cor": "olive",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000055060",
@@ -1909,7 +2157,7 @@
     "categoria": "Veneer",
     "cor": "olive",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000056584",
@@ -1917,7 +2165,7 @@
     "categoria": "Veneer",
     "cor": "olive",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000002868",
@@ -1925,7 +2173,7 @@
     "categoria": "Fluor Care",
     "cor": "red",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000002869",
@@ -1933,7 +2181,7 @@
     "categoria": "Fluor Care",
     "cor": "red",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000002870",
@@ -1941,7 +2189,7 @@
     "categoria": "Fluor Care",
     "cor": "red",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000000544",
@@ -1949,7 +2197,7 @@
     "categoria": "Verniz Fluoretado",
     "cor": "red",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000013847",
@@ -1957,7 +2205,7 @@
     "categoria": "Bloco para CAD CAM",
     "cor": "brown",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000013948",
@@ -1965,7 +2213,7 @@
     "categoria": "Bloco para CAD CAM",
     "cor": "brown",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000013949",
@@ -1973,7 +2221,7 @@
     "categoria": "Bloco para CAD CAM",
     "cor": "brown",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000013951",
@@ -1981,7 +2229,7 @@
     "categoria": "Bloco para CAD CAM",
     "cor": "brown",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000013957",
@@ -1989,7 +2237,7 @@
     "categoria": "Bloco para CAD CAM",
     "cor": "brown",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000013952",
@@ -1997,7 +2245,7 @@
     "categoria": "Bloco para CAD CAM",
     "cor": "brown",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000013956",
@@ -2005,7 +2253,7 @@
     "categoria": "Bloco para CAD CAM",
     "cor": "brown",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   },
   {
     "codigo": "4000013953",
@@ -2013,6 +2261,6 @@
     "categoria": "Bloco para CAD CAM",
     "cor": "brown",
     "segmentacao": 40,
-    "ipi": 0
+    "ipi": 0.0
   }
 ]
