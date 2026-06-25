@@ -47,13 +47,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       // Tentar buscar dados de promoção/preço do SFMC para enriquecer
       const sfmcEntries = await fetchSFMCPriceEntries();
 
-      const sfmcMap = new Map<string, { name: string; isActive: boolean }>();
+      const sfmcMap = new Map<string, { name: string; isActive: boolean; used: boolean }>();
       if (sfmcEntries && sfmcEntries.length > 0) {
         sfmcEntries.forEach((entry) => {
           if (entry.ProductCode) {
             sfmcMap.set(entry.ProductCode, {
               name: entry.ProductName || "",
               isActive: entry.IsActive,
+              used: false,
             });
           }
         });
@@ -67,6 +68,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return rawList.map((item: any) => {
           const code = String(item.codigo).trim();
           const sfmcData = sfmcMap.get(code);
+          if (sfmcData) sfmcData.used = true;
 
           return {
             codigo: item.codigo,
@@ -82,11 +84,31 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         });
       };
 
-      return {
+      const result: Record<string, any[]> = {
         Dentscare: processList(dentscareRaw, "Dentscare"),
         Home_Care: processList(homeCareRaw, "Home_Care"),
         Whiteness: processList(whitenessRaw, "Whiteness"),
+        Inbox: [],
       };
+
+      // Adicionar produtos do SFMC não mapeados ao Inbox (para o painel admin)
+      sfmcMap.forEach((data, code) => {
+        if (!data.used && data.isActive) {
+          result.Inbox.push({
+            codigo: code,
+            material: data.name,
+            categoria: "SFMC Importado",
+            cor: "dark_gray",
+            businessUnit: "Inbox",
+            promotionName: "",
+            promotionIsActive: true,
+            segmentacao: 40,
+            ipi: 0,
+          });
+        }
+      });
+
+      return result;
     }, 1800); // 30 min cache
 
     return res.status(200).json(data);

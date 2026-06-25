@@ -1,6 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from "next";
+import fs from "fs";
+import path from "path";
 import { supabase } from "../../../lib/supabase";
-import { clearCachedData } from "../../../lib/redis"; // Assuming we might need to clear cache, but wait, do we have clearCachedData?
+import redis from "../../../lib/redis";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== "POST") {
@@ -18,10 +20,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(401).json({ error: "Acesso não autorizado" });
   }
 
-  // Verificar se usuário é admin (exemplo genérico, ajustar conforme regra de negócio)
-  // Como não sabemos a role exata, vamos assumir que o frontend valida ou que o token tem a role
-  // idealmente: const isAdmin = user.app_metadata?.role === 'admin';
-
   try {
     const { products } = req.body;
     
@@ -29,35 +27,52 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return res.status(400).json({ error: "O payload deve conter um array 'products'" });
     }
 
-    const upsertData = products.map((p: any) => ({
-      produto_codigo: p.codigo,
-      business_unit: p.businessUnit !== "Inbox" ? p.businessUnit : null,
-      cor: p.cor || "dark_gray",
-      ordem_exibicao: p.ordem_exibicao || 9999,
-      segmentacao: p.segmentacao !== undefined ? p.segmentacao : 40,
-      ipi: p.ipi !== undefined ? p.ipi : 0,
-      updated_at: new Date().toISOString()
-    }));
+    // Group by Business Unit
+    const grouped: Record<string, any[]> = {
+      Dentscare: [],
+      Home_Care: [],
+      Whiteness: [],
+    };
 
-    // Perform upsert
-    const { error } = await supabase
-      .from('config_produto')
-      .upsert(upsertData, { onConflict: 'produto_codigo' });
+    // Note: Items in "Inbox" shouldn't be saved back to JSONs until they are moved to a real BU
+    products.forEach((p: any) => {
+      const bu = p.businessUnit;
+      if (grouped[bu] !== undefined) {
+        grouped[bu].push({
+          codigo: p.codigo,
+          material: p.material,
+          categoria: p.categoria || "Geral",
+          cor: p.cor || "dark_gray",
+          segmentacao: p.segmentacao !== undefined ? p.segmentacao : 40,
+          ipi: p.ipi !== undefined ? p.ipi : 0,
+          ordem_exibicao: p.ordem_exibicao || 9999,
+        });
+      }
+    });
 
-    if (error) {
-      console.error("Erro ao fazer upsert em config_produto:", error);
-      throw error;
+    const dataDir = path.join(process.cwd(), "data");
+
+    // Save each BU to its respective JSON file
+    for (const bu of Object.keys(grouped)) {
+      const buProducts = grouped[bu];
+      // Sort by ordem_exibicao
+      buProducts.sort((a, b) => a.ordem_exibicao - b.ordem_exibicao);
+      
+      // Clean up the field ordem_exibicao before saving if desired, but keeping it is fine
+      const jsonContent = JSON.stringify(buProducts, null, 2);
+      fs.writeFileSync(path.join(dataDir, `${bu}.json`), jsonContent, "utf-8");
     }
-    
-    // Tentar limpar o cache do redis (requer importação se existir a função, senão só retorna)
-    try {
-      const { clearCachedData } = require("../../../lib/redis");
-      if (clearCachedData) await clearCachedData("lista_produtos");
-    } catch (e) {
-      console.warn("Não foi possível limpar o cache do Redis automaticamente:", e);
+
+    // Tentar limpar o cache do redis
+    if (redis) {
+      try {
+        await redis.del("lista_produtos_v5");
+      } catch (e) {
+        console.warn("Não foi possível limpar o cache do Redis automaticamente:", e);
+      }
     }
 
-    return res.status(200).json({ success: true, message: "Configurações salvas com sucesso no banco de dados." });
+    return res.status(200).json({ success: true, message: "Configurações salvas com sucesso nos arquivos JSON." });
 
   } catch (err: any) {
     console.error("Erro no save admin:", err);
