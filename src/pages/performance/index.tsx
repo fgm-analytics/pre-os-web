@@ -14,7 +14,13 @@ import { ReactElement } from 'react';
 
 const parseDateString = (dateStr: string) => {
   if (!dateStr) return new Date(NaN);
-  const [y, m, d] = dateStr.split('-').map(Number);
+  const parts = dateStr.split('-');
+  if (parts.length === 2) {
+    const [y, m] = parts.map(Number);
+    if (isNaN(y) || isNaN(m)) return new Date(NaN);
+    return new Date(y, m - 1, 1);
+  }
+  const [y, m, d] = parts.map(Number);
   if (isNaN(y) || isNaN(m) || isNaN(d)) return new Date(NaN);
   return new Date(y, m - 1, d);
 };
@@ -65,13 +71,11 @@ export default function PerformanceDashboard() {
     const now = new Date();
     // Default to the first day of 3 months ago
     const firstDay = new Date(now.getFullYear(), now.getMonth() - 2, 1);
-    return firstDay.toISOString().split('T')[0];
+    return firstDay.toISOString().slice(0, 7);
   });
   const [endDate, setEndDate] = useState<string>(() => {
     const now = new Date();
-    // Default to the last day of the current month
-    const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0);
-    return lastDay.toISOString().split('T')[0];
+    return now.toISOString().slice(0, 7);
   });
 
   // Available years
@@ -404,8 +408,8 @@ export default function PerformanceDashboard() {
         <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap', alignItems: 'center' }}>
           <TextField
             size="small"
-            label="Data Inicial"
-            type="date"
+            label="Mês Inicial"
+            type="month"
             slotProps={{ inputLabel: { shrink: true } }}
             value={startDate}
             onChange={(e) => setStartDate(e.target.value)}
@@ -414,8 +418,8 @@ export default function PerformanceDashboard() {
 
           <TextField
             size="small"
-            label="Data Final"
-            type="date"
+            label="Mês Final"
+            type="month"
             slotProps={{ inputLabel: { shrink: true } }}
             value={endDate}
             onChange={(e) => setEndDate(e.target.value)}
