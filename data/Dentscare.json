@@ -13,7 +13,7 @@
     "categoria": "Fotopolimerizadores",
     "cor": "white",
     "segmentacao": 40,
-    "ipi": 0.052
+    "ipi": 5.2
   },
   {
     "codigo": "5500000044",
@@ -21,7 +21,7 @@
     "categoria": "Fotopolimerizadores",
     "cor": "white",
     "segmentacao": 40,
-    "ipi": 0.052
+    "ipi": 5.2
   },
   {
     "codigo": "5500000057",
@@ -29,7 +29,7 @@
     "categoria": "Fotopolimerizadores",
     "cor": "white",
     "segmentacao": 40,
-    "ipi": 0.052
+    "ipi": 5.2
   },
   {
     "codigo": "5500000049",
@@ -37,7 +37,7 @@
     "categoria": "Fotopolimerizadores",
     "cor": "white",
     "segmentacao": 40,
-    "ipi": 0.052
+    "ipi": 5.2
   },
   {
     "codigo": "5500000055",
@@ -45,7 +45,7 @@
     "categoria": "Fotopolimerizadores",
     "cor": "white",
     "segmentacao": 40,
-    "ipi": 0.052
+    "ipi": 5.2
   },
   {
     "codigo": "4000000266",
@@ -61,7 +61,7 @@
     "categoria": "Acabamento",
     "cor": "red",
     "segmentacao": 40,
-    "ipi": 0.065
+    "ipi": 6.5
   },
   {
     "codigo": "4000002091",
@@ -69,7 +69,7 @@
     "categoria": "Acabamento",
     "cor": "red",
     "segmentacao": 40,
-    "ipi": 0.065
+    "ipi": 6.5
   },
   {
     "codigo": "4000055820",
@@ -77,7 +77,7 @@
     "categoria": "Acabamento",
     "cor": "red",
     "segmentacao": 40,
-    "ipi": 0.065
+    "ipi": 6.5
   },
   {
     "codigo": "4000002092",
@@ -85,7 +85,7 @@
     "categoria": "Acabamento",
     "cor": "red",
     "segmentacao": 40,
-    "ipi": 0.065
+    "ipi": 6.5
   },
   {
     "codigo": "4000002096",
@@ -149,7 +149,7 @@
     "categoria": "Acessórios",
     "cor": "blue",
     "segmentacao": 40,
-    "ipi": 0.052
+    "ipi": 5.2
   },
   {
     "codigo": "4000002770",
@@ -157,7 +157,7 @@
     "categoria": "Acessórios",
     "cor": "blue",
     "segmentacao": 40,
-    "ipi": 0.052
+    "ipi": 5.2
   },
   {
     "codigo": "4000002772",
@@ -165,7 +165,7 @@
     "categoria": "Acessórios",
     "cor": "blue",
     "segmentacao": 40,
-    "ipi": 0.052
+    "ipi": 5.2
   },
   {
     "codigo": "4000056651",
@@ -509,7 +509,7 @@
     "categoria": "Haste flexível",
     "cor": "orange",
     "segmentacao": 40,
-    "ipi": 0.08
+    "ipi": 8
   },
   {
     "codigo": "4000002114",
@@ -517,7 +517,7 @@
     "categoria": "Haste flexível",
     "cor": "orange",
     "segmentacao": 40,
-    "ipi": 0.08
+    "ipi": 8
   },
   {
     "codigo": "4000002117",
@@ -525,7 +525,7 @@
     "categoria": "Haste flexível",
     "cor": "orange",
     "segmentacao": 40,
-    "ipi": 0.08
+    "ipi": 8
   },
   {
     "codigo": "5500000118",
@@ -533,7 +533,7 @@
     "categoria": "Haste flexível",
     "cor": "orange",
     "segmentacao": 40,
-    "ipi": 0.052
+    "ipi": 5.2
   },
   {
     "codigo": "5500000119",
@@ -541,7 +541,7 @@
     "categoria": "Haste flexível",
     "cor": "orange",
     "segmentacao": 40,
-    "ipi": 0.052
+    "ipi": 5.2
   },
   {
     "codigo": "5500000120",
@@ -549,7 +549,7 @@
     "categoria": "Haste flexível",
     "cor": "orange",
     "segmentacao": 40,
-    "ipi": 0.052
+    "ipi": 5.2
   },
   {
     "codigo": "4000056689",
