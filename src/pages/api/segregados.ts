@@ -1,4 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
+import fs from "fs";
+import path from "path";
 import { supabase } from '@/lib/supabase';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -6,7 +8,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(405).json({ error: 'Method Not Allowed' });
   }
 
-  // Verifica token (se aplicável na API)
   const authHeader = req.headers.authorization;
   if (!authHeader) {
     return res.status(401).json({ error: 'Unauthorized' });
@@ -18,29 +19,59 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   try {
-    const { data, error } = await supabase
-      .from('vw_produto_bu')
-      .select('produto_codigo, texto_breve_material, data_vencimento, quantidade_estoque, business_unit, categoria')
+    // 1. Fetch direct from f_shelf_life table instead of the view
+    const { data: shelfLifeData, error } = await supabase
+      .from('f_shelf_life')
+      .select('produto_codigo, texto_breve_material, data_vencimento, quantidade_estoque')
+      .not('data_vencimento', 'is', null)
       .order('data_vencimento', { ascending: true });
 
     if (error) throw error;
 
-    // Agrupa por business_unit
+    // 2. Load JSONs to map product code to BU
+    const dataDir = path.join(process.cwd(), "data");
+    const buMap = new Map<string, string>();
+
+    const mapJSON = (fileName: string, buName: string) => {
+      const filePath = path.join(dataDir, fileName);
+      if (fs.existsSync(filePath)) {
+        const items = JSON.parse(fs.readFileSync(filePath, "utf-8"));
+        items.forEach((item: any) => {
+          buMap.set(String(item.codigo).trim(), buName);
+        });
+      }
+    };
+
+    mapJSON("Dentscare.json", "Dentscare");
+    mapJSON("Whiteness.json", "Whiteness");
+    mapJSON("Home_Care.json", "Home_Care");
+
+    // 3. Group by BU based on product code
     const grouped: Record<string, any[]> = {
       Dentscare: [],
       Whiteness: [],
-      Home_Care: []
+      Home_Care: [],
+      Outros: []
     };
 
-    if (data) {
-      for (const item of data) {
-        const bu = item.business_unit || 'Outros';
+    if (shelfLifeData) {
+      for (const item of shelfLifeData) {
+        const code = String(item.produto_codigo).trim();
+        const bu = buMap.get(code) || 'Outros';
+        
+        const mappedItem = {
+          produto_codigo: item.produto_codigo,
+          texto_breve_material: item.texto_breve_material,
+          data_vencimento: item.data_vencimento,
+          quantidade_estoque: item.quantidade_estoque,
+          business_unit: bu,
+          categoria: 'Geral'
+        };
+
         if (grouped[bu]) {
-          grouped[bu].push(item);
+          grouped[bu].push(mappedItem);
         } else {
-          // Fallback if there's any 'Outros'
-          if (!grouped['Outros']) grouped['Outros'] = [];
-          grouped['Outros'].push(item);
+          grouped['Outros'].push(mappedItem);
         }
       }
     }
