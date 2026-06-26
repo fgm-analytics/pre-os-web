@@ -23,6 +23,7 @@ function LayoutInner({ children }: { children: ReactNode }) {
     if (newValue === 1) router.push({ pathname: '/performance/faturamento', query }, undefined, { shallow: true });
     if (newValue === 2) router.push({ pathname: '/performance/valores-clientes-produtos', query }, undefined, { shallow: true });
     if (newValue === 3) router.push({ pathname: '/performance/ultimos-pedidos', query }, undefined, { shallow: true });
+    if (newValue === 4) router.push({ pathname: '/performance/variacao', query }, undefined, { shallow: true });
   };
 
   const currentTab = (() => {
@@ -30,6 +31,7 @@ function LayoutInner({ children }: { children: ReactNode }) {
     if (router.pathname === '/performance/faturamento') return 1;
     if (router.pathname === '/performance/valores-clientes-produtos') return 2;
     if (router.pathname === '/performance/ultimos-pedidos') return 3;
+    if (router.pathname === '/performance/variacao') return 4;
     return 0;
   })();
 
@@ -47,6 +49,7 @@ function LayoutInner({ children }: { children: ReactNode }) {
         <Tab label="Faturado Vendedor Mês" sx={{ fontWeight: 700 }} />
         <Tab label="Valores Clientes Produtos" sx={{ fontWeight: 700 }} />
         <Tab label="Últimos Pedidos" sx={{ fontWeight: 700 }} />
+        <Tab label="Variação de Faturamento" sx={{ fontWeight: 700 }} />
       </Tabs>
 
       {/* Global Filters */}
