@@ -550,11 +550,6 @@ def process_sync():
         )
 
 
-        # 6. Sincronizar f_shelf_life
-        clear_data_extension(token, SFMC_DATA_EXTENSION_ID_SHELF_LIFE)
-        shelf_records = fetch_simple_table('f_shelf_life', ['Nº do material', 'Centro', 'Texto breve de material', 'Data de produção', 'Data do vencimento', 'Quantidade Estoque'])
-        token = sync_data("f_shelf_life", shelf_records, format_shelf_life, SFMC_DATA_EXTENSION_ID_SHELF_LIFE, token)
-
 
         # 8. Sincronizar f_ordem_faturamento_full
         clear_data_extension(token, SFMC_DATA_EXTENSION_ID_ORDEM_FATURAMENTO)

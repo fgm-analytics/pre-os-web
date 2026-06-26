@@ -54,30 +54,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       results['d_material'] = error ? error.message : `${mapped.length} records`;
     }
 
-    // 3. Sync f_shelf_life
-    console.log(`[Cron] Syncing ${DE_KEYS.F_SHELF_LIFE}...`);
-    const shelfLifeData = await fetchSFMCDataExtensionPaginated(DE_KEYS.F_SHELF_LIFE);
-    if (shelfLifeData && shelfLifeData.length > 0) {
-      const mapped = shelfLifeData.map(r => ({
-        produto_codigo: r.produto_codigo,
-        centro: r.centro,
-        data_producao: r.data_producao,
-        texto_breve_material: r.texto_breve_material,
-        data_vencimento: r.data_vencimento,
-        quantidade_estoque: parseFloat(r.quantidade_estoque) || 0
-      })).filter(r => r.produto_codigo && r.centro);
-      
-      // Para o f_shelf_life, é melhor apagar e reinserir para evitar acúmulo infinito, 
-      // ou fazer upsert se houver constraint composta.
-      // Como a constraint não foi estritamente definida, vamos dar delete->insert
-      const { error: delErr } = await supabaseAdmin.from('f_shelf_life').delete().neq('produto_codigo', 'CLEANUP');
-      let errStr = delErr ? delErr.message : '';
-      if (!delErr) {
-        const { error: insErr } = await supabaseAdmin.from('f_shelf_life').insert(mapped);
-        if (insErr) errStr = insErr.message;
-      }
-      results['f_shelf_life'] = errStr || `${mapped.length} records`;
-    }
 
     // 4. Sync f_preco_condicao
     console.log(`[Cron] Syncing ${DE_KEYS.F_PRECO_CONDICAO}...`);
