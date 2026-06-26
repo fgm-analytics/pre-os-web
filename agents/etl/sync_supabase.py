@@ -297,7 +297,7 @@ def sync_faturamento(supabase_client: Client):
         EXTRACT(MONTH FROM f."Data Faturamento")::integer as mes,
         SUM(f."Valor Líquido Faturado BRL") as realizado_faturamento,
         SUM(f."Qtde Faturada") as realizado_volume
-    FROM warehouse.f_ordem_faturamento_sap f
+    FROM warehouse.f_ordem_faturamento f
     LEFT JOIN warehouse.d_cliente c ON f."Cliente"::text = c."Cód Cliente"::text
     WHERE f."Cód. Representante Carteira"::bigint IN ({placeholders})
       AND f."Data Faturamento" IS NOT NULL
