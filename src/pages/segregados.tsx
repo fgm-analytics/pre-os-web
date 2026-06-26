@@ -87,9 +87,9 @@ export default function Segregados() {
     const diffMonths = diffTime / (1000 * 60 * 60 * 24 * 30.44);
 
     if (diffMonths <= 12) {
-      return "#fee2e2"; // Red (Segregado)
+      return "#d32f2f"; // Dark Red (Segregado)
     } else if (diffMonths > 12 && diffMonths <= 14) {
-      return "#fef3c7"; // Yellow (Quase segregado)
+      return "#ed6c02"; // Dark Orange/Yellow (Quase segregado)
     }
     return "inherit";
   };
@@ -211,15 +211,24 @@ export default function Segregados() {
                     <TableRow 
                       key={row.produto_codigo}
                       sx={{ 
-                        backgroundColor: getRowColor(row.data_vencimento),
                         '&:hover': {
-                          filter: 'brightness(0.95)'
+                          backgroundColor: 'rgba(255, 255, 255, 0.05)'
                         }
                       }}
                     >
                       <TableCell>{row.produto_codigo}</TableCell>
                       <TableCell>{row.texto_breve_material || "N/D"}</TableCell>
-                      <TableCell align="center">{formatDate(row.data_vencimento)}</TableCell>
+                      <TableCell 
+                        align="center" 
+                        sx={{ 
+                          backgroundColor: getRowColor(row.data_vencimento),
+                          color: getRowColor(row.data_vencimento) !== "inherit" ? "#fff" : "inherit",
+                          fontWeight: getRowColor(row.data_vencimento) !== "inherit" ? "bold" : "normal",
+                          borderRadius: 1
+                        }}
+                      >
+                        {formatDate(row.data_vencimento)}
+                      </TableCell>
                       <TableCell align="right">{row.quantidade_estoque}</TableCell>
                     </TableRow>
                   ))
