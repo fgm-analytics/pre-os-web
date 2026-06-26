@@ -6,7 +6,7 @@ import {
 } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { 
-  Menu as MenuIcon, PriceCheck, BarChart, Logout, AccountCircle, Settings 
+  Menu as MenuIcon, PriceCheck, BarChart, Logout, AccountCircle, Settings, Warning 
 } from '@mui/icons-material';
 import { useAuth } from '../contexts/AuthProvider';
 import { useRouter } from 'next/router';
@@ -44,7 +44,8 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
 
   const menuItems = [
     { text: 'Tabela de Preços', icon: <PriceCheck />, path: '/precos' },
-    { text: 'Performance Comercial', icon: <BarChart />, path: '/performance' }
+    { text: 'Performance Comercial', icon: <BarChart />, path: '/performance' },
+    { text: 'Segregados', icon: <Warning />, path: '/segregados' }
   ];
 
   if (profile?.role === 'admin') {
