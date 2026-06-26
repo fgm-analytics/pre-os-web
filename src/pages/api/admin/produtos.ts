@@ -20,6 +20,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(401).json({ error: "Acesso não autorizado" });
   }
 
+  const { data: profile } = await supabase.from('usuarios').select('role').eq('id', user.id).single();
+  if (!profile || profile.role !== 'admin') {
+    return res.status(403).json({ error: "Acesso negado: apenas administradores podem alterar o catálogo." });
+  }
+
   try {
     const { products } = req.body;
     

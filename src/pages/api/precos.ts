@@ -57,6 +57,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
   } else if (req.method === "POST") {
     try {
+      const { data: profile } = await supabase.from('usuarios').select('role').eq('id', user.id).single();
+      if (!profile || profile.role !== 'admin') {
+        return res.status(403).json({ error: "Acesso negado: apenas administradores podem alterar preços." });
+      }
+
       const data = req.body;
       if (typeof data !== "object" || data === null) {
         return res.status(400).json({ error: "Dados inválidos." });

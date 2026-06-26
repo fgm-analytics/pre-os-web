@@ -50,6 +50,12 @@ export default function AdminCatalogo() {
         return;
       }
 
+      const { data: profile } = await supabase.from('usuarios').select('role').eq('id', session.user.id).single();
+      if (!profile || profile.role !== 'admin') {
+        router.push("/performance");
+        return;
+      }
+
       const res = await fetch("/api/produtos", {
         headers: { Authorization: `Bearer ${session.access_token}` },
       });
