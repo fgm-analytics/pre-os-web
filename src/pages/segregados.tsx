@@ -139,7 +139,7 @@ export default function Segregados() {
       </Head>
       <Container maxWidth="xl" sx={{ mt: 4, mb: 8 }}>
         <Box sx={{ display: "flex", justifyContent: "space-between", mb: 3 }}>
-          <Typography variant="h4" fontWeight="700">
+          <Typography variant="h4" sx={{ fontWeight: 700 }}>
             Itens Segregados e Quase Segregados
           </Typography>
         </Box>
