@@ -74,7 +74,7 @@ function LayoutInner({ children }: { children: ReactNode }) {
           </FormControl>
         )}
 
-        {currentTab !== 1 && (
+        {currentTab !== 1 && currentTab !== 4 && (
           <>
             <FormControl size="small" sx={{ minWidth: 200 }}>
               <InputLabel>Cliente (Carteira)</InputLabel>

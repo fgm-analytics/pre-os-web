@@ -27,7 +27,7 @@ const formatPercent = (val: number | null) => {
 };
 
 export default function VariacaoFaturamento() {
-  const { billingData, loading, error, matchesSelectedSeller, selectedClient } = usePerformanceContext();
+  const { billingData, clienteProdutoData, loading, error, matchesSelectedSeller } = usePerformanceContext();
   const [metric, setMetric] = useState<'variacao_rs' | 'variacao_perc'>('variacao_rs');
   
   // Extrair anos disponíveis
@@ -65,7 +65,6 @@ export default function VariacaoFaturamento() {
 
     billingData.forEach(r => {
       if (!matchesSelectedSeller(r)) return;
-      if (selectedClient !== 'todos' && r.cliente_code !== selectedClient) return;
 
       const isCurrentPeriod = r.ano === selectedYear && (selectedMonth === 'todos' || r.mes === selectedMonth);
       const isPrevPeriod = r.ano === prevYear && (selectedMonth === 'todos' || r.mes === selectedMonth);
@@ -114,7 +113,64 @@ export default function VariacaoFaturamento() {
       top10Aumento: increases.slice(0, 10),
       top10Queda: decreases.slice(0, 10)
     };
-  }, [billingData, selectedYear, selectedMonth, metric, matchesSelectedSeller, selectedClient]);
+  }, [billingData, selectedYear, selectedMonth, metric, matchesSelectedSeller]);
+
+  const topVariationsProdutos = useMemo(() => {
+    const excludedGroups = ['Dentscare', 'Whiteness', 'Outros', 'Home Care', 'Dentscare\\', 'Whiteness\\'];
+    const productsMap = new Map<string, { nome: string; atual: number; anterior: number }>();
+    const prevYear = selectedYear - 1;
+
+    clienteProdutoData.forEach(r => {
+      if (!matchesSelectedSeller(r)) return;
+      if (excludedGroups.includes(r.subgrupo)) return;
+
+      const isCurrentPeriod = r.ano === selectedYear && (selectedMonth === 'todos' || r.mes === selectedMonth);
+      const isPrevPeriod = r.ano === prevYear && (selectedMonth === 'todos' || r.mes === selectedMonth);
+
+      if (isCurrentPeriod || isPrevPeriod) {
+        const key = r.subgrupo;
+        if (!productsMap.has(key)) {
+          productsMap.set(key, { nome: r.subgrupo, atual: 0, anterior: 0 });
+        }
+        const productData = productsMap.get(key)!;
+        
+        if (isCurrentPeriod) productData.atual += Number(r.realizado_faturamento || 0);
+        if (isPrevPeriod) productData.anterior += Number(r.realizado_faturamento || 0);
+      }
+    });
+
+    const variations = Array.from(productsMap.entries()).map(([code, data]) => {
+      const diff_rs = data.atual - data.anterior;
+      const diff_perc = data.anterior > 0 ? diff_rs / data.anterior : (data.atual > 0 ? 1 : 0);
+      
+      return {
+        code,
+        nome: data.nome,
+        atual: data.atual,
+        anterior: data.anterior,
+        diff_rs,
+        diff_perc
+      };
+    });
+
+    const activeVariations = variations.filter(v => v.atual > 0 || v.anterior > 0);
+
+    const sortFn = metric === 'variacao_rs' 
+      ? (a: any, b: any) => b.diff_rs - a.diff_rs 
+      : (a: any, b: any) => b.diff_perc - a.diff_perc;
+
+    const sorted = [...activeVariations].sort(sortFn);
+
+    const increases = sorted.filter(v => (metric === 'variacao_rs' ? v.diff_rs > 0 : v.diff_perc > 0));
+    const decreases = [...activeVariations].filter(v => (metric === 'variacao_rs' ? v.diff_rs < 0 : v.diff_perc < 0)).sort((a, b) => {
+      return metric === 'variacao_rs' ? a.diff_rs - b.diff_rs : a.diff_perc - b.diff_perc;
+    });
+
+    return {
+      top10Aumento: increases.slice(0, 10),
+      top10Queda: decreases.slice(0, 10)
+    };
+  }, [clienteProdutoData, selectedYear, selectedMonth, metric, matchesSelectedSeller]);
 
   if (loading) {
     return (
@@ -197,8 +253,8 @@ export default function VariacaoFaturamento() {
                   <TableHead>
                     <TableRow>
                       <TableCell sx={{ fontWeight: 700 }}>Cliente</TableCell>
-                      <TableCell align="right" sx={{ fontWeight: 700 }}>{selectedYear}</TableCell>
-                      <TableCell align="right" sx={{ fontWeight: 700 }}>{selectedYear - 1}</TableCell>
+                      <TableCell align="right" sx={{ fontWeight: 700 }}>Período Atual</TableCell>
+                      <TableCell align="right" sx={{ fontWeight: 700 }}>Período Anterior</TableCell>
                       <TableCell align="right" sx={{ fontWeight: 700 }}>Variação</TableCell>
                     </TableRow>
                   </TableHead>
@@ -239,8 +295,8 @@ export default function VariacaoFaturamento() {
                   <TableHead>
                     <TableRow>
                       <TableCell sx={{ fontWeight: 700 }}>Cliente</TableCell>
-                      <TableCell align="right" sx={{ fontWeight: 700 }}>{selectedYear}</TableCell>
-                      <TableCell align="right" sx={{ fontWeight: 700 }}>{selectedYear - 1}</TableCell>
+                      <TableCell align="right" sx={{ fontWeight: 700 }}>Período Atual</TableCell>
+                      <TableCell align="right" sx={{ fontWeight: 700 }}>Período Anterior</TableCell>
                       <TableCell align="right" sx={{ fontWeight: 700 }}>Variação</TableCell>
                     </TableRow>
                   </TableHead>
@@ -253,6 +309,93 @@ export default function VariacaoFaturamento() {
                       topVariations.top10Queda.map((v, idx) => (
                         <TableRow key={v.code} hover>
                           <TableCell sx={{ maxWidth: 150, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }} title={`${v.code} - ${v.nome}`}>
+                            {idx + 1}. {v.nome}
+                          </TableCell>
+                          <TableCell align="right">{formatCurrency(v.atual)}</TableCell>
+                          <TableCell align="right" sx={{ color: 'text.secondary' }}>{formatCurrency(v.anterior)}</TableCell>
+                          <TableCell align="right" sx={{ fontWeight: 700, color: 'error.main' }}>
+                            {metric === 'variacao_rs' ? formatCurrency(v.diff_rs) : formatPercent(v.diff_perc)}
+                          </TableCell>
+                        </TableRow>
+                      ))
+                    )}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </CardContent>
+          </Card>
+        </Box>
+      </Box>
+
+      {/* Product Cards */}
+      <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: '1fr 1fr' }, gap: 4, mt: 4 }}>
+        <Box>
+          <Card elevation={3} sx={{ borderTop: '4px solid', borderColor: 'success.main', height: '100%' }}>
+            <CardContent>
+              <Typography variant="h6" sx={{ mb: 2, fontWeight: 700, color: 'success.main' }}>
+                Top 10 Produtos com Aumento
+              </Typography>
+              <TableContainer>
+                <Table size="small">
+                  <TableHead>
+                    <TableRow>
+                      <TableCell sx={{ fontWeight: 700 }}>Produto</TableCell>
+                      <TableCell align="right" sx={{ fontWeight: 700 }}>Período Atual</TableCell>
+                      <TableCell align="right" sx={{ fontWeight: 700 }}>Período Anterior</TableCell>
+                      <TableCell align="right" sx={{ fontWeight: 700 }}>Variação</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {topVariationsProdutos.top10Aumento.length === 0 ? (
+                      <TableRow>
+                        <TableCell colSpan={4} align="center" sx={{ py: 3, color: 'text.secondary' }}>Nenhum produto com aumento no período.</TableCell>
+                      </TableRow>
+                    ) : (
+                      topVariationsProdutos.top10Aumento.map((v, idx) => (
+                        <TableRow key={v.code} hover>
+                          <TableCell sx={{ maxWidth: 150, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }} title={v.nome}>
+                            {idx + 1}. {v.nome}
+                          </TableCell>
+                          <TableCell align="right">{formatCurrency(v.atual)}</TableCell>
+                          <TableCell align="right" sx={{ color: 'text.secondary' }}>{formatCurrency(v.anterior)}</TableCell>
+                          <TableCell align="right" sx={{ fontWeight: 700, color: 'success.main' }}>
+                            {metric === 'variacao_rs' ? `+${formatCurrency(v.diff_rs)}` : formatPercent(v.diff_perc)}
+                          </TableCell>
+                        </TableRow>
+                      ))
+                    )}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </CardContent>
+          </Card>
+        </Box>
+
+        <Box>
+          <Card elevation={3} sx={{ borderTop: '4px solid', borderColor: 'error.main', height: '100%' }}>
+            <CardContent>
+              <Typography variant="h6" sx={{ mb: 2, fontWeight: 700, color: 'error.main' }}>
+                Top 10 Produtos em Queda
+              </Typography>
+              <TableContainer>
+                <Table size="small">
+                  <TableHead>
+                    <TableRow>
+                      <TableCell sx={{ fontWeight: 700 }}>Produto</TableCell>
+                      <TableCell align="right" sx={{ fontWeight: 700 }}>Período Atual</TableCell>
+                      <TableCell align="right" sx={{ fontWeight: 700 }}>Período Anterior</TableCell>
+                      <TableCell align="right" sx={{ fontWeight: 700 }}>Variação</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {topVariationsProdutos.top10Queda.length === 0 ? (
+                      <TableRow>
+                        <TableCell colSpan={4} align="center" sx={{ py: 3, color: 'text.secondary' }}>Nenhum produto com queda no período.</TableCell>
+                      </TableRow>
+                    ) : (
+                      topVariationsProdutos.top10Queda.map((v, idx) => (
+                        <TableRow key={v.code} hover>
+                          <TableCell sx={{ maxWidth: 150, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }} title={v.nome}>
                             {idx + 1}. {v.nome}
                           </TableCell>
                           <TableCell align="right">{formatCurrency(v.atual)}</TableCell>
