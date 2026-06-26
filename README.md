@@ -1,40 +1,35 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/pages/api-reference/create-next-app).
+# Dashboard de Performance Comercial - Web App
 
-## Getting Started
+## 🎯 Objetivo e Especificações do Projeto
+Este projeto tem como objetivo migrar a planilha de performance comercial (FGM) para um web app executivo moderno. O sistema visa reproduzir com extrema fidelidade os totais da planilha original, oferecendo uma experiência de análise visual superior, de alta performance e acessível.
 
-First, run the development server:
+**Stack Tecnológica:**
+- **Frontend:** Next.js / React (TypeScript, TailwindCSS)
+- **Backend:** Node.js/FastAPI (a definir camada de API)
+- **Banco de Dados:** PostgreSQL (ODS de Réplica Local)
+- **Cache:** Redis para agregados e ganhos de performance.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## 🔗 Integrações
+O projeto integra dados de múltiplas fontes para garantir a consistência das visões comerciais:
+1. **Salesforce Marketing Cloud (SFMC):** Sincronização de tabelas de Vendedores e Clientes.
+2. **Data Warehouse (DWH):** Extração do histórico de faturamento e de performance, limitando a importação às tabelas essenciais (`f_meta`, `f_ordem_faturamento`, `f_shelf_life`).
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+*Nota:* As rotinas de extração (ETL) estão sendo desenvolvidas em Python (ex: `sync_sfmc.py`) para popular o PostgreSQL local.
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+## 🚀 Status e O Que Está Pendente
 
-[API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+**O que já foi feito / em andamento:**
+- Inicialização do repositório Git e backup na nuvem.
+- Script de integração SFMC/DWH (`sync_sfmc.py`) em fase de testes e otimização para ambiente de produção.
+- Diagnósticos de clientes faltantes e documentação de integração de produtos.
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes) instead of React pages.
+**O que está pendente (Backlog Imediato):**
+- **ETL:** Finalizar o script `sync_sfmc.py` com suporte robusto a execuções em produção (variáveis de ambiente, fallback local, logs).
+- **Shelf-life:** Resolver o problema na branch `shelf-life` em relação à automação da tabela de preços.
+- **Banco de Dados:** Criar migrations SQL para o schema local (PostgreSQL), incluindo as tabelas `f_meta`, `f_ordem_faturamento` e views materializadas.
+- **Backend:** Desenvolver as rotas mínimas de API (`/api/vendedores`, `/api/clientes`, `/api/performance/faturamento`, etc.) conforme contrato no `AGENTS.md`.
+- **Frontend:** Implementar o design premium do dashboard (Tabelas mensais, Cards trimestrais, Gráficos) consumindo a nova API, aplicando os temas claro/escuro.
+- **Validação de Dados (QA):** Implementar testes rigorosos para garantir que os números de atingimento (realizado / meta) e agregados mensais/anuais batam perfeitamente com a planilha original.
 
-This project uses [`next/font`](https://nextjs.org/docs/pages/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn-pages-router) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/pages/building-your-application/deploying) for more details.
+---
+*Para regras de cálculo detalhadas, arquitetura de agentes e contratos de API, consulte o arquivo [AGENTS.md](../AGENTS.md) na raiz do projeto.*
