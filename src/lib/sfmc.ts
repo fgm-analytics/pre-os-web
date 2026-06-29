@@ -1,13 +1,10 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // SFMC Integration — Fonte: PricebookEntry_Salesforce
-if (process.env.NODE_ENV === 'development') {
-  process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
-}
 // Pricebook2Id = 01sV20000016SsKIAU (lista de preços oficial FGM)
 // Campos esperados no Data Extension:
 //   keys.ProductCode  → código do produto (= Material no SAP/ERP)
 //   values.Name       → nome do produto
 //   values.UnitPrice  → preço de tabela
-//   values.Pricebook2Id → ID da tabela de preços (para filtrar)
 //   values.IsActive   → status do produto na tabela
 
 interface SFMCTokenResponse {

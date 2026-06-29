@@ -98,32 +98,36 @@ export function PerformanceProvider({ children }: { children: ReactNode }) {
         const missingCodes = visibleCodes.filter(code => !namesMap.has(code));
         
         if (missingCodes.length > 0) {
-          // Fallback individual para os faltantes em performance (para evitar limite de 1000 linhas se fizermos bulk)
-          await Promise.all(missingCodes.map(async (code) => {
-            const { data: pData } = await supabase.from('performance_vendedor_2026')
-              .select('vendedor_nome')
-              .eq('vendedor_code', code)
-              .limit(1)
-              .single();
-            if (pData && pData.vendedor_nome) {
-              namesMap.set(code, pData.vendedor_nome);
-            }
-          }));
+          // Fallback 1: Busca em lote na tabela de usuários (1 linha por vendedor, payload pequeno)
+          const { data: uData } = await supabase.from('usuarios')
+            .select('vendedor_code, nome')
+            .in('vendedor_code', missingCodes);
+            
+          if (uData) {
+            uData.forEach(row => {
+              if (row.nome && !namesMap.has(row.vendedor_code)) {
+                namesMap.set(row.vendedor_code, row.nome);
+              }
+            });
+          }
         }
 
-        // Caso ainda falte algum (ex: recém adicionado sem histórico ou metas), busca na tabela de usuários
+        // Caso ainda falte algum (ex: legados), busca em lote na tabela de performance
         const stillMissing = visibleCodes.filter(code => !namesMap.has(code));
         if (stillMissing.length > 0) {
-          await Promise.all(stillMissing.map(async (code) => {
-            const { data: uData } = await supabase.from('usuarios')
-              .select('nome')
-              .eq('vendedor_code', code)
-              .limit(1)
-              .single();
-            if (uData && uData.nome) {
-              namesMap.set(code, uData.nome);
-            }
-          }));
+          // Busca agregada com .in(). Como a maioria foi resolvida acima,
+          // stillMissing será minúsculo, evitando payloads gigantes da tabela transacional.
+          const { data: pData } = await supabase.from('performance_vendedor_2026')
+            .select('vendedor_code, vendedor_nome')
+            .in('vendedor_code', stillMissing);
+            
+          if (pData) {
+            pData.forEach(row => {
+              if (row.vendedor_nome && !namesMap.has(row.vendedor_code)) {
+                namesMap.set(row.vendedor_code, row.vendedor_nome);
+              }
+            });
+          }
         }
         
         const finalNames = visibleCodes.map(code => ({
