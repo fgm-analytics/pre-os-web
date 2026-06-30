@@ -34,6 +34,7 @@ import {
   ToggleButton,
   ToggleButtonGroup,
 } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
 import SearchIcon from "@mui/icons-material/Search";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import FileUploadIcon from "@mui/icons-material/FileUpload";
@@ -91,6 +92,7 @@ import { supabase } from "../lib/supabase";
 
 export default function Home() {
   const { user, profile } = useAuth();
+  const theme = useTheme();
   
   const [globalSegmentacao, setGlobalSegmentacao] = useState<number | "">("");
   const [overriddenSegmentacao, setOverriddenSegmentacao] = useState<Record<string, string>>({});
@@ -728,7 +730,8 @@ export default function Home() {
                             const bu = buKeys[vendedorTab];
                             const cItem = cart[bu]?.[p.codigo] || { quantidade: 0, desconto: 0, bonificados: 0 };
                             const price = prices[p.codigo] || 0;
-                            const displayColor = p.cor && colorMap[p.cor] ? colorMap[p.cor] : "#f3f4f6";
+                            const fallbackColor = theme.palette.mode === 'light' ? theme.palette.text.primary : "#f3f4f6";
+                            const displayColor = p.cor && colorMap[p.cor] ? colorMap[p.cor] : fallbackColor;
                             const isInactive = p.promotionIsActive === false;
                             const segmentacaoVal = overriddenSegmentacao[p.codigo] !== undefined && overriddenSegmentacao[p.codigo] !== ""
                               ? Number(overriddenSegmentacao[p.codigo])
