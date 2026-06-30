@@ -23,6 +23,7 @@ import { supabase } from "../lib/supabase";
 interface SegregadoItem {
   produto_codigo: string;
   texto_breve_material: string;
+  lote: string;
   data_vencimento: string;
   quantidade_estoque: number;
   business_unit: string;
@@ -182,6 +183,15 @@ export default function Segregados() {
                   </TableCell>
                   <TableCell align="center">
                     <TableSortLabel
+                      active={orderBy === 'lote'}
+                      direction={orderBy === 'lote' ? order : 'asc'}
+                      onClick={() => handleRequestSort('lote')}
+                    >
+                      Lote
+                    </TableSortLabel>
+                  </TableCell>
+                  <TableCell align="center">
+                    <TableSortLabel
                       active={orderBy === 'data_vencimento'}
                       direction={orderBy === 'data_vencimento' ? order : 'asc'}
                       onClick={() => handleRequestSort('data_vencimento')}
@@ -208,9 +218,9 @@ export default function Segregados() {
                     </TableCell>
                   </TableRow>
                 ) : (
-                  visibleRows.map((row) => (
+                  visibleRows.map((row, idx) => (
                     <TableRow 
-                      key={row.produto_codigo}
+                      key={`${row.produto_codigo}-${row.lote}-${idx}`}
                       sx={{ 
                         '&:hover': {
                           backgroundColor: 'rgba(255, 255, 255, 0.05)'
@@ -219,6 +229,7 @@ export default function Segregados() {
                     >
                       <TableCell>{row.produto_codigo}</TableCell>
                       <TableCell>{row.texto_breve_material || "N/D"}</TableCell>
+                      <TableCell align="center" sx={{ fontFamily: 'monospace' }}>{row.lote || "-"}</TableCell>
                       <TableCell 
                         align="center" 
                         sx={{ 

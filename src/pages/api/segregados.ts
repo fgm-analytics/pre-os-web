@@ -23,7 +23,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     // 1. Fetch direct from f_shelf_life table instead of the view
     const { data: shelfLifeData, error } = await supabase
       .from('f_shelf_life')
-      .select('produto_codigo, texto_breve_material, data_vencimento, quantidade_estoque')
+      .select('produto_codigo, texto_breve_material, lote, data_vencimento, quantidade_estoque')
       .not('data_vencimento', 'is', null)
       .order('data_vencimento', { ascending: true });
 
@@ -63,6 +63,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const mappedItem = {
           produto_codigo: item.produto_codigo,
           texto_breve_material: item.texto_breve_material,
+          lote: item.lote || '-',
           data_vencimento: item.data_vencimento,
           quantidade_estoque: item.quantidade_estoque,
           business_unit: bu,

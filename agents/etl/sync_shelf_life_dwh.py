@@ -47,6 +47,7 @@ def sync_f_shelf_life(supabase_client: Client):
     SELECT 
         "Nº do material" as produto_codigo,
         "Centro" as centro,
+        "Número do lote" as lote,
         "Texto breve de material" as texto_breve_material,
         "Data de produção" as data_producao,
         "Data do vencimento" as data_vencimento,
@@ -66,11 +67,16 @@ def sync_f_shelf_life(supabase_client: Client):
                 continue
             
             p_code = str(r["produto_codigo"]).strip()
+            lote = str(r["lote"]).strip() if r["lote"] else ""
             qty = float(r["quantidade_estoque"]) if r["quantidade_estoque"] is not None else 0
             
-            if p_code not in deduped:
-                deduped[p_code] = {
+            # Chave composta para deduplicação: produto_codigo + lote
+            dedup_key = f"{p_code}_{lote}"
+            
+            if dedup_key not in deduped:
+                deduped[dedup_key] = {
                     "produto_codigo": p_code,
+                    "lote": lote,
                     "centro": str(r["centro"]).strip() if r["centro"] else None,
                     "texto_breve_material": str(r["texto_breve_material"]).strip() if r["texto_breve_material"] else None,
                     "data_producao": r["data_producao"].isoformat() if r["data_producao"] else None,
@@ -79,12 +85,12 @@ def sync_f_shelf_life(supabase_client: Client):
                 }
             else:
                 # Soma a quantidade em estoque dos lotes
-                deduped[p_code]["quantidade_estoque"] += qty
+                deduped[dedup_key]["quantidade_estoque"] += qty
                 # Mantém a data de vencimento mais próxima (menor data)
-                if r["data_vencimento"] and deduped[p_code]["data_vencimento"]:
-                    if r["data_vencimento"].isoformat() < deduped[p_code]["data_vencimento"]:
-                        deduped[p_code]["data_vencimento"] = r["data_vencimento"].isoformat()
-                        deduped[p_code]["data_producao"] = r["data_producao"].isoformat() if r["data_producao"] else None
+                if r["data_vencimento"] and deduped[dedup_key]["data_vencimento"]:
+                    if r["data_vencimento"].isoformat() < deduped[dedup_key]["data_vencimento"]:
+                        deduped[dedup_key]["data_vencimento"] = r["data_vencimento"].isoformat()
+                        deduped[dedup_key]["data_producao"] = r["data_producao"].isoformat() if r["data_producao"] else None
 
         records = list(deduped.values())
 
@@ -109,7 +115,7 @@ def sync_f_shelf_life(supabase_client: Client):
                 chunk = records[i:i+chunk_size]
                 supabase_client.table("f_shelf_life").upsert(
                     chunk,
-                    on_conflict="produto_codigo"
+                    on_conflict="produto_codigo, lote"
                 ).execute()
                 total_upserted += len(chunk)
                 logger.info(f"Upserted {total_upserted}/{len(records)} f_shelf_life records...")
