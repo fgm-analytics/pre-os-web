@@ -21,8 +21,8 @@ async function forceSyncAndClearCache() {
         headers: { Authorization: `Bearer ${REDIS_TOKEN}` }
       });
       console.log('Cache Redis apagado com sucesso!');
-    } catch (e: any) {
-      console.log('Erro ao limpar Redis:', e.message);
+    } catch (e) {
+      console.log('Erro ao limpar Redis:', e instanceof Error ? e.message : String(e));
     }
   }
 

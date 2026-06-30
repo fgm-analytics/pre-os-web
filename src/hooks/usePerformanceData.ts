@@ -133,16 +133,17 @@ export function usePerformanceData(selectedSellerCode: number | null) {
       setClienteProdutoData(cpData);
       setMetaClienteProdutoData(metaCpData);
       setUltimosPedidosData(ultimosPedidos);
-    } catch (err: any) {
+    } catch (err) {
       console.error('Error fetching performance data:', err);
-      setError(err.message || 'Erro ao carregar dados de performance.');
+      setError(err instanceof Error ? err.message : 'Erro ao carregar dados de performance.');
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchData();
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    void fetchData();
   }, [user, profile, selectedSellerCode]);
 
   return {

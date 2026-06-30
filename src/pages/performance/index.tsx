@@ -4,8 +4,9 @@ import {
   Box, Typography, Grid, Paper, Card, CardContent, 
   FormControl, InputLabel, Select, MenuItem, TextField,
   Table, TableBody, TableCell, TableContainer, TableHead, TableRow,
-  CircularProgress, Alert, Tabs, Tab
+  CircularProgress, Alert, Tabs, Tab, useMediaQuery
 } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 import { usePerformanceContext } from '../../contexts/PerformanceContext';
 import { ResponsiveContainer, AreaChart, Area, ComposedChart, Bar, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
 import { useRouter } from 'next/router';
@@ -62,6 +63,9 @@ const getTrendIndicator = (valCurrent: number, valPrev: number | undefined) => {
 };
 
 export default function PerformanceDashboard() {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+
   const { 
     billingData, metaClienteProdutoData, performanceData, loading, error, 
     selectedClient, clientCodeInput, matchesSelectedSeller 
@@ -490,10 +494,10 @@ export default function PerformanceDashboard() {
       <Grid container spacing={4}>
         <Grid size={{ xs: 12 }}>
           {/* Sequential period timeline chart */}
-          <Paper sx={{ p: 3, height: 400 }}>
-            <Typography variant="h6" sx={{ mb: 2, fontWeight: 700 }}>Histórico de faturamento no período</Typography>
+          <Paper sx={{ p: { xs: 2, md: 3 }, height: isMobile ? 350 : 400 }}>
+            <Typography variant="h6" sx={{ mb: 2, fontWeight: 700, fontSize: isMobile ? '1.1rem' : '1.25rem' }}>Histórico de faturamento no período</Typography>
             <ResponsiveContainer width="100%" height="85%">
-              <ComposedChart data={periodChartData}>
+              <ComposedChart data={periodChartData} margin={{ top: 5, right: isMobile ? 0 : 30, left: isMobile ? -20 : 0, bottom: 5 }}>
                 <defs>
                   <linearGradient id="colorPeriod" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="5%" stopColor="#007FFF" stopOpacity={0.25}/>
@@ -501,10 +505,17 @@ export default function PerformanceDashboard() {
                   </linearGradient>
                 </defs>
                 <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
-                <XAxis dataKey="name" stroke="#9CA3AF" />
+                <XAxis 
+                  dataKey="name" 
+                  stroke="#9CA3AF" 
+                  tick={{ fontSize: isMobile ? 10 : 12 }} 
+                  interval={isMobile ? 'preserveStartEnd' : 0}
+                />
                 <YAxis 
                   stroke="#9CA3AF"
+                  tick={{ fontSize: isMobile ? 10 : 12 }}
                   tickFormatter={(tick) => tick >= 1e6 ? `${(tick / 1e6).toFixed(1)}M` : tick >= 1e3 ? `${(tick / 1e3).toFixed(0)}k` : tick}
+                  width={isMobile ? 40 : 60}
                 />
                 <Tooltip 
                   contentStyle={{ backgroundColor: '#1F2937', borderColor: '#374151', borderRadius: '8px' }}

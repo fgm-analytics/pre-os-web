@@ -19,6 +19,17 @@ import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 import SaveIcon from "@mui/icons-material/Save";
 import { supabase } from "../../lib/supabase";
 
+type ProductRow = {
+  codigo: string;
+  material: string;
+  categoria?: string;
+  cor?: string;
+  businessUnit: string;
+  segmentacao?: number;
+  ipi?: number;
+  ordem_exibicao?: number;
+};
+
 const colorOptions = [
   "dark_gray", "white", "light_gray", "orange", "green", 
   "blue", "brown", "purple", "cyan", "yellow", 
@@ -34,11 +45,7 @@ export default function AdminCatalogo() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [currentTab, setCurrentTab] = useState("Dentscare");
-  const [products, setProducts] = useState<any[]>([]);
-
-  useEffect(() => {
-    fetchProducts();
-  }, []);
+  const [products, setProducts] = useState<ProductRow[]>([]);
 
   const fetchProducts = async () => {
     setLoading(true);
@@ -64,10 +71,10 @@ export default function AdminCatalogo() {
       const data = await res.json();
       
       // Flatten arrays and ensure ordem_exibicao
-      let flatProducts: any[] = [];
+      let flatProducts: ProductRow[] = [];
       ["Dentscare", "Home_Care", "Whiteness", "Inbox"].forEach((bu) => {
         if (data[bu]) {
-          flatProducts = [...flatProducts, ...data[bu].map((p: any, idx: number) => ({
+          flatProducts = [...flatProducts, ...data[bu].map((p: ProductRow, idx: number) => ({
             ...p,
             businessUnit: bu,
             ordem_exibicao: p.ordem_exibicao || idx + 1
@@ -76,14 +83,19 @@ export default function AdminCatalogo() {
       });
       
       // Sort globally
-      flatProducts.sort((a, b) => a.ordem_exibicao - b.ordem_exibicao);
+      flatProducts.sort((a, b) => (a.ordem_exibicao ?? 0) - (b.ordem_exibicao ?? 0));
       setProducts(flatProducts);
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Erro ao carregar produtos");
     } finally {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    void fetchProducts();
+  }, []);
 
   const handleSave = async () => {
     setSaving(true);
@@ -95,7 +107,7 @@ export default function AdminCatalogo() {
 
       // Update ordem_exibicao based on current index per BU
       const finalProducts = [...products];
-      const buCounters: any = { Dentscare: 1, Home_Care: 1, Whiteness: 1, Inbox: 1 };
+      const buCounters: Record<string, number> = { Dentscare: 1, Home_Care: 1, Whiteness: 1, Inbox: 1 };
       
       finalProducts.forEach((p) => {
         p.ordem_exibicao = buCounters[p.businessUnit]++;
@@ -116,8 +128,8 @@ export default function AdminCatalogo() {
       }
 
       setSuccess("Configurações salvas com sucesso!");
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Erro ao salvar");
     } finally {
       setSaving(false);
     }
@@ -145,7 +157,7 @@ export default function AdminCatalogo() {
     setProducts(newProducts);
   };
 
-  const updateProduct = (codigo: string, field: string, value: any) => {
+  const updateProduct = (codigo: string, field: keyof ProductRow, value: string | number) => {
     setProducts(products.map(p => p.codigo === codigo ? { ...p, [field]: value } : p));
   };
 

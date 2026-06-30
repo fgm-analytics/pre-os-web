@@ -145,6 +145,10 @@ export default function Home() {
   // Referência para input de arquivo de pedido
   const fileInputRefOrder = useRef<HTMLInputElement>(null);
 
+  const showMsg = (message: string, severity: "success" | "error" | "warning" = "success") => {
+    setSnackbar({ open: true, message, severity });
+  };
+
   // Carregar produtos e preços
   const loadData = async () => {
     try {
@@ -161,26 +165,30 @@ export default function Home() {
         priceRes.json()
       ]);
 
+      if (!prodRes.ok || prodData.error) {
+        throw new Error(prodData.error || "Erro ao carregar produtos");
+      }
+      if (!priceRes.ok || priceData.error) {
+        throw new Error(priceData.error || "Erro ao carregar preços");
+      }
+
       // Mapear businessUnit para os itens para fácil rastreabilidade
       const mappedBU: Record<string, Product[]> = {};
       Object.keys(prodData).forEach((bu) => {
-        mappedBU[bu] = prodData[bu].map((p: any) => ({ ...p, businessUnit: bu }));
+        mappedBU[bu] = prodData[bu].map((p: Product) => ({ ...p, businessUnit: bu }));
       });
       setProductsByBU(mappedBU);
 
       setPrices(priceData);
     } catch (err) {
-      showMsg("Erro ao carregar dados do servidor.", "error");
+      showMsg(err instanceof Error ? err.message : "Erro ao carregar dados do servidor.", "error");
     }
   };
 
   useEffect(() => {
-    loadData();
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    void loadData();
   }, []);
-
-  const showMsg = (message: string, severity: "success" | "error" | "warning" = "success") => {
-    setSnackbar({ open: true, message, severity });
-  };
 
   // Obter a lista de todos os produtos consolidados para busca ou admin
   const allProducts = useMemo(() => {

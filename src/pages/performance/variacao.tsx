@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any, react-hooks/set-state-in-effect */
 import React, { useState, useMemo } from 'react';
 import Head from 'next/head';
 import { 

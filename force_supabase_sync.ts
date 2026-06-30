@@ -1,4 +1,3 @@
-import { NextApiRequest, NextApiResponse } from 'next';
 import { supabaseAdmin } from './src/lib/supabase';
 import { fetchSFMCDataExtensionPaginated } from './src/lib/sfmc';
 
@@ -15,17 +14,17 @@ const DE_KEYS = {
 async function runLocalSync() {
   console.log("Iniciando sincronização local SFMC -> Supabase ODS...");
   try {
-    const results: Record<string, any> = {};
+    const results: Record<string, string> = {};
 
     console.log(`[Cron] Syncing ${DE_KEYS.F_PRECO_CONDICAO}...`);
     const precoData = await fetchSFMCDataExtensionPaginated(DE_KEYS.F_PRECO_CONDICAO);
     if (precoData && precoData.length > 0) {
-      const mapped = precoData.map((r: any) => ({
+      const mapped = precoData.map((r: { ov: string; item_ov: string; preco_zpr0?: string | number; cod_tipo_list_precos?: string }) => ({
         ov: r.ov,
         item_ov: r.item_ov,
         preco_zpr0: parseFloat((r.preco_zpr0 || "").toString().replace(',', '.')) || 0,
         cod_tipo_list_precos: r.cod_tipo_list_precos
-      })).filter((r: any) => r.ov && r.item_ov);
+      })).filter((r: { ov: string; item_ov: string }) => r.ov && r.item_ov);
       
       const { error } = await supabaseAdmin.from('f_preco_condicao').upsert(mapped, { onConflict: 'ov,item_ov' });
       results['f_preco_condicao'] = error ? error.message : `${mapped.length} records`;
@@ -35,10 +34,10 @@ async function runLocalSync() {
     console.log(`[Cron] Syncing ${DE_KEYS.F_ORDEM_FATURAMENTO}...`);
     const ordemData = await fetchSFMCDataExtensionPaginated(DE_KEYS.F_ORDEM_FATURAMENTO);
     if (ordemData && ordemData.length > 0) {
-      const mapped = ordemData.map((r: any) => ({
+      const mapped = ordemData.map((r: { chave_representante_ov: string; material: string }) => ({
         chave_representante_ov: r.chave_representante_ov,
         material: r.material
-      })).filter((r: any) => r.chave_representante_ov && r.material);
+      })).filter((r: { chave_representante_ov: string; material: string }) => r.chave_representante_ov && r.material);
       
       const { error } = await supabaseAdmin.from('f_ordem_faturamento').upsert(mapped, { onConflict: 'chave_representante_ov,material' });
       results['f_ordem_faturamento'] = error ? error.message : `${mapped.length} records`;
@@ -46,7 +45,7 @@ async function runLocalSync() {
     }
 
     console.log("Sincronização SFMC -> Supabase finalizada!", results);
-  } catch (err: any) {
+  } catch (err) {
     console.error('[Cron] Sync Error:', err);
   }
 }

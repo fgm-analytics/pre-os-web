@@ -515,7 +515,7 @@ def format_shelf_life(records):
 
 def format_ordem_fat_full(records):
     return [{
-        "chave_representante_ov": str(r.get('Chave Representante OV', '')),
+        "chave_representante_ov": str(r.get('Cód. Representante OV', '')),
         "material": str(r.get('Material', ''))
     } for r in records]
 
@@ -553,7 +553,7 @@ def process_sync():
 
         # 8. Sincronizar f_ordem_faturamento_full
         clear_data_extension(token, SFMC_DATA_EXTENSION_ID_ORDEM_FATURAMENTO)
-        ordf_records = fetch_simple_table('f_ordem_faturamento', ['Chave Representante OV', 'Material'])
+        ordf_records = fetch_simple_table('f_ordem_faturamento', ['Cód. Representante OV', 'Material'])
         token = sync_data("f_ordem_faturamento", ordf_records, format_ordem_fat_full, SFMC_DATA_EXTENSION_ID_ORDEM_FATURAMENTO, token)
 
     except Exception as e:

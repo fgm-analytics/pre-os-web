@@ -1,4 +1,4 @@
-const fs = require('fs');
+import fs from 'fs';
 
 async function run() {
   const tokenUrl = process.env.SFMC_AUTH_URI.replace(/\/$/, "") + '/v2/token';

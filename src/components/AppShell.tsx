@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { 
   AppBar, Toolbar, IconButton, Typography, Drawer, 
   List, ListItemButton, ListItemIcon, ListItemText, 
@@ -6,10 +6,12 @@ import {
 } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { 
-  Menu as MenuIcon, PriceCheck, BarChart, Logout, AccountCircle, Settings, Warning 
+  Menu as MenuIcon, PriceCheck, BarChart, Logout, AccountCircle, Settings, Warning,
+  LightMode, DarkMode
 } from '@mui/icons-material';
 import { useAuth } from '../contexts/AuthProvider';
 import { useRouter } from 'next/router';
+import { ColorModeContext } from '../contexts/ColorModeContext';
 
 interface AppShellProps {
   children: React.ReactNode;
@@ -20,6 +22,7 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
   const router = useRouter();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+  const { mode, toggleColorMode } = useContext(ColorModeContext);
   
   const [drawerOpen, setDrawerOpen] = useState(!isMobile);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -61,7 +64,8 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
           bgcolor: 'background.paper',
           borderBottom: '1px solid',
           borderColor: 'divider',
-          boxShadow: 'none'
+          boxShadow: 'none',
+          color: 'text.primary'
         }}
       >
         <Toolbar>
@@ -78,14 +82,17 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
             <img 
               src="/fgm-logo.png" 
               alt="FGM Dental Group" 
-              style={{ height: '24px', width: 'auto', objectFit: 'contain' }} 
+              style={{ height: '24px', width: 'auto', objectFit: 'contain', filter: mode === 'light' ? 'brightness(0)' : 'none' }} 
             />
           </Box>
 
           {profile && (
             <>
+              <IconButton onClick={toggleColorMode} color="inherit" sx={{ mr: 2 }}>
+                {mode === 'dark' ? <LightMode /> : <DarkMode />}
+              </IconButton>
               <Box sx={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }} onClick={handleMenuClick}>
-                <Avatar sx={{ bgcolor: 'secondary.main', mr: 1, width: 36, height: 36 }}>
+                <Avatar sx={{ bgcolor: 'secondary.main', mr: 1, width: 36, height: 36, color: '#fff' }}>
                   {profile.nome.charAt(0).toUpperCase()}
                 </Avatar>
                 {!isMobile && (
@@ -128,8 +135,12 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
         open={drawerOpen}
         onClose={isMobile ? toggleDrawer : undefined}
         sx={{
-          width: 240,
+          width: !isMobile && drawerOpen ? 240 : 0,
           flexShrink: 0,
+          transition: theme.transitions.create('width', {
+            easing: theme.transitions.easing.sharp,
+            duration: drawerOpen ? theme.transitions.duration.enteringScreen : theme.transitions.duration.leavingScreen,
+          }),
           [`& .MuiDrawer-paper`]: { 
             width: 240, 
             boxSizing: 'border-box', 
@@ -166,8 +177,8 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
                   }
                 }}
               >
-                <ListItemIcon sx={{ minWidth: 40 }}>{item.icon}</ListItemIcon>
-                <ListItemText primary={<Typography sx={{ fontWeight: 600, fontSize: '14px' }}>{item.text}</Typography>} />
+                <ListItemIcon sx={{ minWidth: 40, color: 'text.secondary' }}>{item.icon}</ListItemIcon>
+                <ListItemText primary={<Typography sx={{ fontWeight: 600, fontSize: '14px', color: 'text.primary' }}>{item.text}</Typography>} />
               </ListItemButton>
             ))}
           </List>
@@ -182,17 +193,9 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
           pt: { xs: 10, sm: 11, md: 11 },
           minWidth: 0,
           overflow: 'hidden',
-          width: drawerOpen && !isMobile ? 'calc(100% - 240px)' : '100%',
-          transition: theme.transitions.create(['margin', 'width'], {
+          transition: theme.transitions.create(['width', 'margin'], {
             easing: theme.transitions.easing.sharp,
             duration: theme.transitions.duration.leavingScreen,
-          }),
-          ...(drawerOpen && !isMobile && {
-            ml: 0,
-            transition: theme.transitions.create(['margin', 'width'], {
-              easing: theme.transitions.easing.easeOut,
-              duration: theme.transitions.duration.enteringScreen,
-            }),
           }),
         }}
       >
@@ -201,3 +204,4 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
     </Box>
   );
 };
+

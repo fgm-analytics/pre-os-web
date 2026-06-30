@@ -61,13 +61,14 @@ export default function Segregados() {
       
       const data = await res.json();
       setDataByBU(data);
-    } catch (err: any) {
-      setSnackbar({ open: true, message: err.message || "Erro ao carregar dados", severity: "error" });
+    } catch (err) {
+      setSnackbar({ open: true, message: err instanceof Error ? err.message : "Erro ao carregar dados", severity: "error" });
     }
   };
 
   useEffect(() => {
-    loadData();
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    void loadData();
   }, []);
 
   const handleRequestSort = (property: keyof SegregadoItem) => {
@@ -97,7 +98,7 @@ export default function Segregados() {
   // Pega os itens da aba ativa e ordena
   const visibleRows = useMemo(() => {
     const activeBU = buKeys[activeTab];
-    let rows = dataByBU[activeBU] || [];
+    const rows = dataByBU[activeBU] || [];
 
     return rows.sort((a, b) => {
       let aValue = a[orderBy];

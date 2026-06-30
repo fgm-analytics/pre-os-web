@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-require-imports */
 import type { NextApiRequest, NextApiResponse } from "next";
 import fs from "fs";
 import path from "path";

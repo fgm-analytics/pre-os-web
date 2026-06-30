@@ -5,39 +5,45 @@
 Este projeto tem como objetivo migrar a planilha de performance comercial (FGM) para um web app executivo moderno. O sistema visa reproduzir com extrema fidelidade os totais da planilha original, oferecendo uma experiência de análise visual superior, de alta performance e acessível.
 
 **Stack Tecnológica:**
-
 - **Frontend:** Next.js / React (TypeScript, TailwindCSS)
-- **Backend:** Node.js/FastAPI (a definir camada de API)
-- **Banco de Dados:** PostgreSQL (ODS de Réplica Local)
+- **Backend:** Node.js/FastAPI (a definir camada de API) e API Routes (Next.js)
+- **Banco de Dados:** PostgreSQL (Supabase / Réplica Local ODS)
 - **Cache:** Redis para agregados e ganhos de performance.
 
-## 🔗 Integrações
+## 🚀 Status e O Que Já Foi Feito
 
-O projeto integra dados de múltiplas fontes para garantir a consistência das visões comerciais:
+Até o momento, as seguintes etapas foram concluídas na construção da aplicação:
+- **Configuração Inicial e Repositório:** Setup do projeto base utilizando Next.js e TypeScript, integrado com TailwindCSS.
+- **Pipeline de Integração de Dados:** Desenvolvimento e teste de scripts ETL robustos (Python) para importação de planilhas CSV e tabelas DWH/SFMC para o banco de dados.
+- **Banco de Dados:** Criação do schema no PostgreSQL com as tabelas de negócio (`f_ordem_faturamento`, `f_meta`, etc).
+- **Interface Gráfica (Web App):** Implementação do design premium (dark/light mode) do dashboard, criando diversas abas focadas na experiência comercial, como Performance, Preços e Segregados.
+- **Testes e Segurança:** Realizadas auditorias de segurança e estabilização das rotinas locais.
 
-1. **Salesforce Marketing Cloud (SFMC):** Sincronização de tabelas de Vendedores e Clientes.
-2. **Data Warehouse (DWH):** Extração do histórico de faturamento e de performance, limitando a importação às tabelas essenciais (`f_meta`, `f_ordem_faturamento`, `f_shelf_life`).
+## 🔄 Scripts de ETL Essenciais para Integração
 
-*Nota:* As rotinas de extração (ETL) estão sendo desenvolvidas em Python (ex: `sync_sfmc.py`) para popular o PostgreSQL local.
+As integrações de dados são o coração deste sistema, alimentando as dashboards com dados reais e sincronizando tudo diretamente para o **Supabase** (que hospeda nosso PostgreSQL). Os scripts estão localizados na pasta `agents/etl/` e na raiz do projeto.
 
-## 🚀 Status e O Que Está Pendente
+### 1. `sync_sfmc.py` e `force_supabase_sync.ts`
+**O que fazem:** São os scripts responsáveis por puxar os dados do Salesforce Marketing Cloud (SFMC) e persistir diretamente no Supabase. 
+- O script em Python (`sync_sfmc.py`) é mais voltado para cargas massivas, cruzando informações como tabela de faturamento (`f_ordem_faturamento`), metas (`f_meta`), clientes e vendedores.
+- O script em TypeScript (`force_supabase_sync.ts`) é desenhado para rodar via CLI/Cron de forma automatizada, puxando as "Data Extensions" do SFMC e realizando upsert via Supabase Admin Client.
 
-**O que já foi feito / em andamento:**
+### 2. `sync_shelf_life_dwh.py`
+**O que faz:** Script focado em sincronizar dados críticos de prateleira / validade (Shelf-Life) direto do Data Warehouse (DWH). Ele garante que as informações referentes aos estoques de produtos que estão próximos do vencimento ou possuem campanhas específicas de Shelf-Life sejam importadas, suportando abas específicas do painel comercial.
 
-- Inicialização do repositório Git e backup na nuvem.
-- Script de integração SFMC/DWH (`sync_sfmc.py`) em fase de testes e otimização para ambiente de produção.
-- Diagnósticos de clientes faltantes e documentação de integração de produtos.
+## 📊 Estrutura e Funcionamento das Abas (Páginas)
 
-**O que está pendente (Backlog Imediato):**
+O painel foi desenhado para facilitar a vida do executivo/vendedor, quebrando as informações em páginas focadas. A seguir o que cada aba faz:
 
-- **ETL:** Finalizar o script `sync_sfmc.py` com suporte robusto a execuções em produção (variáveis de ambiente, fallback local, logs).
-- **Shelf-life:** Resolver o problema na branch `shelf-life` em relação à automação da tabela de preços.
-- **Banco de Dados:** Criar migrations SQL para o schema local (PostgreSQL), incluindo as tabelas `f_meta`, `f_ordem_faturamento` e views materializadas.
-- **Backend:** Desenvolver as rotas mínimas de API (`/api/vendedores`, `/api/clientes`, `/api/performance/faturamento`, etc.) conforme contrato no `AGENTS.md`.
-- **Frontend:** Implementar o design premium do dashboard (Tabelas mensais, Cards trimestrais, Gráficos) consumindo a nova API, aplicando os temas claro/escuro.
-- **Validação de Dados (QA):** Implementar testes rigorosos para garantir que os números de atingimento (realizado / meta) e agregados mensais/anuais batam perfeitamente com a planilha original.
+- **Visão Geral (`/`)**: Página de entrada (Dashboard Principal). Traz um resumo rápido com cartões agregados do mês e semestre.
+- **Performance Geral (`/performance`)**: Aba mãe que agrega a visão consolidada de desempenho das vendas da equipe.
+  - **Faturamento (`/performance/faturamento`)**: Analisa o faturamento líquido e bruto versus a meta de cada vendedor/região, permitindo entender o nível de "atingimento".
+  - **Variação (`/performance/variacao`)**: Demonstra a evolução ou queda percentual das vendas quando comparadas a períodos anteriores (MoM, YoY).
+  - **Valores Clientes/Produtos (`/performance/valores-clientes-produtos`)**: Foca na rentabilidade por cliente ou giro de produto. Útil para identificar quais clientes geram mais retorno e quais produtos compõem a curva A.
+  - **Últimos Pedidos (`/performance/ultimos-pedidos`)**: Feed focado nos dados transacionais. Lista em detalhes os registros de faturamento e vendas recém importados.
+- **Preços e Promoções (`/precos`)**: Renderiza a tabela de preços oficial do trimestre (ex: Tabela do 2º Trimestre) e promoções ativas, servindo como guia rápido de consulta comercial e elaboração de propostas.
+- **Segregados (`/segregados`)**: Exibe as informações de vendas e linhas de negócio que não compõem as metas padrão ou que precisam de um acompanhamento apartado (segregado da performance geral).
+- **Catálogo / Admin (`/admin/catalogo`)**: Área de consulta e gerenciamento do catálogo de produtos, listando classificações, grupos e subgrupos da base FGM.
 
 ---
 *Para regras de cálculo detalhadas, arquitetura de agentes e contratos de API, consulte o arquivo [AGENTS.md](../AGENTS.md) na raiz do projeto.*
-
-Criado por Sean Quadros
