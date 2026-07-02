@@ -1,4 +1,4 @@
-﻿import { NextApiRequest, NextApiResponse } from 'next';
+import { NextApiRequest, NextApiResponse } from 'next';
 import { supabaseAdmin } from '../../lib/supabaseAdmin';
 import { toolsRegistry } from '../../lib/tools';
 
@@ -159,6 +159,18 @@ const tools = [
           required: ['cliente'],
         },
       },
+      {
+        name: 'get_historico_produto_cliente',
+        description: 'Retorna o histÃ³rico de faturamento e volume (unidades) de um produto especÃ­fico para um cliente especÃ­fico.',
+        parameters: {
+          type: 'OBJECT',
+          properties: {
+            cliente: { type: 'STRING', description: 'Nome do cliente' },
+            produto: { type: 'STRING', description: 'Nome ou subgrupo do produto' },
+          },
+          required: ['cliente', 'produto'],
+        },
+      },
     ],
   },
 ];
@@ -263,6 +275,7 @@ REGRAS COMERCIAIS E ESTRATÃ‰GIAS:
 - Priorize produtos que o cliente jÃ¡ comprou anteriormente.
 - Nunca recomende produto indisponÃ­vel.
 - Considere apenas produtos na tabela de preÃ§os vigente.
+- NUNCA invente nomes de produtos ou sugira produtos da concorrência (ex: AMARIS). Baseie-se EXCLUSIVAMENTE nos nomes de produtos retornados pelas ferramentas.
 - Churn: Clientes acima de 180 dias sem compra. (Informe explicitamente essa condiÃ§Ã£o ao citar um).
 - Risco de Churn: Clientes entre 120 e 179 dias sem compra.`
       }],

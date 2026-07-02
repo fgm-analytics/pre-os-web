@@ -15,6 +15,7 @@ import { getClienteDiasSemCompra } from './getClienteDiasSemCompra';
 import { getSegregadosInfo } from './getSegregadosInfo';
 import { getSegregadosAlertas } from './getSegregadosAlertas';
 import { getAgendaVisita } from './getAgendaVisita';
+import { getHistoricoProdutoCliente } from './getHistoricoProdutoCliente';
 import { ToolHandler } from './types';
 
 export const toolsRegistry: Record<string, ToolHandler> = {
@@ -35,4 +36,5 @@ export const toolsRegistry: Record<string, ToolHandler> = {
   get_segregados_info: getSegregadosInfo,
   get_segregados_alertas: getSegregadosAlertas,
   get_agenda_visita: getAgendaVisita,
+  get_historico_produto_cliente: getHistoricoProdutoCliente,
 };
