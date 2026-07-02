@@ -15,7 +15,7 @@ interface Message {
 import { usePerformanceContext } from '../../contexts/PerformanceContext';
 
 export const ChatWindow: React.FC = () => {
-  const { selectedSeller } = usePerformanceContext();
+  const { selectedSeller, selectedSellerCode } = usePerformanceContext();
   const [messages, setMessages] = useState<Message[]>([
     { role: 'assistant', content: 'Olá! Sou seu assistente de vendas da FGM. Como posso ajudar com sua carteira de clientes hoje?' }
   ]);
@@ -48,6 +48,7 @@ export const ChatWindow: React.FC = () => {
         body: JSON.stringify({
           messages: newMessages.filter(m => m.role !== 'tool' && !m.tool_calls), // Send simplified history for this demo
           vendedorId: selectedSeller,
+          vendedorCode: selectedSellerCode
         })
       });
 

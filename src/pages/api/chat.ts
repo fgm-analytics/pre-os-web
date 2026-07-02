@@ -41,20 +41,9 @@ const tools = [
 ];
 
 // Executa a função mapeada consultando o Supabase
-async function executeTool(name: string, args: any, vendedorId?: string) {
-  console.log(`Executando ferramenta: ${name} com argumentos:`, args, 'para vendedor:', vendedorId);
+async function executeTool(name: string, args: any, vendedorCode?: number | null) {
+  console.log(`Executando ferramenta: ${name} com argumentos:`, args, 'para código do vendedor:', vendedorCode);
   
-  let vendedorCode = null;
-  if (vendedorId) {
-    const { data: vData } = await supabaseAdmin
-      .from('v_vendedores_ativos')
-      .select('vendedor_code')
-      .eq('vendedor_nome', vendedorId)
-      .limit(1)
-      .single();
-    if (vData) vendedorCode = vData.vendedor_code;
-  }
-
   if (name === 'get_status_meta') {
     // O mock foca em julho de 2026, vamos pegar o mês 7
     const currentMonth = 7; 
@@ -129,7 +118,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   try {
-    const { messages, vendedorId } = req.body;
+    const { messages, vendedorId, vendedorCode } = req.body;
 
     if (!messages || !Array.isArray(messages)) {
       return res.status(400).json({ error: 'Messages is required and must be an array' });
@@ -186,7 +175,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       const functionArgs = responsePart.functionCall.args || {};
       
       // Executa a função localmente
-      const functionResult = await executeTool(functionName, functionArgs, vendedorId);
+      const functionResult = await executeTool(functionName, functionArgs, vendedorCode);
       
       // Adiciona a resposta da IA (o pedido da chamada de função) ao histórico
       geminiMessages.push(data.candidates[0].content);

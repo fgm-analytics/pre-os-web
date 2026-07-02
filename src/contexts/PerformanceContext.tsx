@@ -16,6 +16,7 @@ interface PerformanceContextProps {
 
   // Filter State (synced with URL)
   selectedSeller: string;
+  selectedSellerCode: number | null;
   setSelectedSeller: (seller: string) => void;
   selectedClient: string;
   setSelectedClient: (client: string) => void;
@@ -250,7 +251,8 @@ export function PerformanceProvider({ children }: { children: ReactNode }) {
       setClientCodeInput: (v) => { setClientCodeInput(v); updateURL({ clientCode: v }); },
       sellers,
       clients,
-      matchesSelectedSeller
+      matchesSelectedSeller,
+      selectedSellerCode
     }}>
       {children}
     </PerformanceContext.Provider>
