@@ -50,11 +50,15 @@ async function executeTool(name: string, args: any, vendedorCode?: number | null
     
     if (!vendedorCode) return { error: `Vendedor não encontrado. (vendedorCode recebido: ${vendedorCode})` };
 
-    const { data: metas } = await supabaseAdmin
+    const { data: metas, error: supabaseError } = await supabaseAdmin
       .from('performance_vendedor_2026')
       .select('meta_faturamento, realizado_faturamento')
       .eq('vendedor_code', vendedorCode)
       .eq('mes', currentMonth);
+
+    if (supabaseError) {
+      return { error: `Erro no Supabase: ${JSON.stringify(supabaseError)}` };
+    }
 
     let totalMeta = 0;
     let totalRealizado = 0;
