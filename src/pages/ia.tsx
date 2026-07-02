@@ -12,7 +12,7 @@ export default function IAPage() {
       </Head>
       <Container maxWidth="lg" sx={{ mt: 2, mb: 4 }}>
         <Box sx={{ mb: 4 }}>
-          <Typography variant="h4" component="h1" gutterBottom fontWeight="bold">
+          <Typography variant="h4" component="h1" gutterBottom sx={{ fontWeight: 'bold' }}>
             Assistente Comercial IA
           </Typography>
           <Typography variant="body1" color="text.secondary">
