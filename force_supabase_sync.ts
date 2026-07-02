@@ -1,4 +1,4 @@
-import { supabaseAdmin } from './src/lib/supabase';
+import { supabaseAdmin } from './src/lib/supabaseAdmin';
 import { fetchSFMCDataExtensionPaginated } from './src/lib/sfmc';
 
 // Script adaptado para rodar a cron function via CLI.
