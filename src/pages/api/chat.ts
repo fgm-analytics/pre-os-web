@@ -118,6 +118,21 @@ const tools = [
       {
         name: "get_segregados_alertas",
         description: "Lista produtos segregados que vencem nos próximos 30 dias ou que têm o maior estoque."
+      },
+      {
+        name: "get_faturamento_acumulado_ano",
+        description: "Retorna o faturamento total acumulado (Year-To-Date) do vendedor no ano atual."
+      },
+      {
+        name: "get_sugestao_produtos_cliente",
+        description: "Sugere produtos para um cliente específico baseado no seu histórico de compras ou lacunas.",
+        parameters: {
+          type: "OBJECT",
+          properties: {
+            cliente: { type: "STRING", description: "Nome do cliente para o qual deseja sugestões" }
+          },
+          required: ["cliente"]
+        }
       }
     ]
   }
@@ -414,6 +429,53 @@ async function executeTool(name: string, args: any, vendedorCode?: number | null
       maior_estoque: maiorEstoque && maiorEstoque.length > 0 ? maiorEstoque[0] : null
     };
   }
+
+  if (name === 'get_faturamento_acumulado_ano') {
+    const { data: meses } = await supabaseAdmin.from('performance_vendedor_2026')
+      .select('subgrupo, realizado_faturamento')
+      .eq('vendedor_code', vendedorCode);
+      
+    let totalAcumulado = 0;
+    const excludedGroups = ['Dentscare', 'Whiteness', 'Outros', 'Home Care', 'Dentscare\\', 'Whiteness\\'];
+    if (meses) {
+      meses.forEach((m: any) => {
+        if (!excludedGroups.includes(m.subgrupo)) {
+          totalAcumulado += Number(m.realizado_faturamento || 0);
+        }
+      });
+    }
+    return { faturamento_acumulado_ytd: `R$ ${totalAcumulado.toFixed(2)}` };
+  }
+
+  if (name === 'get_sugestao_produtos_cliente') {
+    const { data: hist } = await supabaseAdmin.from('historico_cliente_produto')
+      .select('subgrupo, ano, realizado_faturamento')
+      .eq('vendedor_code', vendedorCode)
+      .ilike('cliente_nome', `%${args.cliente}%`);
+      
+    if (!hist || hist.length === 0) return { error: "Nenhum histórico encontrado para este cliente." };
+    
+    const agrupado: Record<string, { anos: Set<number>, faturamento: number }> = {};
+    hist.forEach((h: any) => {
+      if (!agrupado[h.subgrupo]) agrupado[h.subgrupo] = { anos: new Set(), faturamento: 0 };
+      agrupado[h.subgrupo].anos.add(h.ano);
+      agrupado[h.subgrupo].faturamento += Number(h.realizado_faturamento || 0);
+    });
+    
+    const parouDeComprar = Object.entries(agrupado)
+      .filter(([sub, info]) => !info.anos.has(2026))
+      .map(([sub, info]) => ({ produto_sugerido: sub, motivo: "Comprou no passado mas não comprou este ano." }));
+      
+    const focosPrincipais = Object.entries(agrupado)
+      .filter(([sub, info]) => info.anos.has(2026))
+      .sort((a, b) => b[1].faturamento - a[1].faturamento)
+      .map(([sub, info]) => ({ produto_sugerido: sub, motivo: "Curva A de compras deste cliente." }));
+      
+    return {
+      sugestoes_recuperacao: parouDeComprar.slice(0, 3),
+      sugestoes_manutencao_cross_sell: focosPrincipais.slice(0, 3)
+    };
+  }
   return { error: "Função não encontrada" };
 }
 
@@ -536,7 +598,13 @@ REGRAS COMERCIAIS E ESTRATÉGIAS:
       const functionArgs = responsePart.functionCall.args || {};
       
       // Executa a função localmente
-      const functionResult = await executeTool(functionName, functionArgs, vendedorCode);
+      let functionResult;
+      try {
+        functionResult = await executeTool(functionName, functionArgs, vendedorCode);
+      } catch (err: any) {
+        console.error('Erro na ferramenta:', err);
+        functionResult = { error: `Erro ao executar a ferramenta interna: ${err.message}` };
+      }
       
       // Adiciona a resposta da IA (o pedido da chamada de função) ao histórico
       geminiMessages.push(data.candidates[0].content);
