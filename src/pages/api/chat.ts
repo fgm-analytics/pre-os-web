@@ -1,33 +1,26 @@
 import { NextApiRequest, NextApiResponse } from 'next';
+import { supabaseAdmin } from '../../lib/supabaseAdmin';
 
-// Ignora erros de certificado SSL apenas no ambiente local (útil para redes corporativas)
-if (process.env.NODE_ENV === 'development') {
-  process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
-}
+// Ignora erros de certificado SSL (útil para redes corporativas com proxy)
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 
-// Ferramentas que a IA pode usar no formato Gemini
+// Ferramentas disponíveis para o modelo
 const tools = [
   {
     functionDeclarations: [
       {
         name: "get_clientes_em_queda",
-        description: "Retorna a lista de clientes que tiveram queda de faturamento.",
+        description: "Retorna a lista de clientes que tiveram queda de faturamento ou faturamento mais baixo no ano.",
         parameters: {
           type: "OBJECT",
-          properties: {
-            periodo: {
-              type: "STRING",
-              description: "O período para analisar (ex: 'mes', 'trimestre')"
-            }
-          },
-          required: ["periodo"]
+          properties: {},
         }
       },
       {
         name: "get_status_meta",
-        description: "Retorna o status atual de atingimento de meta do vendedor."
+        description: "Retorna o status atual de atingimento de meta do vendedor no mês atual."
       },
       {
         name: "get_clientes_risco_churn",
@@ -47,27 +40,79 @@ const tools = [
   }
 ];
 
-// Funções simuladas para o MVP (no futuro conectarão com Supabase/PostgreSQL)
+// Executa a função mapeada consultando o Supabase
 async function executeTool(name: string, args: any, vendedorId?: string) {
   console.log(`Executando ferramenta: ${name} com argumentos:`, args, 'para vendedor:', vendedorId);
   
-  if (name === 'get_clientes_em_queda') {
-    return [
-      { cliente: "Clínica Odonto Feliz", queda: "35%", motivo: "Parou de comprar resina" },
-      { cliente: "Consultório Dr. João", queda: "15%", motivo: "Reduziu volume geral" }
-    ];
+  let vendedorCode = null;
+  if (vendedorId) {
+    const { data: vData } = await supabaseAdmin
+      .from('v_vendedores_ativos')
+      .select('vendedor_code')
+      .eq('vendedor_nome', vendedorId)
+      .limit(1)
+      .single();
+    if (vData) vendedorCode = vData.vendedor_code;
   }
-  
+
   if (name === 'get_status_meta') {
-    return { meta_anual: "R$ 500.000", realizado: "R$ 200.000", atingimento: "40%", status: "Abaixo do esperado para o semestre" };
+    // O mock foca em julho de 2026, vamos pegar o mês 7
+    const currentMonth = 7; 
+    const { data: metas } = await supabaseAdmin
+      .from('performance_vendedor_2026')
+      .select('meta_faturamento, realizado_faturamento')
+      .eq('vendedor_nome', vendedorId)
+      .eq('mes', currentMonth);
+
+    let totalMeta = 0;
+    let totalRealizado = 0;
+    
+    if (metas) {
+      metas.forEach((m: any) => {
+        totalMeta += Number(m.meta_faturamento || 0);
+        totalRealizado += Number(m.realizado_faturamento || 0);
+      });
+    }
+    
+    const atingimento = totalMeta > 0 ? (totalRealizado / totalMeta) * 100 : 0;
+    
+    return { 
+      meta_mensal: `R$ ${totalMeta.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`, 
+      realizado: `R$ ${totalRealizado.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`, 
+      atingimento: `${atingimento.toFixed(1)}%`,
+      status: atingimento >= 100 ? "Meta Batida!" : (atingimento > 80 ? "Na média" : "Abaixo do esperado")
+    };
   }
   
   if (name === 'get_clientes_risco_churn') {
-    return [
-      { cliente: "Dra. Maria Clara", dias_sem_compra: args.dias || 90, ultima_compra: "R$ 5.000" }
-    ];
+    const dias = args.dias || 90;
+    if (!vendedorCode) return { error: "Vendedor não encontrado no banco de dados." };
+
+    const { data: clientes } = await supabaseAdmin
+      .from('v_ultimos_pedidos')
+      .select('cliente_nome, dias_desde_ultima_compra, oportunidade_recompra')
+      .eq('vendedor_code', vendedorCode)
+      .gte('dias_desde_ultima_compra', dias)
+      .order('dias_desde_ultima_compra', { ascending: false })
+      .limit(5);
+
+    return clientes || [];
   }
-  
+
+  if (name === 'get_clientes_em_queda') {
+    if (!vendedorCode) return { error: "Vendedor não encontrado no banco de dados." };
+
+    const { data: clientes } = await supabaseAdmin
+      .from('v_hist_cliente')
+      .select('cliente_nome, realizado_faturamento')
+      .eq('vendedor_code', vendedorCode)
+      .eq('ano', 2026)
+      .order('realizado_faturamento', { ascending: true })
+      .limit(5);
+
+    return clientes || [];
+  }
+
   return { error: "Função não encontrada" };
 }
 
