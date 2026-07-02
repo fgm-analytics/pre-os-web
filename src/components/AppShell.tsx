@@ -7,7 +7,7 @@ import {
 import { useTheme } from '@mui/material/styles';
 import { 
   Menu as MenuIcon, PriceCheck, BarChart, Logout, AccountCircle, Settings, Warning,
-  LightMode, DarkMode
+  LightMode, DarkMode, SmartToy
 } from '@mui/icons-material';
 import { useAuth } from '../contexts/AuthProvider';
 import { useRouter } from 'next/router';
@@ -48,7 +48,8 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
   const menuItems = [
     { text: 'Tabela de Preços', icon: <PriceCheck />, path: '/precos' },
     { text: 'Performance Comercial', icon: <BarChart />, path: '/performance' },
-    { text: 'Segregados', icon: <Warning />, path: '/segregados' }
+    { text: 'Segregados', icon: <Warning />, path: '/segregados' },
+    { text: 'Assistente IA', icon: <SmartToy />, path: '/ia' }
   ];
 
   if (profile?.role === 'admin') {
