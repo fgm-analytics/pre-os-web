@@ -179,10 +179,16 @@ async function executeTool(name: string, args: any, vendedorCode?: number | null
   
   if (name === 'get_status_meta') {
     const currentMonth = 7; 
-    const { data: metas } = await supabaseAdmin.from('performance_vendedor_2026').select('meta_faturamento, realizado_faturamento').eq('vendedor_code', vendedorCode).eq('mes', currentMonth);
+    const { data: metas } = await supabaseAdmin.from('performance_vendedor_2026').select('subgrupo, meta_faturamento, realizado_faturamento').eq('vendedor_code', vendedorCode).eq('mes', currentMonth);
     let totalMeta = 0; let totalRealizado = 0;
+    const excludedGroups = ['Dentscare', 'Whiteness', 'Outros', 'Home Care', 'Dentscare\\', 'Whiteness\\'];
     if (metas) {
-      metas.forEach((m: any) => { totalMeta += Number(m.meta_faturamento || 0); totalRealizado += Number(m.realizado_faturamento || 0); });
+      metas.forEach((m: any) => { 
+        if (!excludedGroups.includes(m.subgrupo)) {
+          totalMeta += Number(m.meta_faturamento || 0); 
+          totalRealizado += Number(m.realizado_faturamento || 0); 
+        }
+      });
     }
     const atingimento = totalMeta > 0 ? (totalRealizado / totalMeta) * 100 : 0;
     if (totalMeta === 0) return { error: "Sem meta encontrada para o mês." };
@@ -255,10 +261,16 @@ async function executeTool(name: string, args: any, vendedorCode?: number | null
   }
   if (name === 'get_meta_projecao_diaria') {
     const currentMonth = 7; 
-    const { data: metas } = await supabaseAdmin.from('performance_vendedor_2026').select('meta_faturamento, realizado_faturamento').eq('vendedor_code', vendedorCode).eq('mes', currentMonth);
+    const { data: metas } = await supabaseAdmin.from('performance_vendedor_2026').select('subgrupo, meta_faturamento, realizado_faturamento').eq('vendedor_code', vendedorCode).eq('mes', currentMonth);
     let totalMeta = 0; let totalRealizado = 0;
+    const excludedGroups = ['Dentscare', 'Whiteness', 'Outros', 'Home Care', 'Dentscare\\', 'Whiteness\\'];
     if (metas) {
-      metas.forEach((m: any) => { totalMeta += Number(m.meta_faturamento || 0); totalRealizado += Number(m.realizado_faturamento || 0); });
+      metas.forEach((m: any) => { 
+        if (!excludedGroups.includes(m.subgrupo)) {
+          totalMeta += Number(m.meta_faturamento || 0); 
+          totalRealizado += Number(m.realizado_faturamento || 0); 
+        }
+      });
     }
     const falta = totalMeta - totalRealizado;
     const diasUteisTotais = 22; // Assumido padrão
@@ -283,14 +295,17 @@ async function executeTool(name: string, args: any, vendedorCode?: number | null
 
   if (name === 'get_melhor_pior_mes') {
     const { data: meses } = await supabaseAdmin.from('performance_vendedor_2026')
-      .select('mes, realizado_faturamento')
+      .select('subgrupo, mes, realizado_faturamento')
       .eq('vendedor_code', vendedorCode);
     
     if (!meses || meses.length === 0) return { error: "Sem dados para este ano." };
     
     const agrupado: Record<number, number> = {};
+    const excludedGroups = ['Dentscare', 'Whiteness', 'Outros', 'Home Care', 'Dentscare\\', 'Whiteness\\'];
     meses.forEach((m: any) => {
-      agrupado[m.mes] = (agrupado[m.mes] || 0) + Number(m.realizado_faturamento || 0);
+      if (!excludedGroups.includes(m.subgrupo)) {
+        agrupado[m.mes] = (agrupado[m.mes] || 0) + Number(m.realizado_faturamento || 0);
+      }
     });
     
     const entries = Object.entries(agrupado).map(([m, val]) => ({ mes: Number(m), faturamento: val }));
