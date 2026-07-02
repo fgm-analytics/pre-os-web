@@ -166,8 +166,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       parts: [{ text: 'Você é um assistente de vendas de alta performance da FGM Dental Group. Ajude o vendedor a analisar sua carteira e atingir metas. Seja conciso e direto. Sempre use as ferramentas disponíveis para obter dados reais antes de responder sobre clientes ou metas.' }]
     };
 
-    // Primeira chamada para a API do Gemini
-    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`, {
+    // Primeira chamada para a API do Gemini (Mudamos para 1.5-flash que tem 1500 requisições diárias gratuitas)
+    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -218,7 +218,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       });
       
       // Segunda chamada para o Gemini (para formular a resposta em texto)
-      const secondResponse = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`, {
+      const secondResponse = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
