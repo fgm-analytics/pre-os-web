@@ -1,6 +1,7 @@
 import os
-from dotenv import load_dotenv
-load_dotenv()
+import inspect
+from dotenv import load_dotenv,find_dotenv
+load_dotenv(r'//home/fgm//scripts//pre-os-web//.env')
 
 import time
 import json
@@ -39,14 +40,14 @@ SFMC_DATA_EXTENSION_ID_PRECO = os.getenv("SFMC_DATA_EXTENSION_ID_PRECO")
 SFMC_DATA_EXTENSION_ID_ORDEM_FATURAMENTO = os.getenv("SFMC_DATA_EXTENSION_ID_ORDEM_FATURAMENTO")
 
 # Configurações de Banco de Dados
-DB_HOST = os.getenv("DB_HOST", "localhost")
-DB_PORT = os.getenv("DB_PORT", "5432")
-DB_NAME = os.getenv("DB_NAME", "ods_db")
-DB_USER = os.getenv("DB_USER", "postgres")
-DB_PASSWORD = os.getenv("DB_PASSWORD", "postgres")
+DB_HOST = os.getenv("DB_HOST")
+DB_PORT = os.getenv("DB_PORT")
+DB_NAME = os.getenv("DB_NAME")
+DB_USER = os.getenv("DB_USER")
+DB_PASSWORD = os.getenv("DB_PASSWORD")
 
 # Configurações do Job
-CHUNK_SIZE = int(os.getenv("SFMC_CHUNK_SIZE", 2400))
+CHUNK_SIZE = int(os.getenv("SFMC_CHUNK_SIZE",2400))
 MAX_RETRIES = 5
 
 def get_db_connection():
@@ -438,7 +439,6 @@ def sync_data(topic, records, formatter_fn, de_id, token):
         except Exception as e:
             logger.error(f"[{topic}] Erro ao limpar a Data Extension: {str(e)}")
 
-    import inspect
     is_generator = inspect.isgenerator(records)
 
     if not is_generator:

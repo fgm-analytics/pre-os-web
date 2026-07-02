@@ -15,14 +15,14 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 # Load configurations
-load_dotenv()
+load_dotenv(r'//home//fgm/scripts//pre-os-web//.env')
 
 # Source DB (DWH PostgreSQL)
-DB_HOST = os.getenv("DB_HOST", "10.200.10.45")
-DB_PORT = os.getenv("DB_PORT", "5433")
-DB_NAME = os.getenv("DB_NAME", "dw_prd")
-DB_USER = os.getenv("DB_USER", "rpa_analytics")
-DB_PASSWORD = os.getenv("DB_PASSWORD", "Dev2026!FGM@")
+DB_HOST = os.getenv("DB_HOST")
+DB_PORT = os.getenv("DB_PORT")
+DB_NAME = os.getenv("DB_NAME")
+DB_USER = os.getenv("DB_USER")
+DB_PASSWORD = os.getenv("DB_PASSWORD")
 
 # Destination (Supabase)
 SUPABASE_URL = os.getenv("SUPABASE_URL")
