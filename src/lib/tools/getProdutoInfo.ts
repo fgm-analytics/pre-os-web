@@ -1,12 +1,5 @@
-import fs from 'fs';
-import path from 'path';
-import { getCachedData } from '../redis';
+import { getListaProdutosV5, getTabelaPrecosV2 } from '../catalogService';
 import { ToolResult } from './types';
-
-async function readJsonFile(filePath: string) {
-  const content = await fs.promises.readFile(filePath, 'utf-8');
-  return JSON.parse(content);
-}
 
 export async function getProdutoInfo(args: any, _vendedorCode?: number | null): Promise<ToolResult> {
   const { produto, quantidade } = args;
@@ -14,27 +7,29 @@ export async function getProdutoInfo(args: any, _vendedorCode?: number | null): 
 
   let prices: any = {};
   try {
-    prices = await getCachedData('tabela_precos_v2', async () => ({}), 86400);
-  } catch (e) {}
-
-  const dataDir = path.join(process.cwd(), 'data');
-  const jsonFiles = ['Dentscare.json', 'Home_Care.json', 'Whiteness.json'];
-  let productMatch = null;
-
-  for (const file of jsonFiles) {
-    const p = path.join(dataDir, file);
-    if (fs.existsSync(p)) {
-      const items = await readJsonFile(p);
-      const match = items.find((i: any) =>
-        String(i.codigo) === String(produto) ||
-        String(i.material).toLowerCase().includes(String(produto).toLowerCase())
-      );
-      if (match) {
-        productMatch = match;
-        break;
-      }
-    }
+    prices = await getTabelaPrecosV2();
+  } catch (e) {
+    console.error('Erro ao buscar preços em getProdutoInfo', e);
   }
+
+  let catalog: Record<string, any[]> = {};
+  try {
+    catalog = await getListaProdutosV5();
+  } catch (e) {
+    console.error('Erro ao buscar catálogo em getProdutoInfo', e);
+  }
+
+  const allProducts = [
+    ...(catalog.Dentscare || []),
+    ...(catalog.Home_Care || []),
+    ...(catalog.Whiteness || []),
+    ...(catalog.Inbox || []),
+  ];
+
+  const productMatch = allProducts.find((i: any) =>
+    String(i.codigo) === String(produto) ||
+    String(i.material).toLowerCase().includes(String(produto).toLowerCase())
+  );
 
   if (!productMatch) return { error: 'Produto não encontrado ou indisponível para venda na tabela oficial.' };
 
@@ -50,6 +45,11 @@ export async function getProdutoInfo(args: any, _vendedorCode?: number | null): 
     desconto_segmentacao: `${desconto}%`,
     preco_dental: precoDental > 0 ? `R$ ${precoDental.toFixed(2)}` : 'Indisponível',
   };
+
+  if (productMatch.promotionName && productMatch.promotionIsActive) {
+    resp.promocao_ativa = productMatch.promotionName;
+  }
+
   if (quantidade && quantidade > 0 && precoDental > 0) {
     resp.quantidade = quantidade;
     resp.preco_total = `R$ ${(precoDental * quantidade).toFixed(2)}`;

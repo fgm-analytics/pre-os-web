@@ -1,10 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any, @typescript-eslint/no-require-imports */
 import type { NextApiRequest, NextApiResponse } from "next";
-import fs from "fs";
-import path from "path";
-import { fetchSFMCPriceEntries } from "../../lib/sfmc";
-import { getCachedData } from "../../lib/redis";
 import { supabase } from "../../lib/supabase";
+import { getListaProdutosV5 } from "../../lib/catalogService";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== "GET") {
@@ -23,104 +20,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   try {
-    const data = await getCachedData("lista_produtos_v5", async () => {
-      // Carregar arquivos JSON locais — fonte oficial da estrutura e sequência de produtos
-      const dataDir = path.join(process.cwd(), "data");
-
-      const dentscarePath = path.join(dataDir, "Dentscare.json");
-      const homeCarePath = path.join(dataDir, "Home_Care.json");
-      const whitenessPath = path.join(dataDir, "Whiteness.json");
-
-      const dentscareRaw = fs.existsSync(dentscarePath)
-        ? JSON.parse(fs.readFileSync(dentscarePath, "utf-8"))
-        : [];
-
-      const homeCareRaw = fs.existsSync(homeCarePath)
-        ? JSON.parse(fs.readFileSync(homeCarePath, "utf-8"))
-        : [];
-
-      const whitenessRaw = fs.existsSync(whitenessPath)
-        ? JSON.parse(fs.readFileSync(whitenessPath, "utf-8"))
-        : [];
-
-      console.log(`[API produtos] JSONs carregados: Dentscare=${dentscareRaw.length}, Home_Care=${homeCareRaw.length}, Whiteness=${whitenessRaw.length}`);
-
-      // Tentar buscar dados de promoção do SFMC para enriquecer
-      const { fetchSFMCProducts } = require("../../lib/sfmc");
-      const sfmcItems = await fetchSFMCProducts();
-
-      const sfmcMap = new Map<string, { name: string; isActive: boolean; used: boolean; promotionName: string }>();
-      if (sfmcItems && sfmcItems.length > 0) {
-        sfmcItems.forEach((item: any) => {
-          const keys = (item.keys || {}) as any;
-          const values = (item.values || {}) as any;
-          const codigo = String(keys.ProductCode || values.ProductCode || keys.productcode || values.productcode || "").trim();
-          const material = values.Description || values.description || "";
-          const promotionName = values.promotionname || values.promotionName || "";
-          const promotionIsActive = values.promotionisactive !== "false" && values.promotionIsActive !== "false" && values.promotionisactive !== false && values.promotionIsActive !== false;
-
-          if (codigo) {
-            sfmcMap.set(codigo, {
-              name: material,
-              isActive: promotionIsActive,
-              used: false,
-              promotionName: promotionName,
-            });
-          }
-        });
-        console.log(`[API produtos] SFMC enriquecimento: ${sfmcMap.size} entradas`);
-      } else {
-        console.log("[API produtos] SFMC indisponível, usando dados locais puros");
-      }
-
-      // Processar lista de produtos de cada BU
-      const processList = (rawList: any[], targetBU: string) => {
-        return rawList.map((item: any) => {
-          const code = String(item.codigo).trim();
-          const sfmcData = sfmcMap.get(code);
-          if (sfmcData) sfmcData.used = true;
-
-          return {
-            codigo: item.codigo,
-            material: sfmcData ? (sfmcData.name || item.material) : item.material,
-            categoria: item.categoria || "Geral",
-            cor: item.cor || "dark_gray",
-            businessUnit: targetBU,
-            promotionName: sfmcData ? sfmcData.promotionName : "",
-            promotionIsActive: sfmcData ? sfmcData.isActive : true, // Se SFMC disponível, usa status; senão mostra todos
-            segmentacao: item.segmentacao !== undefined ? item.segmentacao : 40,
-            ipi: item.ipi !== undefined ? item.ipi : 0,
-          };
-        });
-      };
-
-      const result: Record<string, any[]> = {
-        Dentscare: processList(dentscareRaw, "Dentscare"),
-        Home_Care: processList(homeCareRaw, "Home_Care"),
-        Whiteness: processList(whitenessRaw, "Whiteness"),
-        Inbox: [],
-      };
-
-      // Adicionar produtos do SFMC não mapeados ao Inbox (para o painel admin)
-      sfmcMap.forEach((data, code) => {
-        if (!data.used && data.isActive) {
-          result.Inbox.push({
-            codigo: code,
-            material: data.name,
-            categoria: "SFMC Importado",
-            cor: "dark_gray",
-            businessUnit: "Inbox",
-            promotionName: "",
-            promotionIsActive: true,
-            segmentacao: 40,
-            ipi: 0,
-          });
-        }
-      });
-
-      return result;
-    }, 1800); // 30 min cache
-
+    const data = await getListaProdutosV5();
     return res.status(200).json(data);
   } catch (error) {
     console.error("API /api/produtos Error:", error);
