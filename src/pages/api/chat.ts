@@ -48,7 +48,7 @@ async function executeTool(name: string, args: any, vendedorCode?: number | null
     // O mock foca em julho de 2026, vamos pegar o mês 7
     const currentMonth = 7; 
     
-    if (!vendedorCode) return { error: "Vendedor não encontrado no banco de dados." };
+    if (!vendedorCode) return { error: `Vendedor não encontrado. (vendedorCode recebido: ${vendedorCode})` };
 
     const { data: metas } = await supabaseAdmin
       .from('performance_vendedor_2026')
@@ -67,6 +67,12 @@ async function executeTool(name: string, args: any, vendedorCode?: number | null
     }
     
     const atingimento = totalMeta > 0 ? (totalRealizado / totalMeta) * 100 : 0;
+    
+    if (totalMeta === 0) {
+      return {
+        error: `Debug: O código de vendedor recebido foi ${vendedorCode}. Foram encontradas ${metas?.length || 0} linhas para o mês ${currentMonth}. Por que veio vazio?`
+      };
+    }
     
     return { 
       meta_mensal: `R$ ${totalMeta.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`, 
