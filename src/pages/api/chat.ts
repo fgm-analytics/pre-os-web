@@ -124,11 +124,31 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   try {
-    const { messages, vendedorId, vendedorCode } = req.body;
+    const { messages, vendedorId, vendedorCode: vendedorCodeFromBody } = req.body;
 
     if (!messages || !Array.isArray(messages)) {
       return res.status(400).json({ error: 'Messages is required and must be an array' });
     }
+
+    // Se o frontend não enviou o código do vendedor, resolve pelo token de autenticação
+    let vendedorCode: number | null = vendedorCodeFromBody ?? null;
+    if (!vendedorCode) {
+      const authHeader = req.headers.authorization;
+      const token = authHeader?.replace('Bearer ', '');
+      if (token) {
+        const { data: { user } } = await supabaseAdmin.auth.getUser(token);
+        if (user) {
+          const { data: profile } = await supabaseAdmin
+            .from('usuarios')
+            .select('vendedor_code')
+            .eq('id', user.id)
+            .single();
+          if (profile?.vendedor_code) vendedorCode = profile.vendedor_code;
+        }
+      }
+    }
+
+    console.log('[chat.ts] vendedorCode final:', vendedorCode, '| from body:', vendedorCodeFromBody);
 
     // Mapeia as mensagens do formato OpenAI (do Frontend) para o formato Gemini
     const geminiMessages: any[] = messages.filter((m: any) => m.role !== 'system' && m.role !== 'tool').map((m: any) => ({

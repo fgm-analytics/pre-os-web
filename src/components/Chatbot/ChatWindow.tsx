@@ -13,6 +13,7 @@ interface Message {
 }
 
 import { usePerformanceContext } from '../../contexts/PerformanceContext';
+import { supabase } from '../../lib/supabase';
 
 export const ChatWindow: React.FC = () => {
   const { selectedSeller, selectedSellerCode } = usePerformanceContext();
@@ -42,11 +43,20 @@ export const ChatWindow: React.FC = () => {
     setIsLoading(true);
 
     try {
+      // Pega o token de sessão para enviar para a API resolver o vendedorCode
+      const { data: sessionData } = await supabase.auth.getSession();
+      const accessToken = sessionData?.session?.access_token;
+
+      console.log('[ChatWindow] Enviando para /api/chat. vendedorCode:', selectedSellerCode, '| token present:', !!accessToken);
+
       const response = await fetch('/api/chat', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          ...(accessToken ? { 'Authorization': `Bearer ${accessToken}` } : {})
+        },
         body: JSON.stringify({
-          messages: newMessages.filter(m => m.role !== 'tool' && !m.tool_calls), // Send simplified history for this demo
+          messages: newMessages.filter(m => m.role !== 'tool' && !m.tool_calls),
           vendedorId: selectedSeller,
           vendedorCode: selectedSellerCode
         })
