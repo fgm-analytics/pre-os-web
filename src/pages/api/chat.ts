@@ -86,7 +86,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     // Mapeia as mensagens do formato OpenAI (do Frontend) para o formato Gemini
-    const geminiMessages = messages.filter((m: any) => m.role !== 'system' && m.role !== 'tool').map((m: any) => ({
+    const geminiMessages: any[] = messages.filter((m: any) => m.role !== 'system' && m.role !== 'tool').map((m: any) => ({
       role: m.role === 'user' ? 'user' : 'model',
       parts: [{ text: m.content }]
     }));
