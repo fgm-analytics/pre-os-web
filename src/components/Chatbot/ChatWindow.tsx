@@ -77,7 +77,7 @@ export const ChatWindow: React.FC = () => {
     >
       <Box sx={{ p: 2, bgcolor: 'primary.main', color: 'white', display: 'flex', alignItems: 'center' }}>
         <SmartToy sx={{ mr: 1 }} />
-        <Typography variant="h6" fontWeight="bold">Assistente Comercial IA</Typography>
+        <Typography variant="h6" sx={{ fontWeight: 'bold' }}>Assistente Comercial IA</Typography>
       </Box>
       <Divider />
       
