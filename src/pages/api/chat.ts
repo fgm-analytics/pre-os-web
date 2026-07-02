@@ -93,6 +93,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       parts: [{ text: m.content }]
     }));
 
+    // O Gemini exige que a primeira mensagem do histórico (contents) seja SEMPRE do 'user'
+    // Se a primeira mensagem for a saudação inicial do 'model', a API retorna Erro 400.
+    while (geminiMessages.length > 0 && geminiMessages[0].role !== 'user') {
+      geminiMessages.shift();
+    }
+
     const systemInstruction = {
       parts: [{ text: 'Você é um assistente de vendas de alta performance da FGM Dental Group. Ajude o vendedor a analisar sua carteira e atingir metas. Seja conciso e direto. Sempre use as ferramentas disponíveis para obter dados reais antes de responder sobre clientes ou metas.' }]
     };
