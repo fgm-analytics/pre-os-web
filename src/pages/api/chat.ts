@@ -1,7 +1,9 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 
-// Ignora erros de certificado SSL (útil para redes corporativas com proxy)
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+// Ignora erros de certificado SSL apenas no ambiente local (útil para redes corporativas)
+if (process.env.NODE_ENV === 'development') {
+  process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+}
 
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 
