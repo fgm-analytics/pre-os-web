@@ -137,7 +137,7 @@ async function executeTool(name: string, args: any, vendedorCode?: number | null
     
     let prices: any = {};
     try {
-      prices = await getCachedData("tabela_precos_v2", async () => ({}));
+      prices = await getCachedData("tabela_precos_v2", async () => ({}), 86400);
     } catch(e) {}
     
     const dataDir = path.join(process.cwd(), "data");
