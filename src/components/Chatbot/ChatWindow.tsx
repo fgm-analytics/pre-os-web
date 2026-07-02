@@ -48,14 +48,24 @@ export const ChatWindow: React.FC = () => {
       });
 
       if (!response.ok) {
-        throw new Error('Falha ao comunicar com a IA');
+        let errorMsg = 'Falha ao comunicar com a IA';
+        try {
+          const errorData = await response.json();
+          if (errorData.error) errorMsg = errorData.error;
+        } catch (e) {
+          // Fallback if not JSON
+        }
+        throw new Error(errorMsg);
       }
 
       const assistantMessage = await response.json();
       setMessages(prev => [...prev, assistantMessage]);
-    } catch (error) {
-      console.error(error);
-      setMessages(prev => [...prev, { role: 'assistant', content: 'Desculpe, ocorreu um erro ao processar sua solicitação.' }]);
+    } catch (error: any) {
+      console.error('Frontend Error:', error);
+      setMessages(prev => [...prev, { 
+        role: 'assistant', 
+        content: `Desculpe, ocorreu um erro: ${error.message}` 
+      }]);
     } finally {
       setIsLoading(false);
     }
