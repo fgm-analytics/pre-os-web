@@ -32,15 +32,27 @@ export default function Login() {
     setErrorMsg(null);
 
     try {
-      const { error } = await supabase.auth.signInWithPassword({
+      const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
 
       if (error) {
         setErrorMsg(error.message === 'Invalid login credentials' ? 'E-mail ou senha incorretos.' : error.message);
-      } else {
-        router.push('/performance');
+      } else if (data?.user) {
+        // Verifica se o usuário tem perfil na tabela pública
+        const { data: profile } = await supabase
+          .from('usuarios')
+          .select('id')
+          .eq('id', data.user.id)
+          .maybeSingle();
+
+        if (!profile) {
+          await supabase.auth.signOut();
+          setErrorMsg('Acesso negado: Seu usuário não possui um perfil ativo no sistema.');
+        } else {
+          router.push('/performance');
+        }
       }
     } catch (err: any) {
       setErrorMsg('Ocorreu um erro interno de conexão.');

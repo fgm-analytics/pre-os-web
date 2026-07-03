@@ -42,65 +42,84 @@ export const ColorModeProvider: React.FC<{ children: React.ReactNode }> = ({ chi
         palette: {
           mode,
           primary: {
-            main: "#007FFF", // Primary 500
-            light: "#0068D6", // Primary 600
-            dark: "#003C82", // Primary 800
+            main: "#dd4c4f", // Coral Red
+            light: "#ff7f7b",
+            dark: "#a51226",
           },
           secondary: {
-            main: "#00B7B3", // Turquesa 500
-            light: "#2FD1CD", // Turquesa 400
-            dark: "#0051A8", // Azul 700
+            main: "#8ec2c2", // Teal Mid
+            light: "#b7d5d5",
+            dark: "#5f9191",
           },
           success: {
-            main: "#00A870", // Destaque Verde Clínico
+            main: "#00A870",
           },
           background: {
-            default: mode === "light" ? "#F4F5F7" : "#111827", // Evita branco puro no light
-            paper: mode === "light" ? "#FAFAFB" : "#1F2937",   // Evita branco puro
+            default: mode === "light" ? "#ffffff" : "#1a1a1a",
+            paper: mode === "light" ? "#ffffff" : "#222222",
           },
           text: {
-            primary: mode === "light" ? "#1F2937" : "#F9FAFB", // Evita preto puro no light
-            secondary: mode === "light" ? "#4B5563" : "#9CA3AF",
+            primary: mode === "light" ? "#444444" : "#f5f5f5", // Charcoal ink / Off-white
+            secondary: mode === "light" ? "#888888" : "#a3a3a3",
           },
-          divider: mode === "light" ? "#E5E7EB" : "#374151",
+          divider: mode === "light" ? "#d9d9d9" : "#333333",
         },
         typography: {
-          fontFamily: "'Inter', sans-serif",
-          h1: { fontWeight: 700, fontSize: "64px", lineHeight: "72px" },
-          h2: { fontWeight: 700, fontSize: "48px", lineHeight: "56px" },
-          h3: { fontWeight: 600, fontSize: "36px", lineHeight: "44px" },
-          h4: { fontWeight: 600, fontSize: "28px", lineHeight: "36px" },
-          h5: { fontWeight: 600, fontSize: "24px", lineHeight: "32px" },
-          h6: { fontWeight: 500 },
-          body1: { fontSize: "16px", lineHeight: "28px" },
+          fontFamily: "'Nunito', sans-serif",
+          h1: { fontWeight: 400, fontSize: "51.2px", lineHeight: "56.32px" },
+          h2: { fontWeight: 400, fontSize: "41.6px", lineHeight: "45.76px" },
+          h3: { fontWeight: 400, fontSize: "30.4px", lineHeight: "33.44px" },
+          h4: { fontWeight: 400, fontSize: "24px", lineHeight: "27.2px" },
+          h5: { fontWeight: 400, fontSize: "22.4px", lineHeight: "31.36px" },
+          h6: { fontWeight: 400 },
+          body1: { fontSize: "16px", lineHeight: "27.2px", fontWeight: 400 }, // 1.7x line height
           body2: { fontSize: "14px", lineHeight: "20px" },
-          caption: { fontSize: "12px", lineHeight: "16px" },
-          button: { textTransform: "none", fontWeight: 600 },
+          caption: { fontSize: "12.8px", lineHeight: "17.92px", fontWeight: 700 }, // label-sm from design
+          button: { textTransform: "none", fontWeight: 400 },
         },
         components: {
           MuiPaper: {
             styleOverrides: {
               root: {
                 backgroundImage: "none",
-                borderRadius: 12,
-                border: `1px solid ${mode === "light" ? "#E5E7EB" : "#374151"}`,
+                borderRadius: 40, // 40px radius dominant
+                border: `1px solid ${mode === "light" ? "#d9d9d9" : "#333333"}`,
                 boxShadow: mode === "light" 
-                  ? "0px 4px 12px rgba(0,0,0,0.05)" 
-                  : "0px 8px 24px rgba(0,0,0,0.10)",
+                  ? "none" 
+                  : "0px 8px 24px rgba(0,0,0,0.20)",
               },
             },
           },
           MuiButton: {
             styleOverrides: {
               root: {
-                borderRadius: 8,
+                borderRadius: 40,
                 transition: "all 0.2s ease-in-out",
-                boxShadow: "0px 2px 8px rgba(0,0,0,0.08)",
+                boxShadow: "none",
+                backgroundColor: mode === "light" ? "#444444" : "#f5f5f5",
+                color: mode === "light" ? "#ffffff" : "#222222",
                 "&:hover": {
                   transform: "translateY(-1px)",
-                  boxShadow: "0px 8px 24px rgba(0, 127, 255, 0.2)",
+                  boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
+                  backgroundColor: mode === "light" ? "#222222" : "#ffffff",
                 },
               },
+              outlined: {
+                backgroundColor: "transparent",
+                color: mode === "light" ? "#444444" : "#f5f5f5",
+                borderColor: mode === "light" ? "#d9d9d9" : "#333333",
+                "&:hover": {
+                  backgroundColor: mode === "light" ? "#f3f5f7" : "#333333",
+                  borderColor: mode === "light" ? "#888888" : "#888888",
+                },
+              },
+              text: {
+                backgroundColor: "transparent",
+                color: mode === "light" ? "#444444" : "#f5f5f5",
+                "&:hover": {
+                  backgroundColor: mode === "light" ? "#f3f5f7" : "#333333",
+                }
+              }
             },
           },
           MuiOutlinedInput: {
@@ -113,12 +132,12 @@ export const ColorModeProvider: React.FC<{ children: React.ReactNode }> = ({ chi
           MuiTableCell: {
             styleOverrides: {
               root: {
-                borderBottom: `1px solid ${mode === "light" ? "#E5E7EB" : "#374151"}`,
+                borderBottom: `1px solid ${mode === "light" ? "#d9d9d9" : "#333333"}`,
               },
               head: {
-                fontWeight: 600,
-                backgroundColor: mode === "light" ? "#F9FAFB" : "#1F2937",
-                backdropFilter: "blur(8px)",
+                fontWeight: 700,
+                backgroundColor: mode === "light" ? "#ffffff" : "#222222",
+                color: mode === "light" ? "#888888" : "#a3a3a3",
               },
             },
           },
