@@ -45,12 +45,21 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
     router.push('/');
   };
 
+  const allowedIaEmails = [
+    'vendedores@fgmdentalgroup.com',
+    'gerente@fgmdentalgroup.com',
+    'admin@fgmdentalgroup.com'
+  ];
+
   const menuItems = [
     { text: 'Tabela de Preços', icon: <PriceCheck />, path: '/precos' },
     { text: 'Performance Comercial', icon: <BarChart />, path: '/performance' },
-    { text: 'Segregados', icon: <Warning />, path: '/segregados' },
-    { text: 'Assistente IA', icon: <SmartToy />, path: '/ia' }
+    { text: 'Segregados', icon: <Warning />, path: '/segregados' }
   ];
+
+  if (profile?.email && allowedIaEmails.includes(profile.email.toLowerCase())) {
+    menuItems.push({ text: 'Assistente IA', icon: <SmartToy />, path: '/ia' });
+  }
 
   if (profile?.role === 'admin') {
     menuItems.push({ text: 'Configuração de Catálogo', icon: <Settings />, path: '/admin/catalogo' });
