@@ -648,7 +648,7 @@ export default function Home() {
         {role === "vendedor" ? (
           // FLUXO DO VENDEDOR
           <Box sx={{ display: "flex", flexDirection: "column", flexGrow: 1, gap: 3 }}>
-            <Paper sx={{ bgcolor: "background.paper", p: 0.5 }}>
+            <Paper sx={{ bgcolor: "background.paper", p: 0.5, borderRadius: "12px" }}>
               <Tabs
                 value={vendedorTab}
                 onChange={(_, val) => {
@@ -769,7 +769,7 @@ export default function Home() {
                                 <TableCell align="right" sx={{ fontWeight: 600 }}>
                                   {price > 0 ? `R$ ${formatCurrency(price)}` : "Sob consulta"}
                                 </TableCell>
-                                <TableCell align="right" sx={{ fontWeight: 600, color: "secondary.light" }}>
+                                <TableCell align="right" sx={{ fontWeight: 600, color: theme.palette.mode === 'light' ? 'primary.main' : 'primary.light' }}>
                                   {price > 0 ? `R$ ${formatCurrency(segmentacaoPrice)}` : "Sob consulta"}
                                 </TableCell>
 
