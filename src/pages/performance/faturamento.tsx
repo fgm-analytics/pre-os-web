@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState, useMemo } from 'react';
 import Head from 'next/head';
-import { 
+import {
   Box, Typography, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow,
-  CircularProgress, Alert, Tabs, Tab, ToggleButton, ToggleButtonGroup
+  CircularProgress, Alert, Tabs, Tab, ToggleButton, ToggleButtonGroup, Select, MenuItem, SelectChangeEvent
 } from '@mui/material';
 import { usePerformanceContext } from '../../contexts/PerformanceContext';
 import { useRouter } from 'next/router';
@@ -32,10 +32,17 @@ const formatPercent = (val: number | null) => {
   return `${(val * 100).toFixed(2)}%`;
 };
 
+const MONTH_NAMES = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
+
 export default function FaturadoVendedorMes() {
   const router = useRouter();
   const { performanceData, loading, error, matchesSelectedSeller } = usePerformanceContext();
   const [metric, setMetric] = useState<'valor' | 'volume'>('valor');
+  const [selectedMonth, setSelectedMonth] = useState(0);
+
+  const handleMonthChange = (event: SelectChangeEvent<number>) => {
+    setSelectedMonth(Number(event.target.value));
+  };
 
   const handleMetricChange = (
     event: React.MouseEvent<HTMLElement>,
@@ -223,8 +230,67 @@ export default function FaturadoVendedorMes() {
         </Box>
       </Box>
 
-      {/* Monthly Table */}
-      <Box sx={{ width: '100%', overflow: 'hidden', mb: 4 }}>
+      {/* Monthly Table - Mobile (month selector) */}
+      <Box sx={{ width: '100%', display: { xs: 'block', md: 'none' }, mb: 4 }}>
+        <Typography variant="h6" sx={{ mb: 2, fontWeight: 700 }}>Visão Mensal (2026)</Typography>
+        <Select
+          value={selectedMonth}
+          onChange={handleMonthChange}
+          size="small"
+          fullWidth
+          sx={{ mb: 2, bgcolor: 'background.paper' }}
+        >
+          {MONTH_NAMES.map((m, idx) => (
+            <MenuItem key={m} value={idx}>{m}</MenuItem>
+          ))}
+        </Select>
+        <TableContainer component={Paper} sx={{ width: '100%', border: '1px solid', borderColor: 'divider', maxHeight: '60vh' }}>
+          <Table size="small" stickyHeader>
+            <TableHead>
+              <TableRow>
+                <TableCell sx={{ fontWeight: 700, bgcolor: 'background.paper' }}>Grupo de Produto</TableCell>
+                <TableCell align="right" sx={{ fontWeight: 700, bgcolor: 'background.paper' }}>Realizado</TableCell>
+                <TableCell align="right" sx={{ fontWeight: 700, bgcolor: 'background.paper' }}>Meta</TableCell>
+                <TableCell align="right" sx={{ fontWeight: 700, bgcolor: 'background.paper' }}>% Ating</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {/* Total Row */}
+              {(() => {
+                const m = tableData.totals.meses[selectedMonth];
+                const ating = m.meta > 0 ? m.realizado / m.meta : null;
+                const mColor = m.meta > 0 && m.realizado >= m.meta ? 'success.main' : m.meta > 0 ? 'warning.main' : 'inherit';
+                return (
+                  <TableRow sx={{ bgcolor: 'rgba(255, 255, 255, 0.08)' }}>
+                    <TableCell sx={{ fontWeight: 800 }}>Total</TableCell>
+                    <TableCell align="right" sx={{ fontWeight: 700, color: mColor }}>{formatValue(m.realizado)}</TableCell>
+                    <TableCell align="right" sx={{ fontWeight: 700 }}>{formatValue(m.meta)}</TableCell>
+                    <TableCell align="right" sx={{ fontWeight: 700, color: ating !== null && ating >= 1 ? 'success.main' : 'warning.main' }}>{formatPercent(ating)}</TableCell>
+                  </TableRow>
+                );
+              })()}
+
+              {/* Subgroup Rows */}
+              {tableData.subgroups.map(sub => {
+                const m = sub.meses[selectedMonth];
+                const ating = m.meta > 0 ? m.realizado / m.meta : null;
+                const mColor = m.meta > 0 && m.realizado >= m.meta ? 'success.main' : m.meta > 0 ? 'warning.main' : 'inherit';
+                return (
+                  <TableRow key={sub.subgrupo} hover sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                    <TableCell sx={{ fontWeight: 500, whiteSpace: 'normal', wordWrap: 'break-word', minWidth: 140, maxWidth: 180 }}>{sub.subgrupo}</TableCell>
+                    <TableCell align="right" sx={{ color: mColor }}>{m.realizado !== 0 ? formatValue(m.realizado) : ''}</TableCell>
+                    <TableCell align="right">{m.meta !== 0 ? formatValue(m.meta) : ''}</TableCell>
+                    <TableCell align="right" sx={{ color: ating !== null ? (ating >= 1 ? 'success.main' : 'warning.main') : 'text.secondary' }}>{formatPercent(ating)}</TableCell>
+                  </TableRow>
+                );
+              })}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Box>
+
+      {/* Monthly Table - Desktop (full grid) */}
+      <Box sx={{ width: '100%', overflow: 'hidden', mb: 4, display: { xs: 'none', md: 'block' } }}>
         <Typography variant="h6" sx={{ mb: 2, fontWeight: 700 }}>Visão Mensal (2026)</Typography>
         <TableContainer component={Paper} sx={{ width: '100%', overflowX: 'auto', border: '1px solid', borderColor: 'divider', maxHeight: '60vh' }}>
           <Table size="small" stickyHeader>
@@ -233,7 +299,7 @@ export default function FaturadoVendedorMes() {
               <TableCell rowSpan={2} sx={{ fontWeight: 700, minWidth: { xs: 120, md: 200 }, maxWidth: { xs: 150, md: 250 }, whiteSpace: 'normal', wordWrap: 'break-word', bgcolor: 'background.paper', borderBottom: '2px solid rgba(255,255,255,0.1)', position: 'sticky', left: 0, zIndex: 3 }}>
                 Grupo de Produto | Mês
               </TableCell>
-              {['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'].map(m => (
+              {MONTH_NAMES.map(m => (
                 <TableCell key={m} colSpan={2} align="center" sx={{ fontWeight: 700, bgcolor: 'background.paper', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
                   {m}
                 </TableCell>

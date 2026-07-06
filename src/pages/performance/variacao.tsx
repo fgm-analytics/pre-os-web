@@ -243,7 +243,7 @@ export default function VariacaoFaturamento() {
 
       {/* Data Cards */}
       <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: '1fr 1fr' }, gap: 4 }}>
-        <Box>
+        <Box sx={{ minWidth: 0 }}>
           <Card elevation={3} sx={{ borderTop: '4px solid', borderColor: 'success.main', height: '100%' }}>
             <CardContent>
               <Typography variant="h6" sx={{ mb: 2, fontWeight: 700, color: 'success.main' }}>
@@ -255,7 +255,7 @@ export default function VariacaoFaturamento() {
                     <TableRow>
                       <TableCell sx={{ fontWeight: 700 }}>Cliente</TableCell>
                       <TableCell align="right" sx={{ fontWeight: 700 }}>Período Atual</TableCell>
-                      <TableCell align="right" sx={{ fontWeight: 700 }}>Período Anterior</TableCell>
+                      <TableCell align="right" sx={{ fontWeight: 700, display: { xs: 'none', sm: 'table-cell' } }}>Período Anterior</TableCell>
                       <TableCell align="right" sx={{ fontWeight: 700 }}>Variação</TableCell>
                     </TableRow>
                   </TableHead>
@@ -267,11 +267,11 @@ export default function VariacaoFaturamento() {
                     ) : (
                       topVariations.top10Aumento.map((v, idx) => (
                         <TableRow key={v.code} hover>
-                          <TableCell sx={{ maxWidth: 150, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }} title={`${v.code} - ${v.nome}`}>
+                          <TableCell sx={{ maxWidth: { xs: 130, sm: 150 }, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }} title={`${v.code} - ${v.nome}`}>
                             {idx + 1}. {v.nome}
                           </TableCell>
                           <TableCell align="right">{formatCurrency(v.atual)}</TableCell>
-                          <TableCell align="right" sx={{ color: 'text.secondary' }}>{formatCurrency(v.anterior)}</TableCell>
+                          <TableCell align="right" sx={{ color: 'text.secondary', display: { xs: 'none', sm: 'table-cell' } }}>{formatCurrency(v.anterior)}</TableCell>
                           <TableCell align="right" sx={{ fontWeight: 700, color: 'success.main' }}>
                             {metric === 'variacao_rs' ? `+${formatCurrency(v.diff_rs)}` : formatPercent(v.diff_perc)}
                           </TableCell>
@@ -285,7 +285,7 @@ export default function VariacaoFaturamento() {
           </Card>
         </Box>
 
-        <Box>
+        <Box sx={{ minWidth: 0 }}>
           <Card elevation={3} sx={{ borderTop: '4px solid', borderColor: 'error.main', height: '100%' }}>
             <CardContent>
               <Typography variant="h6" sx={{ mb: 2, fontWeight: 700, color: 'error.main' }}>
@@ -297,7 +297,7 @@ export default function VariacaoFaturamento() {
                     <TableRow>
                       <TableCell sx={{ fontWeight: 700 }}>Cliente</TableCell>
                       <TableCell align="right" sx={{ fontWeight: 700 }}>Período Atual</TableCell>
-                      <TableCell align="right" sx={{ fontWeight: 700 }}>Período Anterior</TableCell>
+                      <TableCell align="right" sx={{ fontWeight: 700, display: { xs: 'none', sm: 'table-cell' } }}>Período Anterior</TableCell>
                       <TableCell align="right" sx={{ fontWeight: 700 }}>Variação</TableCell>
                     </TableRow>
                   </TableHead>
@@ -309,11 +309,11 @@ export default function VariacaoFaturamento() {
                     ) : (
                       topVariations.top10Queda.map((v, idx) => (
                         <TableRow key={v.code} hover>
-                          <TableCell sx={{ maxWidth: 150, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }} title={`${v.code} - ${v.nome}`}>
+                          <TableCell sx={{ maxWidth: { xs: 130, sm: 150 }, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }} title={`${v.code} - ${v.nome}`}>
                             {idx + 1}. {v.nome}
                           </TableCell>
                           <TableCell align="right">{formatCurrency(v.atual)}</TableCell>
-                          <TableCell align="right" sx={{ color: 'text.secondary' }}>{formatCurrency(v.anterior)}</TableCell>
+                          <TableCell align="right" sx={{ color: 'text.secondary', display: { xs: 'none', sm: 'table-cell' } }}>{formatCurrency(v.anterior)}</TableCell>
                           <TableCell align="right" sx={{ fontWeight: 700, color: 'error.main' }}>
                             {metric === 'variacao_rs' ? formatCurrency(v.diff_rs) : formatPercent(v.diff_perc)}
                           </TableCell>
@@ -330,7 +330,7 @@ export default function VariacaoFaturamento() {
 
       {/* Product Cards */}
       <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: '1fr 1fr' }, gap: 4, mt: 4 }}>
-        <Box>
+        <Box sx={{ minWidth: 0 }}>
           <Card elevation={3} sx={{ borderTop: '4px solid', borderColor: 'success.main', height: '100%' }}>
             <CardContent>
               <Typography variant="h6" sx={{ mb: 2, fontWeight: 700, color: 'success.main' }}>
@@ -342,7 +342,7 @@ export default function VariacaoFaturamento() {
                     <TableRow>
                       <TableCell sx={{ fontWeight: 700 }}>Produto</TableCell>
                       <TableCell align="right" sx={{ fontWeight: 700 }}>Período Atual</TableCell>
-                      <TableCell align="right" sx={{ fontWeight: 700 }}>Período Anterior</TableCell>
+                      <TableCell align="right" sx={{ fontWeight: 700, display: { xs: 'none', sm: 'table-cell' } }}>Período Anterior</TableCell>
                       <TableCell align="right" sx={{ fontWeight: 700 }}>Variação</TableCell>
                     </TableRow>
                   </TableHead>
@@ -354,11 +354,11 @@ export default function VariacaoFaturamento() {
                     ) : (
                       topVariationsProdutos.top10Aumento.map((v, idx) => (
                         <TableRow key={v.code} hover>
-                          <TableCell sx={{ maxWidth: 150, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }} title={v.nome}>
+                          <TableCell sx={{ maxWidth: { xs: 130, sm: 150 }, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }} title={v.nome}>
                             {idx + 1}. {v.nome}
                           </TableCell>
                           <TableCell align="right">{formatCurrency(v.atual)}</TableCell>
-                          <TableCell align="right" sx={{ color: 'text.secondary' }}>{formatCurrency(v.anterior)}</TableCell>
+                          <TableCell align="right" sx={{ color: 'text.secondary', display: { xs: 'none', sm: 'table-cell' } }}>{formatCurrency(v.anterior)}</TableCell>
                           <TableCell align="right" sx={{ fontWeight: 700, color: 'success.main' }}>
                             {metric === 'variacao_rs' ? `+${formatCurrency(v.diff_rs)}` : formatPercent(v.diff_perc)}
                           </TableCell>
@@ -372,7 +372,7 @@ export default function VariacaoFaturamento() {
           </Card>
         </Box>
 
-        <Box>
+        <Box sx={{ minWidth: 0 }}>
           <Card elevation={3} sx={{ borderTop: '4px solid', borderColor: 'error.main', height: '100%' }}>
             <CardContent>
               <Typography variant="h6" sx={{ mb: 2, fontWeight: 700, color: 'error.main' }}>
@@ -384,7 +384,7 @@ export default function VariacaoFaturamento() {
                     <TableRow>
                       <TableCell sx={{ fontWeight: 700 }}>Produto</TableCell>
                       <TableCell align="right" sx={{ fontWeight: 700 }}>Período Atual</TableCell>
-                      <TableCell align="right" sx={{ fontWeight: 700 }}>Período Anterior</TableCell>
+                      <TableCell align="right" sx={{ fontWeight: 700, display: { xs: 'none', sm: 'table-cell' } }}>Período Anterior</TableCell>
                       <TableCell align="right" sx={{ fontWeight: 700 }}>Variação</TableCell>
                     </TableRow>
                   </TableHead>
@@ -396,11 +396,11 @@ export default function VariacaoFaturamento() {
                     ) : (
                       topVariationsProdutos.top10Queda.map((v, idx) => (
                         <TableRow key={v.code} hover>
-                          <TableCell sx={{ maxWidth: 150, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }} title={v.nome}>
+                          <TableCell sx={{ maxWidth: { xs: 130, sm: 150 }, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }} title={v.nome}>
                             {idx + 1}. {v.nome}
                           </TableCell>
                           <TableCell align="right">{formatCurrency(v.atual)}</TableCell>
-                          <TableCell align="right" sx={{ color: 'text.secondary' }}>{formatCurrency(v.anterior)}</TableCell>
+                          <TableCell align="right" sx={{ color: 'text.secondary', display: { xs: 'none', sm: 'table-cell' } }}>{formatCurrency(v.anterior)}</TableCell>
                           <TableCell align="right" sx={{ fontWeight: 700, color: 'error.main' }}>
                             {metric === 'variacao_rs' ? formatCurrency(v.diff_rs) : formatPercent(v.diff_perc)}
                           </TableCell>

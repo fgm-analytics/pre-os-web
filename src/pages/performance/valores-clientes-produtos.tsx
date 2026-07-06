@@ -1,8 +1,9 @@
 import React, { useState, useMemo } from 'react';
 import Head from 'next/head';
-import { 
+import {
   Box, Typography, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow,
-  CircularProgress, Alert, Tabs, Tab, FormControl, InputLabel, Select, MenuItem, TextField
+  CircularProgress, Alert, Tabs, Tab, FormControl, InputLabel, Select, MenuItem, TextField,
+  ToggleButton, ToggleButtonGroup
 } from '@mui/material';
 import { usePerformanceContext } from '../../contexts/PerformanceContext';
 import { useRouter } from 'next/router';
@@ -43,6 +44,17 @@ export default function ValoresClientesProdutos() {
     clienteProdutoData, metaClienteProdutoData, loading, error,
     matchesSelectedSeller, clients, selectedClient, clientCodeInput
   } = usePerformanceContext();
+
+  const [mobileMetric, setMobileMetric] = useState<'volume' | 'valor'>('valor');
+
+  const handleMobileMetricChange = (
+    event: React.MouseEvent<HTMLElement>,
+    newMetric: 'volume' | 'valor',
+  ) => {
+    if (newMetric !== null) {
+      setMobileMetric(newMetric);
+    }
+  };
 
   const currentClientCode = useMemo(() => {
     if (clientCodeInput.trim() !== '') {
@@ -166,7 +178,97 @@ export default function ValoresClientesProdutos() {
           Nenhum dado encontrado para o cliente selecionado.
         </Alert>
       ) : (
-        <Box sx={{ width: '100%', overflow: 'hidden', mb: 4 }}>
+        <>
+        <Box sx={{ width: '100%', display: { xs: 'block', md: 'none' }, mb: 4 }}>
+          <ToggleButtonGroup
+            value={mobileMetric}
+            exclusive
+            onChange={handleMobileMetricChange}
+            aria-label="metric toggle"
+            color="primary"
+            sx={{ bgcolor: 'background.paper', width: '100%', mb: 2 }}
+          >
+            <ToggleButton value="volume" sx={{ px: 4, fontWeight: 700, flex: 1 }}>Volume</ToggleButton>
+            <ToggleButton value="valor" sx={{ px: 4, fontWeight: 700, flex: 1 }}>Valor</ToggleButton>
+          </ToggleButtonGroup>
+
+          <TableContainer component={Paper} sx={{ width: '100%', border: '1px solid', borderColor: 'divider', maxHeight: '70vh' }}>
+            <Table size="small" stickyHeader>
+              <TableHead>
+                <TableRow>
+                  <TableCell sx={{ fontWeight: 700, minWidth: 120, maxWidth: 150, whiteSpace: 'normal', wordWrap: 'break-word', bgcolor: 'background.paper' }}>Produto</TableCell>
+                  <TableCell align="center" sx={{ fontWeight: 700, bgcolor: 'background.paper' }}>Status</TableCell>
+                  <TableCell align="center" sx={{ fontWeight: 700, bgcolor: 'background.paper' }}>2026</TableCell>
+                  <TableCell align="center" sx={{ fontWeight: 700, bgcolor: 'background.paper' }}>Meta 2026</TableCell>
+                  <TableCell align="center" sx={{ fontWeight: 700, bgcolor: 'background.paper' }}>% Meta</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {/* Total Row */}
+                <TableRow sx={{ bgcolor: 'rgba(255, 255, 255, 0.08)' }}>
+                  <TableCell sx={{ fontWeight: 800 }}>Total</TableCell>
+                  <TableCell></TableCell>
+                  {mobileMetric === 'volume' ? (
+                    <>
+                      <TableCell align="center" sx={{ fontWeight: 800 }}>{formatVolume(tableData.totals.vol26)}</TableCell>
+                      <TableCell align="center" sx={{ fontWeight: 800 }}>{formatVolume(tableData.totals.metaVol26)}</TableCell>
+                      <TableCell align="center" sx={{ fontWeight: 800, color: tableData.totals.pMetaAtingV !== null && tableData.totals.pMetaAtingV >= 1 ? 'success.main' : 'warning.main' }}>
+                        {tableData.totals.pMetaAtingV !== null ? formatPercent(tableData.totals.pMetaAtingV) : ''}
+                      </TableCell>
+                    </>
+                  ) : (
+                    <>
+                      <TableCell align="center" sx={{ fontWeight: 800 }}>{formatCurrency(tableData.totals.fat26)}</TableCell>
+                      <TableCell align="center" sx={{ fontWeight: 800 }}>{formatCurrency(tableData.totals.metaFat26)}</TableCell>
+                      <TableCell align="center" sx={{ fontWeight: 800, color: tableData.totals.pMetaAtingF !== null && tableData.totals.pMetaAtingF >= 1 ? 'success.main' : 'warning.main' }}>
+                        {tableData.totals.pMetaAtingF !== null ? formatPercent(tableData.totals.pMetaAtingF) : ''}
+                      </TableCell>
+                    </>
+                  )}
+                </TableRow>
+
+                {/* Data Rows */}
+                {tableData.rows.map((row) => (
+                  <TableRow key={row.produto} hover>
+                    <TableCell sx={{ fontWeight: 600, whiteSpace: 'normal', wordWrap: 'break-word', minWidth: 120, maxWidth: 150 }}>{row.produto}</TableCell>
+                    <TableCell align="center" sx={{ p: 1 }}>
+                      <Box sx={{
+                        bgcolor: row.status.bg,
+                        color: row.status.color,
+                        py: 0.5, px: 1,
+                        borderRadius: 1,
+                        fontWeight: 700,
+                        fontSize: '0.75rem',
+                        textAlign: 'center'
+                      }}>
+                        {row.status.text}
+                      </Box>
+                    </TableCell>
+                    {mobileMetric === 'volume' ? (
+                      <>
+                        <TableCell align="center">{formatVolume(row.vol26)}</TableCell>
+                        <TableCell align="center">{formatVolume(row.metaVol26)}</TableCell>
+                        <TableCell align="center" sx={{ color: row.pMetaAtingV !== null && row.pMetaAtingV >= 1 ? 'success.main' : 'warning.main', fontWeight: 600 }}>
+                          {row.pMetaAtingV !== null ? formatPercent(row.pMetaAtingV) : ''}
+                        </TableCell>
+                      </>
+                    ) : (
+                      <>
+                        <TableCell align="center">{formatCurrency(row.fat26)}</TableCell>
+                        <TableCell align="center">{formatCurrency(row.metaFat26)}</TableCell>
+                        <TableCell align="center" sx={{ color: row.pMetaAtingF !== null && row.pMetaAtingF >= 1 ? 'success.main' : 'warning.main', fontWeight: 600 }}>
+                          {row.pMetaAtingF !== null ? formatPercent(row.pMetaAtingF) : ''}
+                        </TableCell>
+                      </>
+                    )}
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Box>
+
+        <Box sx={{ width: '100%', overflow: 'hidden', mb: 4, display: { xs: 'none', md: 'block' } }}>
           <TableContainer component={Paper} sx={{ width: '100%', overflowX: 'auto', border: '1px solid', borderColor: 'divider', maxHeight: '70vh' }}>
             <Table size="small" stickyHeader sx={{ minWidth: 1400 }}>
               <TableHead>
@@ -283,6 +385,7 @@ export default function ValoresClientesProdutos() {
             </Table>
           </TableContainer>
         </Box>
+        </>
       )}
     </Box>
   );
