@@ -42,9 +42,9 @@ export const ColorModeProvider: React.FC<{ children: React.ReactNode }> = ({ chi
         palette: {
           mode,
           primary: {
-            main: "#dd4c4f", // Coral Red
-            light: "#ff7f7b",
-            dark: "#a51226",
+            main: "#003c82", // FGM Blue
+            light: "#3b6bb0",
+            dark: "#002254",
           },
           secondary: {
             main: "#8ec2c2", // Teal Mid
@@ -65,13 +65,13 @@ export const ColorModeProvider: React.FC<{ children: React.ReactNode }> = ({ chi
           divider: mode === "light" ? "#d9d9d9" : "#333333",
         },
         typography: {
-          fontFamily: "'Nunito', sans-serif",
-          h1: { fontWeight: 400, fontSize: "51.2px", lineHeight: "56.32px" },
-          h2: { fontWeight: 400, fontSize: "41.6px", lineHeight: "45.76px" },
-          h3: { fontWeight: 400, fontSize: "30.4px", lineHeight: "33.44px" },
-          h4: { fontWeight: 400, fontSize: "24px", lineHeight: "27.2px" },
-          h5: { fontWeight: 400, fontSize: "22.4px", lineHeight: "31.36px" },
-          h6: { fontWeight: 400 },
+          fontFamily: "'Inter', sans-serif",
+          h1: { fontWeight: 700, fontSize: "51.2px", lineHeight: "56.32px" },
+          h2: { fontWeight: 700, fontSize: "41.6px", lineHeight: "45.76px" },
+          h3: { fontWeight: 700, fontSize: "30.4px", lineHeight: "33.44px" },
+          h4: { fontWeight: 700, fontSize: "24px", lineHeight: "27.2px" },
+          h5: { fontWeight: 700, fontSize: "22.4px", lineHeight: "31.36px" },
+          h6: { fontWeight: 700 },
           body1: { fontSize: "16px", lineHeight: "27.2px", fontWeight: 400 }, // 1.7x line height
           body2: { fontSize: "14px", lineHeight: "20px" },
           caption: { fontSize: "12.8px", lineHeight: "17.92px", fontWeight: 700 }, // label-sm from design
@@ -82,7 +82,7 @@ export const ColorModeProvider: React.FC<{ children: React.ReactNode }> = ({ chi
             styleOverrides: {
               root: {
                 backgroundImage: "none",
-                borderRadius: 40, // 40px radius dominant
+                borderRadius: 32, // 32px radius dominant (lg)
                 border: `1px solid ${mode === "light" ? "#d9d9d9" : "#333333"}`,
                 boxShadow: mode === "light" 
                   ? "none" 
@@ -93,7 +93,7 @@ export const ColorModeProvider: React.FC<{ children: React.ReactNode }> = ({ chi
           MuiButton: {
             styleOverrides: {
               root: {
-                borderRadius: 40,
+                borderRadius: 32,
                 transition: "all 0.2s ease-in-out",
                 boxShadow: "none",
                 backgroundColor: mode === "light" ? "#444444" : "#f5f5f5",
