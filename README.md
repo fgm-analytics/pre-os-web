@@ -23,9 +23,9 @@ Até o momento, as seguintes etapas foram concluídas na construção da aplica�
 
 As integrações de dados são o coração deste sistema, alimentando as dashboards com dados reais e sincronizando tudo diretamente para o **Supabase** (que hospeda nosso PostgreSQL). Os scripts estão localizados na pasta `agents/etl/` e na raiz do projeto.
 
-### 1. `sync_sfmc.py` e `force_supabase_sync.ts`
-**O que fazem:** São os scripts responsáveis por puxar os dados do Salesforce Marketing Cloud (SFMC) e persistir diretamente no Supabase. 
-- O script em Python (`sync_sfmc.py`) é mais voltado para cargas massivas, cruzando informações como tabela de faturamento (`f_ordem_faturamento`), metas (`f_meta`), clientes e vendedores.
+### 1. `sync_dwh_to_supabase.py` e `force_supabase_sync.ts`
+**O que fazem:** São os scripts responsáveis por puxar os dados do Data Warehouse (DWH) e persistir diretamente no Supabase. 
+- O script em Python (`sync_dwh_to_supabase.py`) é mais voltado para cargas massivas, cruzando informações como tabela de faturamento (`f_ordem_faturamento`), metas (`f_meta`), clientes e vendedores.
 - O script em TypeScript (`force_supabase_sync.ts`) é desenhado para rodar via CLI/Cron de forma automatizada, puxando as "Data Extensions" do SFMC e realizando upsert via Supabase Admin Client.
 
 ### 2. `sync_shelf_life_dwh.py`
