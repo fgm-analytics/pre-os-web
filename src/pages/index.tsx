@@ -4,12 +4,15 @@ import {
   Box, Card, CardContent, TextField, Button, Typography, 
   Alert, CircularProgress, InputAdornment, IconButton, Container
 } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { supabase } from '../lib/supabase';
 import { useRouter } from 'next/router';
 import { useAuth } from '../contexts/AuthProvider';
 
 export default function Login() {
+  const theme = useTheme();
+  const mode = theme.palette.mode;
   const router = useRouter();
   const { user } = useAuth();
   
@@ -65,10 +68,19 @@ export default function Login() {
   return (
     <Container maxWidth="xs" sx={{ height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
       <Box sx={{ width: '100%' }}>
-        <Box sx={{ mb: 4, textAlign: 'center' }}>
-          <Typography variant="h4" color="primary" sx={{ fontWeight: 800, mb: 1, letterSpacing: '1px' }}>
-            FGM DENTAL GROUP
-          </Typography>
+        <Box sx={{ mb: 4, textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+          <Box sx={{ mb: 1, display: 'flex', justifyContent: 'center' }}>
+            <img 
+              src="/fgm-logo-revops.png" 
+              alt="FGM RevOps" 
+              style={{ 
+                height: '56px', 
+                width: 'auto', 
+                objectFit: 'contain',
+                filter: mode === 'light' ? 'invert(1) hue-rotate(180deg)' : 'none'
+              }} 
+            />
+          </Box>
           <Typography variant="body2" color="text.secondary">
             Plataforma de Preços & Performance Comercial
           </Typography>

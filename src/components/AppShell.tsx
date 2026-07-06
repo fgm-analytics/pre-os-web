@@ -90,9 +90,9 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
           </IconButton>
           <Box sx={{ flexGrow: 1, display: 'flex', alignItems: 'center' }}>
             <img 
-              src="/fgm-logo.png" 
-              alt="FGM Dental Group" 
-              style={{ height: '24px', width: 'auto', objectFit: 'contain', filter: mode === 'light' ? 'brightness(0)' : 'none' }} 
+              src="/fgm-logo-revops.png" 
+              alt="FGM RevOps" 
+              style={{ height: '32px', width: 'auto', objectFit: 'contain', filter: mode === 'light' ? 'invert(1) hue-rotate(180deg)' : 'none' }} 
             />
           </Box>
 
