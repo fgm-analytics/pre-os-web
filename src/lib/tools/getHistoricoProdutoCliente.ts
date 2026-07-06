@@ -2,7 +2,7 @@ import { supabaseAdmin } from '../supabaseAdmin';
 import { ToolResult } from './types';
 
 function formatCurrency(value: number) {
-  return `R$ ${value.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+  return `R$ ${value.toLocaleString('pt-BR', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
 }
 
 export async function getHistoricoProdutoCliente(args: any, vendedorCode?: number | null): Promise<ToolResult> {

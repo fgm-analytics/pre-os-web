@@ -11,13 +11,13 @@ import PerformanceLayout from '../../components/PerformanceLayout';
 import { ReactElement } from 'react';
 
 const formatCurrency = (val: number) => {
-  if (val === 0) return 'R$ 0,00';
+  if (val === 0) return 'R$ 0';
   if (!val) return '';
   return new Intl.NumberFormat('pt-BR', {
     style: 'currency',
     currency: 'BRL',
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
   }).format(val);
 };
 

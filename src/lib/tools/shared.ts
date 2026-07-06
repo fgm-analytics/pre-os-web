@@ -9,7 +9,7 @@ export function getCurrentYear() {
 export const CURRENT_YEAR = getCurrentYear();
 
 export function formatCurrency(value: number) {
-  return `R$ ${value.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+  return `R$ ${value.toLocaleString('pt-BR', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
 }
 
 export function normalizeToolText(text: string) {

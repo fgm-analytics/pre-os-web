@@ -42,9 +42,9 @@ export const ColorModeProvider: React.FC<{ children: React.ReactNode }> = ({ chi
         palette: {
           mode,
           primary: {
-            main: "#003c82", // FGM Blue
-            light: "#3b6bb0",
-            dark: "#002254",
+            main: "#017FFF", // Bright Blue
+            light: "#4dabff",
+            dark: "#0059b2",
           },
           secondary: {
             main: "#8ec2c2", // Teal Mid
