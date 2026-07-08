@@ -13,21 +13,83 @@ body {
 
 /* Custom scrollbars */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 10px;
+  height: 10px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #0b0f19;
+  background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #1f2937;
-  border-radius: 4px;
+  background: rgba(0, 127, 255, 0.15);
+  border-radius: 5px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #374151;
+  background: rgba(0, 127, 255, 0.3);
+}
+
+/* Neumorphism Custom Utilities */
+.neumorphic-flat {
+  border-radius: 20px;
+  transition: all 0.3s ease;
+}
+.light-mode .neumorphic-flat {
+  background: #ECF0F3;
+  box-shadow: 8px 8px 16px #d1d9e6, -8px -8px 16px #ffffff;
+}
+.dark-mode .neumorphic-flat {
+  background: #1E222B;
+  box-shadow: 8px 8px 16px #13151b, -8px -8px 16px #292f3b;
+}
+
+.neumorphic-inset {
+  border-radius: 16px;
+  transition: all 0.3s ease;
+}
+.light-mode .neumorphic-inset {
+  background: #ECF0F3;
+  box-shadow: inset 5px 5px 10px #d1d9e6, inset -5px -5px 10px #ffffff;
+}
+.dark-mode .neumorphic-inset {
+  background: #1E222B;
+  box-shadow: inset 5px 5px 10px #13151b, inset -5px -5px 10px #292f3b;
+}
+
+.neumorphic-btn {
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+.light-mode .neumorphic-btn {
+  background: #ECF0F3;
+  color: #444444;
+  box-shadow: 4px 4px 8px #d1d9e6, -4px -4px 8px #ffffff;
+}
+.light-mode .neumorphic-btn:hover {
+  box-shadow: 2px 2px 4px #d1d9e6, -2px -2px 4px #ffffff;
+  transform: translateY(1px);
+}
+.light-mode .neumorphic-btn:active {
+  box-shadow: inset 3px 3px 6px #d1d9e6, inset -3px -3px 6px #ffffff;
+  transform: translateY(0px);
+}
+
+.dark-mode .neumorphic-btn {
+  background: #1E222B;
+  color: #f5f5f5;
+  box-shadow: 4px 4px 8px #13151b, -4px -4px 8px #292f3b;
+}
+.dark-mode .neumorphic-btn:hover {
+  box-shadow: 2px 2px 4px #13151b, -2px -2px 4px #292f3b;
+  transform: translateY(1px);
+}
+.dark-mode .neumorphic-btn:active {
+  box-shadow: inset 3px 3px 6px #13151b, inset -3px -3px 6px #292f3b;
+  transform: translateY(0px);
 }
 
 /* Soft animations */

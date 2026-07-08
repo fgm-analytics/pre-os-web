@@ -22,6 +22,16 @@ export const ColorModeProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     }
   }, []);
 
+  useEffect(() => {
+    if (mode === "dark") {
+      document.documentElement.classList.add("dark-mode");
+      document.documentElement.classList.remove("light-mode");
+    } else {
+      document.documentElement.classList.add("light-mode");
+      document.documentElement.classList.remove("dark-mode");
+    }
+  }, [mode]);
+
   const colorMode = useMemo(
     () => ({
       toggleColorMode: () => {
@@ -55,14 +65,14 @@ export const ColorModeProvider: React.FC<{ children: React.ReactNode }> = ({ chi
             main: "#00A870",
           },
           background: {
-            default: mode === "light" ? "#ffffff" : "#1a1a1a",
-            paper: mode === "light" ? "#ffffff" : "#222222",
+            default: mode === "light" ? "#ECF0F3" : "#1E222B",
+            paper: mode === "light" ? "#ECF0F3" : "#1E222B",
           },
           text: {
             primary: mode === "light" ? "#444444" : "#f5f5f5", // Charcoal ink / Off-white
-            secondary: mode === "light" ? "#888888" : "#a3a3a3",
+            secondary: mode === "light" ? "#666666" : "#a3a3a3",
           },
-          divider: mode === "light" ? "#d9d9d9" : "#333333",
+          divider: mode === "light" ? "rgba(0,0,0,0.05)" : "rgba(255,255,255,0.05)",
         },
         typography: {
           fontFamily: "'Inter', sans-serif",
@@ -75,49 +85,85 @@ export const ColorModeProvider: React.FC<{ children: React.ReactNode }> = ({ chi
           body1: { fontSize: "16px", lineHeight: "27.2px", fontWeight: 400 }, // 1.7x line height
           body2: { fontSize: "14px", lineHeight: "20px" },
           caption: { fontSize: "12.8px", lineHeight: "17.92px", fontWeight: 700 }, // label-sm from design
-          button: { textTransform: "none", fontWeight: 400 },
+          button: { textTransform: "none", fontWeight: 600 },
         },
         components: {
           MuiPaper: {
             styleOverrides: {
               root: {
                 backgroundImage: "none",
-                borderRadius: 32, // 32px radius dominant (lg)
-                border: `1px solid ${mode === "light" ? "#d9d9d9" : "#333333"}`,
+                borderRadius: 24, // 24px radius dominant (lg)
+                border: "none",
                 boxShadow: mode === "light" 
-                  ? "none" 
-                  : "0px 8px 24px rgba(0,0,0,0.20)",
+                  ? "8px 8px 16px #d1d9e6, -8px -8px 16px #ffffff" 
+                  : "8px 8px 16px #13151b, -8px -8px 16px #292f3b",
               },
             },
           },
           MuiButton: {
             styleOverrides: {
               root: {
-                borderRadius: 32,
+                borderRadius: 20,
                 transition: "all 0.2s ease-in-out",
-                boxShadow: "none",
-                backgroundColor: mode === "light" ? "#444444" : "#f5f5f5",
-                color: mode === "light" ? "#ffffff" : "#222222",
+                fontWeight: 600,
+                padding: "8px 20px",
+                backgroundColor: mode === "light" ? "#ECF0F3" : "#1E222B",
+                color: mode === "light" ? "#444444" : "#f5f5f5",
+                boxShadow: mode === "light"
+                  ? "4px 4px 8px #d1d9e6, -4px -4px 8px #ffffff"
+                  : "4px 4px 8px #13151b, -4px -4px 8px #292f3b",
                 "&:hover": {
-                  transform: "translateY(-1px)",
-                  boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
-                  backgroundColor: mode === "light" ? "#222222" : "#ffffff",
+                  boxShadow: mode === "light"
+                    ? "2px 2px 4px #d1d9e6, -2px -2px 4px #ffffff"
+                    : "2px 2px 4px #13151b, -2px -2px 4px #292f3b",
+                  transform: "translateY(1px)",
+                  backgroundColor: mode === "light" ? "#ECF0F3" : "#1E222B",
+                },
+                "&:active": {
+                  boxShadow: mode === "light"
+                    ? "inset 3px 3px 6px #d1d9e6, inset -3px -3px 6px #ffffff"
+                    : "inset 3px 3px 6px #13151b, inset -3px -3px 6px #292f3b",
+                  transform: "translateY(0px)",
+                },
+              },
+              contained: {
+                background: "linear-gradient(135deg, #017FFF 0%, #00b4d8 100%)",
+                color: "#ffffff",
+                boxShadow: mode === "light"
+                  ? "4px 4px 8px #d1d9e6, -4px -4px 8px rgba(255,255,255,0.8)"
+                  : "4px 4px 8px #13151b, -4px -4px 8px rgba(255,255,255,0.05)",
+                "&:hover": {
+                  background: "linear-gradient(135deg, #0066cc 0%, #0096c7 100%)",
+                  boxShadow: mode === "light"
+                    ? "2px 2px 4px #d1d9e6, -2px -2px 4px rgba(255,255,255,0.8)"
+                    : "2px 2px 4px #13151b, -2px -2px 4px rgba(255,255,255,0.05)",
+                },
+                "&:active": {
+                  boxShadow: "inset 3px 3px 6px rgba(0,0,0,0.3)",
                 },
               },
               outlined: {
                 backgroundColor: "transparent",
-                color: mode === "light" ? "#444444" : "#f5f5f5",
-                borderColor: mode === "light" ? "#d9d9d9" : "#333333",
+                color: mode === "light" ? "#017FFF" : "#4dabff",
+                border: "none",
+                boxShadow: mode === "light"
+                  ? "inset 3px 3px 6px #d1d9e6, inset -3px -3px 6px #ffffff"
+                  : "inset 3px 3px 6px #13151b, inset -3px -3px 6px #292f3b",
                 "&:hover": {
-                  backgroundColor: mode === "light" ? "#f3f5f7" : "#333333",
-                  borderColor: mode === "light" ? "#888888" : "#888888",
+                  border: "none",
+                  backgroundColor: mode === "light" ? "rgba(1, 127, 255, 0.05)" : "rgba(77, 171, 255, 0.05)",
+                  boxShadow: mode === "light"
+                    ? "inset 2px 2px 4px #d1d9e6, inset -2px -2px 4px #ffffff"
+                    : "inset 2px 2px 4px #13151b, inset -2px -2px 4px #292f3b",
                 },
               },
               text: {
                 backgroundColor: "transparent",
                 color: mode === "light" ? "#444444" : "#f5f5f5",
+                boxShadow: "none",
                 "&:hover": {
-                  backgroundColor: mode === "light" ? "#f3f5f7" : "#333333",
+                  backgroundColor: mode === "light" ? "rgba(0,0,0,0.03)" : "rgba(255,255,255,0.03)",
+                  boxShadow: "none",
                 }
               }
             },
@@ -125,19 +171,67 @@ export const ColorModeProvider: React.FC<{ children: React.ReactNode }> = ({ chi
           MuiOutlinedInput: {
             styleOverrides: {
               root: {
-                borderRadius: 8,
+                borderRadius: 16,
+                backgroundColor: mode === "light" ? "#ECF0F3" : "#1E222B",
+                boxShadow: mode === "light"
+                  ? "inset 3px 3px 6px #d1d9e6, inset -3px -3px 6px #ffffff"
+                  : "inset 3px 3px 6px #13151b, inset -3px -3px 6px #292f3b",
+                "& .MuiOutlinedInput-notchedOutline": {
+                  border: "none",
+                },
+                "&:hover .MuiOutlinedInput-notchedOutline": {
+                  border: "none",
+                },
+                "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                  border: "none",
+                },
+              },
+            },
+          },
+          MuiTabs: {
+            styleOverrides: {
+              root: {
+                backgroundColor: mode === "light" ? "#ECF0F3" : "#1E222B",
+                borderRadius: 20,
+                padding: 4,
+                boxShadow: mode === "light"
+                  ? "inset 3px 3px 6px #d1d9e6, inset -3px -3px 6px #ffffff"
+                  : "inset 3px 3px 6px #13151b, inset -3px -3px 6px #292f3b",
+                "& .MuiTabs-indicator": {
+                  display: "none",
+                },
+              },
+            },
+          },
+          MuiTab: {
+            styleOverrides: {
+              root: {
+                borderRadius: 16,
+                margin: "2px 6px",
+                minHeight: 38,
+                padding: "6px 16px",
+                fontWeight: 600,
+                transition: "all 0.2s ease-in-out",
+                color: mode === "light" ? "#666666" : "#a3a3a3",
+                "&.Mui-selected": {
+                  color: "#017FFF",
+                  backgroundColor: mode === "light" ? "#ECF0F3" : "#1E222B",
+                  boxShadow: mode === "light"
+                    ? "3px 3px 6px #d1d9e6, -3px -3px 6px #ffffff"
+                    : "3px 3px 6px #13151b, -3px -3px 6px #292f3b",
+                },
               },
             },
           },
           MuiTableCell: {
             styleOverrides: {
               root: {
-                borderBottom: `1px solid ${mode === "light" ? "#d9d9d9" : "#333333"}`,
+                borderBottom: `1px solid ${mode === "light" ? "rgba(0,0,0,0.04)" : "rgba(255,255,255,0.04)"}`,
               },
               head: {
                 fontWeight: 700,
-                backgroundColor: mode === "light" ? "#ffffff" : "#222222",
-                color: mode === "light" ? "#888888" : "#a3a3a3",
+                backgroundColor: mode === "light" ? "#ECF0F3" : "#1E222B",
+                color: mode === "light" ? "#666666" : "#a3a3a3",
               },
             },
           },
