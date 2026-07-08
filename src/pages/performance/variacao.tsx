@@ -4,11 +4,21 @@ import Head from 'next/head';
 import { 
   Box, Typography, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow,
   CircularProgress, Alert, ToggleButton, ToggleButtonGroup, FormControl, InputLabel, Select, MenuItem,
-  Card, CardContent
+  Card, CardContent, Autocomplete, Checkbox, Chip, TextField
 } from '@mui/material';
+import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
+import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import { usePerformanceContext } from '../../contexts/PerformanceContext';
 import PerformanceLayout from '../../components/PerformanceLayout';
 import { ReactElement } from 'react';
+
+const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
+const checkedIcon = <CheckBoxIcon fontSize="small" />;
+const MONTHS_OPTIONS = Array.from({ length: 12 }, (_, i) => ({
+  value: i + 1,
+  name: new Date(2000, i, 1).toLocaleString('pt-BR', { month: 'long' })
+}));
+const SELECT_ALL_MONTHS = { value: 0, name: 'Todos os Meses' };
 
 const formatCurrency = (val: number) => {
   if (val === 0) return 'R$ 0';
@@ -42,7 +52,7 @@ export default function VariacaoFaturamento() {
 
   const defaultYear = availableYears.length > 0 ? availableYears[0] : 2026;
   const [selectedYear, setSelectedYear] = useState<number>(defaultYear);
-  const [selectedMonth, setSelectedMonth] = useState<number | 'todos'>('todos');
+  const [selectedMonth, setSelectedMonth] = useState<number[]>([]);
 
   // Atualiza defaultYear se availableYears mudar
   React.useEffect(() => {
@@ -50,6 +60,29 @@ export default function VariacaoFaturamento() {
       setSelectedYear(availableYears[0]);
     }
   }, [availableYears, selectedYear]);
+
+  const isAllMonthsSelected = selectedMonth.length === 12;
+
+  const handleMonthChange = (event: any, newValue: any[]) => {
+    const hasSelectAll = newValue.some(option => option.value === 0);
+    if (hasSelectAll) {
+      if (isAllMonthsSelected) {
+        setSelectedMonth([]);
+      } else {
+        setSelectedMonth(Array.from({ length: 12 }, (_, i) => i + 1));
+      }
+    } else {
+      setSelectedMonth(newValue.map(option => option.value));
+    }
+  };
+
+  const autocompleteMonthValue = useMemo(() => {
+    const selectedObj = MONTHS_OPTIONS.filter(m => selectedMonth.includes(m.value));
+    if (selectedMonth.length === 12) {
+      return [SELECT_ALL_MONTHS, ...selectedObj];
+    }
+    return selectedObj;
+  }, [selectedMonth]);
 
   const handleMetricChange = (
     event: React.MouseEvent<HTMLElement>,
@@ -67,8 +100,8 @@ export default function VariacaoFaturamento() {
     billingData.forEach(r => {
       if (!matchesSelectedSeller(r)) return;
 
-      const isCurrentPeriod = r.ano === selectedYear && (selectedMonth === 'todos' || r.mes === selectedMonth);
-      const isPrevPeriod = r.ano === prevYear && (selectedMonth === 'todos' || r.mes === selectedMonth);
+      const isCurrentPeriod = r.ano === selectedYear && (selectedMonth.length === 0 || selectedMonth.includes(r.mes));
+      const isPrevPeriod = r.ano === prevYear && (selectedMonth.length === 0 || selectedMonth.includes(r.mes));
 
       if (isCurrentPeriod || isPrevPeriod) {
         const key = r.cliente_code;
@@ -125,8 +158,8 @@ export default function VariacaoFaturamento() {
       if (!matchesSelectedSeller(r)) return;
       if (excludedGroups.includes(r.subgrupo)) return;
 
-      const isCurrentPeriod = r.ano === selectedYear && (selectedMonth === 'todos' || r.mes === selectedMonth);
-      const isPrevPeriod = r.ano === prevYear && (selectedMonth === 'todos' || r.mes === selectedMonth);
+      const isCurrentPeriod = r.ano === selectedYear && (selectedMonth.length === 0 || selectedMonth.includes(r.mes));
+      const isPrevPeriod = r.ano === prevYear && (selectedMonth.length === 0 || selectedMonth.includes(r.mes));
 
       if (isCurrentPeriod || isPrevPeriod) {
         const key = r.subgrupo;
@@ -193,7 +226,7 @@ export default function VariacaoFaturamento() {
 
       {/* Local Filters */}
       <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, gap: 2, mb: 4, alignItems: 'center', justifyContent: 'space-between' }}>
-        <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
+        <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap', alignItems: 'center' }}>
           <FormControl size="small" sx={{ minWidth: 150 }}>
             <InputLabel>Ano Atual</InputLabel>
             <Select
@@ -207,21 +240,67 @@ export default function VariacaoFaturamento() {
             </Select>
           </FormControl>
 
-          <FormControl size="small" sx={{ minWidth: 150 }}>
-            <InputLabel>Mês</InputLabel>
-            <Select
-              value={selectedMonth}
-              label="Mês"
-              onChange={(e) => setSelectedMonth(e.target.value === 'todos' ? 'todos' : Number(e.target.value))}
-            >
-              <MenuItem value="todos">Todos os Meses</MenuItem>
-              {Array.from({ length: 12 }, (_, i) => i + 1).map(mes => (
-                <MenuItem key={mes} value={mes}>
-                  {new Date(2000, mes - 1, 1).toLocaleString('pt-BR', { month: 'long' })}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
+          <Autocomplete<{ value: number; name: string }, true, false, false>
+            multiple
+            size="small"
+            options={[SELECT_ALL_MONTHS, ...MONTHS_OPTIONS]}
+            disableCloseOnSelect
+            getOptionLabel={(option) => option.name}
+            value={autocompleteMonthValue}
+            onChange={handleMonthChange}
+            isOptionEqualToValue={(option, val) => option.value === val.value}
+            renderOption={(props, option, { selected }) => {
+              const { key, ...optionProps } = props;
+              const isTodos = option.value === 0;
+              const isOptionChecked = isTodos ? isAllMonthsSelected : selected;
+              return (
+                <li key={option.value} {...optionProps}>
+                  <Checkbox
+                    icon={icon}
+                    checkedIcon={checkedIcon}
+                    style={{ marginRight: 8 }}
+                    checked={isOptionChecked}
+                  />
+                  {option.name}
+                </li>
+              );
+            }}
+            renderInput={(params) => (
+              <TextField 
+                {...params} 
+                label="Mês" 
+                placeholder={selectedMonth.length === 0 ? "Todos os Meses" : ""}
+              />
+            )}
+            renderValue={(value, getItemProps) => (
+              <>
+                {isAllMonthsSelected || selectedMonth.length === 0 ? (
+                  <Chip
+                    key="todos"
+                    label="Todos os Meses"
+                    size="small"
+                    onDelete={() => setSelectedMonth([])}
+                    sx={{ mr: 0.5, mb: 0.5 }}
+                  />
+                ) : (
+                  value
+                    .filter(v => v.value !== 0)
+                    .map((option, index) => {
+                      const { key, ...tagProps } = getItemProps({ index });
+                      return (
+                        <Chip
+                          key={option.value}
+                          label={option.name}
+                          size="small"
+                          {...tagProps}
+                        />
+                      );
+                    })
+                )}
+              </>
+            )}
+            sx={{ minWidth: 220, maxWidth: 350 }}
+          />
         </Box>
 
         <ToggleButtonGroup

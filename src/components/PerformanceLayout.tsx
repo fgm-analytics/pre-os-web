@@ -1,8 +1,14 @@
-import React, { ReactNode } from 'react';
-import { Box, Typography, Tabs, Tab, FormControl, InputLabel, Select, MenuItem, TextField } from '@mui/material';
+import React, { ReactNode, useMemo } from 'react';
+import { Box, Typography, Tabs, Tab, FormControl, InputLabel, Select, MenuItem, TextField, Autocomplete, Checkbox, Chip } from '@mui/material';
+import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
+import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import { useRouter } from 'next/router';
 import { useAuth } from '../contexts/AuthProvider';
 import { usePerformanceContext, PerformanceProvider } from '../contexts/PerformanceContext';
+
+const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
+const checkedIcon = <CheckBoxIcon fontSize="small" />;
+const SELECT_ALL_OPTION = { code: 'todos', name: 'Todos os Clientes' };
 
 function LayoutInner({ children }: { children: ReactNode }) {
   const router = useRouter();
@@ -34,6 +40,30 @@ function LayoutInner({ children }: { children: ReactNode }) {
     if (router.pathname === '/performance/variacao') return 4;
     return 0;
   })();
+
+  const isAllSelected = clients.length > 0 && selectedClient.length === clients.length;
+
+  const handleClientChange = (event: any, newValue: any[]) => {
+    const hasSelectAll = newValue.some(option => option.code === 'todos');
+    if (hasSelectAll) {
+      if (isAllSelected) {
+        setSelectedClient([]);
+      } else {
+        setSelectedClient(clients.map(c => c.code));
+      }
+    } else {
+      setSelectedClient(newValue.map(c => c.code));
+    }
+    setClientCodeInput('');
+  };
+
+  const autocompleteValue = useMemo(() => {
+    const selectedObj = clients.filter(c => selectedClient.includes(c.code));
+    if (clients.length > 0 && selectedClient.length === clients.length) {
+      return [SELECT_ALL_OPTION, ...selectedObj];
+    }
+    return selectedObj;
+  }, [selectedClient, clients]);
 
   return (
     <Box>
@@ -76,22 +106,70 @@ function LayoutInner({ children }: { children: ReactNode }) {
 
         {currentTab !== 1 && currentTab !== 4 && (
           <>
-            <FormControl size="small" sx={{ minWidth: 200 }}>
-              <InputLabel>Cliente (Carteira)</InputLabel>
-              <Select
-                value={selectedClient}
-                label="Cliente (Carteira)"
-                onChange={(e) => {
-                  setSelectedClient(e.target.value);
-                  setClientCodeInput('');
-                }}
-              >
-                <MenuItem value="todos">Todos os Clientes</MenuItem>
-                {clients.map(c => (
-                  <MenuItem key={c.code} value={c.code}>{c.code} - {c.name}</MenuItem>
-                ))}
-              </Select>
-            </FormControl>
+            <Autocomplete<{ code: string; name: string }, true, false, false>
+              multiple
+              size="small"
+              options={[SELECT_ALL_OPTION, ...clients]}
+              disableCloseOnSelect
+              getOptionLabel={(option) => option.code === 'todos' ? option.name : `${option.code} - ${option.name}`}
+              value={autocompleteValue}
+              onChange={handleClientChange}
+              isOptionEqualToValue={(option, val) => option.code === val.code}
+              renderOption={(props, option, { selected }) => {
+                const { key, ...optionProps } = props;
+                const isTodos = option.code === 'todos';
+                const isOptionChecked = isTodos ? isAllSelected : selected;
+                return (
+                  <li key={option.code} {...optionProps}>
+                    <Checkbox
+                      icon={icon}
+                      checkedIcon={checkedIcon}
+                      style={{ marginRight: 8 }}
+                      checked={isOptionChecked}
+                    />
+                    {isTodos ? option.name : `${option.code} - ${option.name}`}
+                  </li>
+                );
+              }}
+              renderInput={(params) => (
+                <TextField 
+                  {...params} 
+                  label="Cliente (Carteira)" 
+                  placeholder={selectedClient.length === 0 ? "Pesquisar clientes..." : ""}
+                />
+              )}
+              renderValue={(value, getItemProps) => (
+                <>
+                  {isAllSelected ? (
+                    <Chip
+                      key="todos"
+                      label="Todos os Clientes"
+                      size="small"
+                      onDelete={() => {
+                        setSelectedClient([]);
+                        setClientCodeInput('');
+                      }}
+                      sx={{ mr: 0.5, mb: 0.5 }}
+                    />
+                  ) : (
+                    value
+                      .filter(v => v.code !== 'todos')
+                      .map((option, index) => {
+                        const { key, ...tagProps } = getItemProps({ index });
+                        return (
+                          <Chip
+                            key={option.code}
+                            label={`${option.code} - ${option.name}`}
+                            size="small"
+                            {...tagProps}
+                          />
+                        );
+                      })
+                  )}
+                </>
+              )}
+              sx={{ minWidth: 260, maxWidth: 400 }}
+            />
 
             <TextField
               size="small"
@@ -100,7 +178,7 @@ function LayoutInner({ children }: { children: ReactNode }) {
               value={clientCodeInput}
               onChange={(e) => {
                 setClientCodeInput(e.target.value);
-                setSelectedClient('todos');
+                setSelectedClient([]);
               }}
               sx={{ minWidth: 180 }}
             />

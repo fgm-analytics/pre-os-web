@@ -40,21 +40,22 @@ export default function UltimosPedidos() {
     }
   };
 
-  const currentClientCode = useMemo(() => {
+  const currentClientCodes = useMemo(() => {
     if (clientCodeInput.trim() !== '') {
       const matched = clients.find(c => c.code.toLowerCase().includes(clientCodeInput.trim().toLowerCase()));
-      return matched ? matched.code : clientCodeInput.trim();
+      return matched ? [matched.code] : [clientCodeInput.trim()];
     }
-    return selectedClient !== 'todos' ? selectedClient : '';
+    if (!selectedClient) return [];
+    return selectedClient.filter(c => c !== 'todos');
   }, [clientCodeInput, selectedClient, clients]);
 
   const filteredData = useMemo(() => {
     return ultimosPedidosData.filter(r => {
       const matchSeller = matchesSelectedSeller(r);
-      const matchClient = currentClientCode ? r.cliente_code === currentClientCode : true;
+      const matchClient = currentClientCodes.length > 0 ? currentClientCodes.includes(r.cliente_code) : true;
       return matchSeller && matchClient;
     });
-  }, [ultimosPedidosData, matchesSelectedSeller, currentClientCode]);
+  }, [ultimosPedidosData, matchesSelectedSeller, currentClientCodes]);
 
   const sortedData = useMemo(() => {
     const comparator = (a: UltimosPedidosRecord, b: UltimosPedidosRecord) => {

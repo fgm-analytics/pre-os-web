@@ -108,8 +108,8 @@ export default function PerformanceDashboard() {
       let matchClient = true;
       if (clientCodeInput.trim() !== '') {
         matchClient = r.cliente_code?.toLowerCase().includes(clientCodeInput.trim().toLowerCase());
-      } else if (selectedClient !== 'todos') {
-        matchClient = r.cliente_code === selectedClient;
+      } else if (selectedClient && selectedClient.length > 0 && !selectedClient.includes('todos')) {
+        matchClient = selectedClient.includes(r.cliente_code);
       }
 
       const afterStart = r.ano > startY || (r.ano === startY && r.mes >= startM);
@@ -139,7 +139,7 @@ export default function PerformanceDashboard() {
 
     const excludedGroups = ['Dentscare', 'Whiteness', 'Outros', 'Home Care', 'Dentscare\\', 'Whiteness\\'];
 
-    const isGlobalMeta = selectedClient === 'todos' && clientCodeInput.trim() === '';
+    const isGlobalMeta = (selectedClient.length === 0 || selectedClient.includes('todos')) && clientCodeInput.trim() === '';
 
     if (isGlobalMeta) {
       performanceData.forEach(r => {
@@ -157,8 +157,8 @@ export default function PerformanceDashboard() {
         let matchClient = true;
         if (clientCodeInput.trim() !== '') {
           matchClient = r.cliente_code?.toLowerCase().includes(clientCodeInput.trim().toLowerCase());
-        } else if (selectedClient !== 'todos') {
-          matchClient = r.cliente_code === selectedClient;
+        } else if (selectedClient && selectedClient.length > 0 && !selectedClient.includes('todos')) {
+          matchClient = selectedClient.includes(r.cliente_code);
         }
         
         const inYearRange = 2026 >= startY && 2026 <= endY;
@@ -215,8 +215,8 @@ export default function PerformanceDashboard() {
       let matchClient = true;
       if (clientCodeInput.trim() !== '') {
         matchClient = r.cliente_code?.toLowerCase().includes(clientCodeInput.trim().toLowerCase());
-      } else if (selectedClient !== 'todos') {
-        matchClient = r.cliente_code === selectedClient;
+      } else if (selectedClient && selectedClient.length > 0 && !selectedClient.includes('todos')) {
+        matchClient = selectedClient.includes(r.cliente_code);
       }
       const afterStart = r.ano > startY || (r.ano === startY && r.mes >= startM);
       const beforeEnd = r.ano < endY || (r.ano === endY && r.mes <= endM);
@@ -248,8 +248,8 @@ export default function PerformanceDashboard() {
       let matchClient = true;
       if (clientCodeInput.trim() !== '') {
         matchClient = r.cliente_code?.toLowerCase().includes(clientCodeInput.trim().toLowerCase());
-      } else if (selectedClient !== 'todos') {
-        matchClient = r.cliente_code === selectedClient;
+      } else if (selectedClient && selectedClient.length > 0 && !selectedClient.includes('todos')) {
+        matchClient = selectedClient.includes(r.cliente_code);
       }
 
       // Overlaid comparison uses same month range across all years
@@ -323,8 +323,8 @@ export default function PerformanceDashboard() {
         let matchClient = true;
         if (clientCodeInput.trim() !== '') {
           matchClient = r.cliente_code?.toLowerCase().includes(clientCodeInput.trim().toLowerCase());
-        } else if (selectedClient !== 'todos') {
-          matchClient = r.cliente_code === selectedClient;
+        } else if (selectedClient && selectedClient.length > 0 && !selectedClient.includes('todos')) {
+          matchClient = selectedClient.includes(r.cliente_code);
         }
         
         if (matchSeller && matchClient) {
@@ -338,7 +338,7 @@ export default function PerformanceDashboard() {
       });
 
       const excludedGroups = ['Dentscare', 'Whiteness', 'Outros', 'Home Care', 'Dentscare\\', 'Whiteness\\'];
-      const isGlobalMeta = selectedClient === 'todos' && clientCodeInput.trim() === '';
+      const isGlobalMeta = (selectedClient.length === 0 || selectedClient.includes('todos')) && clientCodeInput.trim() === '';
 
       if (isGlobalMeta) {
         performanceData.forEach(r => {
@@ -352,8 +352,8 @@ export default function PerformanceDashboard() {
           let matchClient = true;
           if (clientCodeInput.trim() !== '') {
             matchClient = r.cliente_code?.toLowerCase().includes(clientCodeInput.trim().toLowerCase());
-          } else if (selectedClient !== 'todos') {
-            matchClient = r.cliente_code === selectedClient;
+          } else if (selectedClient && selectedClient.length > 0 && !selectedClient.includes('todos')) {
+            matchClient = selectedClient.includes(r.cliente_code);
           }
           
           if (matchClient && y === 2026 && r.mes === m) {

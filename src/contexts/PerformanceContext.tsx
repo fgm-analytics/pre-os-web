@@ -18,8 +18,8 @@ interface PerformanceContextProps {
   selectedSeller: string;
   selectedSellerCode: number | null;
   setSelectedSeller: (seller: string) => void;
-  selectedClient: string;
-  setSelectedClient: (client: string) => void;
+  selectedClient: string[];
+  setSelectedClient: (client: string[] | string) => void;
   clientCodeInput: string;
   setClientCodeInput: (code: string) => void;
 
@@ -40,9 +40,9 @@ export function PerformanceProvider({ children }: { children: ReactNode }) {
   const [availableSellers, setAvailableSellers] = useState<{code: number, name: string}[]>([]);
   const [loadingContext, setLoadingContext] = useState(true);
 
-  // Local state synced with URL. Default to empty string.
+  // Local state synced with URL. Default to empty array.
   const [selectedSeller, setLocalSeller] = useState<string>('');
-  const [selectedClient, setLocalClient] = useState<string>('todos');
+  const [selectedClient, setLocalClient] = useState<string[]>([]);
   const [clientCodeInput, setClientCodeInput] = useState<string>('');
 
   // 1. Fetch available sellers based on hierarchy
@@ -148,7 +148,13 @@ export function PerformanceProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (router.isReady) {
       if (typeof router.query.seller === 'string') setLocalSeller(router.query.seller);
-      if (typeof router.query.client === 'string') setLocalClient(router.query.client);
+      if (typeof router.query.client === 'string') {
+        setLocalClient(router.query.client ? router.query.client.split(',').filter(Boolean) : []);
+      } else if (Array.isArray(router.query.client)) {
+        setLocalClient((router.query.client as string[]).filter(Boolean));
+      } else {
+        setLocalClient([]);
+      }
       if (typeof router.query.clientCode === 'string') setClientCodeInput(router.query.clientCode);
     }
   }, [router.isReady, router.query.seller, router.query.client, router.query.clientCode]);
@@ -170,9 +176,12 @@ export function PerformanceProvider({ children }: { children: ReactNode }) {
     updateURL({ seller });
   };
 
-  const setSelectedClient = (client: string) => {
-    setLocalClient(client);
-    updateURL({ client });
+  const setSelectedClient = (client: string[] | string) => {
+    const clientsArray = Array.isArray(client) 
+      ? client.filter(c => c !== 'todos') 
+      : (client === 'todos' || !client ? [] : [client]);
+    setLocalClient(clientsArray);
+    updateURL({ client: clientsArray.join(',') });
   };
 
   // Auto-select first seller if none is selected

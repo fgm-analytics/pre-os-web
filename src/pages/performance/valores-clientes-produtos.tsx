@@ -56,17 +56,18 @@ export default function ValoresClientesProdutos() {
     }
   };
 
-  const currentClientCode = useMemo(() => {
+  const currentClientCodes = useMemo(() => {
     if (clientCodeInput.trim() !== '') {
       // Find matching client by code partially
       const matched = clients.find(c => c.code.toLowerCase().includes(clientCodeInput.trim().toLowerCase()));
-      return matched ? matched.code : clientCodeInput.trim();
+      return matched ? [matched.code] : [clientCodeInput.trim()];
     }
-    return selectedClient !== 'todos' ? selectedClient : '';
+    if (!selectedClient) return [];
+    return selectedClient.filter(c => c !== 'todos');
   }, [clientCodeInput, selectedClient, clients]);
 
   const tableData = useMemo(() => {
-    if (!currentClientCode) return { 
+    if (currentClientCodes.length === 0) return { 
       rows: [], 
       totals: { vol24: 0, vol25: 0, vol26: 0, metaVol26: 0, pMetaAtingV: null, pCrescV: null, fat23: 0, fat24: 0, fat25: 0, fat26: 0, metaFat26: 0, pMetaAtingF: null, pCrescF: null } 
     };
@@ -96,7 +97,7 @@ export default function ValoresClientesProdutos() {
       let metaVol26 = 0, metaFat26 = 0;
 
       clienteProdutoData.forEach(r => {
-        if (matchesSelectedSeller(r) && r.cliente_code === currentClientCode && r.subgrupo === prod) {
+        if (matchesSelectedSeller(r) && currentClientCodes.includes(r.cliente_code) && r.subgrupo === prod) {
           if (r.ano === 2024) { vol24 += Number(r.realizado_volume || 0); fat24 += Number(r.realizado_faturamento || 0); }
           if (r.ano === 2025) { vol25 += Number(r.realizado_volume || 0); fat25 += Number(r.realizado_faturamento || 0); }
           if (r.ano === 2026) { vol26 += Number(r.realizado_volume || 0); fat26 += Number(r.realizado_faturamento || 0); }
@@ -105,7 +106,7 @@ export default function ValoresClientesProdutos() {
       });
 
       metaClienteProdutoData.forEach(r => {
-        if (matchesSelectedSeller(r) && r.cliente_code === currentClientCode && r.subgrupo === prod) {
+        if (matchesSelectedSeller(r) && currentClientCodes.includes(r.cliente_code) && r.subgrupo === prod) {
           if (r.mes >= 1 && r.mes <= 12) {
             metaVol26 += Number(r.meta_volume || 0);
             metaFat26 += Number(r.meta_faturamento || 0);
@@ -140,7 +141,7 @@ export default function ValoresClientesProdutos() {
     };
 
     return { rows, totals };
-  }, [currentClientCode, clienteProdutoData, metaClienteProdutoData, matchesSelectedSeller]);
+  }, [currentClientCodes, clienteProdutoData, metaClienteProdutoData, matchesSelectedSeller]);
 
   if (loading) {
     return (
@@ -161,17 +162,19 @@ export default function ValoresClientesProdutos() {
       </Head>
 
       {/* Client Context Banner */}
-      {currentClientCode && clients.find(c => c.code === currentClientCode) && (
+      {currentClientCodes.length > 0 && (
         <Box sx={{ mb: 2, p: 2, bgcolor: 'primary.main', color: 'primary.contrastText', borderRadius: 1, boxShadow: 1 }}>
           <Typography variant="h6" sx={{ fontWeight: 700 }}>
-            {clients.find(c => c.code === currentClientCode)?.name}
+            {currentClientCodes.length === 1 
+              ? (clients.find(c => c.code === currentClientCodes[0])?.name || `Cliente ${currentClientCodes[0]}`)
+              : `${currentClientCodes.length} Clientes Selecionados`}
           </Typography>
         </Box>
       )}
 
-      {!currentClientCode ? (
+      {currentClientCodes.length === 0 ? (
         <Alert severity="info" sx={{ mt: 2 }}>
-          Por favor, selecione um cliente no menu ou digite o código para visualizar os dados de performance de produtos.
+          Por favor, selecione um ou mais clientes no menu ou digite o código para visualizar os dados de performance de produtos.
         </Alert>
       ) : tableData.rows.length === 0 ? (
         <Alert severity="warning" sx={{ mt: 2 }}>
