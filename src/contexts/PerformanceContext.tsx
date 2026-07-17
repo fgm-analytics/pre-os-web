@@ -35,7 +35,7 @@ const PerformanceContext = createContext<PerformanceContextProps | undefined>(un
 
 export function PerformanceProvider({ children }: { children: ReactNode }) {
   const router = useRouter();
-  const { profile } = useAuth();
+  const { profile, loading: authLoading } = useAuth();
   
   const [availableSellers, setAvailableSellers] = useState<{code: number, name: string}[]>([]);
   const [loadingContext, setLoadingContext] = useState(true);
@@ -47,7 +47,11 @@ export function PerformanceProvider({ children }: { children: ReactNode }) {
 
   // 1. Fetch available sellers based on hierarchy
   useEffect(() => {
-    if (!profile) return;
+    if (authLoading) return;
+    if (!profile) {
+      setLoadingContext(false);
+      return;
+    }
     
     const loadSellers = async () => {
       setLoadingContext(true);

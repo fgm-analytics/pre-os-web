@@ -17,7 +17,7 @@ function LayoutInner({ children }: { children: ReactNode }) {
     selectedSeller, setSelectedSeller, 
     selectedClient, setSelectedClient, 
     clientCodeInput, setClientCodeInput,
-    sellers, clients 
+    sellers, clients, selectedSellerCode, loading 
   } = usePerformanceContext();
 
   const isVendedor = profile?.role === 'vendedor';
@@ -187,7 +187,19 @@ function LayoutInner({ children }: { children: ReactNode }) {
       </Box>
 
       {/* Page Content */}
-      {children}
+      {!loading && !selectedSellerCode ? (
+        <Box sx={{ mt: 4 }}>
+          <Typography color="error" variant="h6" gutterBottom>
+            Perfil Incompleto ou Não Encontrado
+          </Typography>
+          <Typography color="text.secondary">
+            O seu usuário não possui um código de vendedor associado ou não foi encontrado na base de dados de vendedores ativos. 
+            Entre em contato com o suporte ou o administrador do sistema para vincular o seu código de vendedor (vendedor_code).
+          </Typography>
+        </Box>
+      ) : (
+        children
+      )}
     </Box>
   );
 }
